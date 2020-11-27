@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'TisaWeb-Regular';
+    src: url('TisaWeb-Regular.eot');
+    src: url('TisaWeb-Regular.eot?#iefix') format('embedded-opentype'),
+        url('TisaWeb-Regular.woff2') format('woff2'),
+        url('TisaWeb-Regular.woff') format('woff'),
+        url('TisaWeb-Regular.ttf') format('truetype'),
+        url('TisaWeb-Regular.svg#TisaWeb-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
