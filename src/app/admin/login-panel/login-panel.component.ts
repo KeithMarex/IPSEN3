@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login-panel.component.scss']
 })
 export class LoginPanelComponent implements OnInit {
+  currentView = 'login';
 
   constructor() { }
 
