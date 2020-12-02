@@ -9,6 +9,9 @@ import { LoginPanelComponent } from './admin/login-panel/login-panel.component';
 import { CustomerComponent } from './customer/customer.component';
 import { QuestionComponent } from './customer/question/question.component';
 import { CustomNavigationComponent } from './customer/question/custom-navigation/custom-navigation.component';
+import { PasswordForgotComponent } from './admin/login-panel/password-forgot/password-forgot.component';
+import { LoginFormComponent } from './admin/login-panel/login-form/login-form.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -19,10 +22,13 @@ import { CustomNavigationComponent } from './customer/question/custom-navigation
     LoginPanelComponent,
     CustomerComponent,
     QuestionComponent,
-    CustomNavigationComponent
+    CustomNavigationComponent,
+    PasswordForgotComponent,
+    LoginFormComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

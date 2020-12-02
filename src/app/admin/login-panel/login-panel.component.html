@@ -4,21 +4,8 @@
       <div class="col">
         <div class="container align-items-center">
           <br>
-          <h1>Login</h1>
-          <p>Hier kunt u veilig inloggen op de beheerders portaal van ARAG legal.</p>
-          <label for="basic-url">E-mail</label>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-          </div>
-          <label for="basic-url">Wachtwoord</label>
-          <div class="input-group mb-3">
-            <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-          </div>
-
-          <div class="row align-items-center">
-            <div class="col"><p type="button" style="cursor: pointer">Wachtwoord vergeten?</p></div>
-            <div class="col text-right"><button type="button" class="btn btn-warning">Login</button></div>
-          </div>
+          <app-login-form *ngIf="currentView === 'login'" (changeView)="currentView = 'pass'"></app-login-form>
+          <app-password-forgot *ngIf="currentView !== 'login'" (changeView)="currentView = 'login'"></app-password-forgot>
         </div>
       </div>
       <div class="col bg-image-col">
