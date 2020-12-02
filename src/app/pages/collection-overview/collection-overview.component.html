@@ -5,19 +5,65 @@
         <div class="sidebar__wrapper col-sm-3 ">
             <div class="sidebar__header container-fluid ">
                 <div class="sidebar__header-row row">
-                    <div class="col-sm-8">
+                    <div class="sidebar__col col-sm-8">
                         <h1 class="sidebar__heading">Collecties</h1>
                     </div>
-                    <div class="col-sm-4">
+                    <div class=" sidebar__col col-sm-4">
                         <button type="button" class="sidebar__btn btn">
                             Nieuw
                         </button>
                     </div>
                 </div>
             </div>
+            <div class="sidebar-content container-fluid">
+                <div class="sidebar-content__row row">
+                    <ul class="sidebar-content__list content-list">
+                        <li class="content-list__item active"><a href="#">Reisvoucher</a></li>
+                        <li class="content-list__item"><a href="#">Reisvoucher 2</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
-        <div class="col-sm-9">
-            test 2
+        <div class="admin-content col-sm-9">
+            <div class="admin-content__wrapper container-fluid">
+                <div class="admin-content__header row">
+                    <div class="admin-content__col col">
+                        <h1 class="admin-content__heading">Reisvoucher</h1>
+                    </div>
+                </div>
+                <div class="admin-content__content-table row">
+                    <table class="content-table table">
+                        <thead class="content-table__head">
+                          <tr>
+                            <th scope="col">Titel</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Versie</th>
+                            <th scope="col">Acties</th>
+                          </tr>
+                        </thead>
+                        <tbody class="content-table__body">
+                          <tr>
+                            <td>Reisvoucher</td>
+                            <td><span class="content-table__status concept">Concept</span></td>
+                            <td>v1.2</td>
+                            <td>@mdo</td>
+                          </tr>
+                          <tr>
+                            <td>Reisvoucher</td>
+                            <td><span class="content-table__status published">Published</span></td>
+                            <td>v1.1</td>
+                            <td>@fat</td>
+                          </tr>
+                          <tr>
+                            <td>Reisvoucher</td>
+                            <td><span class="content-table__status archieved">Archieved</span></td>
+                            <td>v1.0</td>
+                            <td>@twitter</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
