@@ -30,4 +30,18 @@
         &.published { background-color: $statusPublished; }
         &.archieved { background-color: $statusArchieved; }
     }
+
+    &__row {
+        &:hover {
+            cursor: pointer;
+            background-color: #f8f8f8;
+            > .content-table__actions-cel {
+                opacity: 100%;
+            }
+        }
+    }
+
+    &__actions-cel {
+        opacity: 0;
+    }
 }
