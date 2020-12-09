@@ -13,6 +13,7 @@ import { CollectionOverviewComponent } from './pages/collection-overview/collect
 import { PasswordForgotComponent } from './admin/login-panel/password-forgot/password-forgot.component';
 import { LoginFormComponent } from './admin/login-panel/login-form/login-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HomepageComponent } from './homepage/homepage.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     CustomNavigationComponent,
     CollectionOverviewComponent,
     PasswordForgotComponent,
-    LoginFormComponent
+    LoginFormComponent,
+    HomepageComponent
   ],
   imports: [
     BrowserModule,
