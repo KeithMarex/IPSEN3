@@ -14,7 +14,6 @@ export class LoginFormComponent implements OnInit {
   }
 
   viewPass() {
-
     this.changeView.emit();
   }
 }

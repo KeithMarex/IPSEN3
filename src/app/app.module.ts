@@ -22,7 +22,7 @@ const appRoutes: Routes = [
   {path: 'admin', component: AdminComponent},
   {path: 'admin/dashboard', component: CollectionOverviewComponent},
   {path: '', component: CustomerComponent}
-]
+];
 
 @NgModule({
   declarations: [
