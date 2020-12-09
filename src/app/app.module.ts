@@ -13,6 +13,7 @@ import { CollectionOverviewComponent } from './pages/collection-overview/collect
 import { PasswordForgotComponent } from './admin/login-panel/password-forgot/password-forgot.component';
 import { LoginFormComponent } from './admin/login-panel/login-form/login-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HomepageComponent } from './homepage/homepage.component';
 import { RemoveComponent } from './icons/remove/remove.component';
 import { CloneComponent } from './icons/clone/clone.component';
 import { EditComponent } from './icons/edit/edit.component';
@@ -39,6 +40,7 @@ const appRoutes: Routes = [
     CollectionOverviewComponent,
     PasswordForgotComponent,
     LoginFormComponent,
+    HomepageComponent,
     RemoveComponent,
     CloneComponent,
     EditComponent
