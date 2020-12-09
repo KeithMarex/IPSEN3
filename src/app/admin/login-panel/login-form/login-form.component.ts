@@ -1,4 +1,4 @@
-import {Component, ErrorHandler, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 @Component({
@@ -7,6 +7,8 @@ import {HttpClient} from '@angular/common/http';
   styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent implements OnInit {
+  succes = true;
+
   @Output() changeView = new EventEmitter();
 
   constructor(private http: HttpClient) { }
@@ -19,8 +21,17 @@ export class LoginFormComponent implements OnInit {
     this.changeView.emit();
   }
 
+  setWarning(){
+    this.succes = false;
+  }
+
   onFormSubmit(postData: {email: string, password: string}){
-    this.http.post('https://ipsen3.nielsprins.com/api/user/checkUserCredentials', postData).subscribe(responseData => {console.log(responseData);});
+    this.http.post('https://ipsen3.nielsprins.com/api/user/checkUserCredentials', postData).subscribe(responseData => {
+      if (responseData['login'] === 'failed'){
+        this.setWarning();
+      }
+      console.log(responseData['login']);
+    });
   }
 
   onFetchPosts() {
