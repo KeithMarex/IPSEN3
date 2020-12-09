@@ -80,23 +80,52 @@
     </div>
 </div>
 
-
+<!-- Change status modal -->
 <div class="modal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Modal body text goes here.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Status aanpassen</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Kies een status voor de volgende collectie:</p>
+                <p>Reisvoucher - v1.2</p>
+                <select class="modal__form-select form-select form-select-sm" aria-label=".form-select-sm example">
+                    <option selected>Concept</option>
+                    <option value="1">Archieved</option>
+                    <option value="2">Published</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Annuleren</button>
+                <button type="button" class="modal__btn btn btn-primary">Aanpassen</button>
+            </div>
+        </div>
     </div>
-  </div>
+</div>
+
+
+<!-- Copy collection modal -->
+<div class="modal modal__active" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Collectie kopiëren</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Weet u zeker, dat u de volgende collectie wilt kopiëren</p>
+                <p>Reisvoucher - v1.2</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Annuleren</button>
+                <button type="button" class="modal__btn btn btn-primary">Kopiëren</button>
+            </div>
+        </div>
+    </div>
 </div>

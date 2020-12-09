@@ -45,3 +45,37 @@
         opacity: 0;
     }
 }
+
+.modal {
+    background-color: rgba(0, 0, 0, 0.8);
+    
+    &-dialog {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        margin: 0;
+        width: 500px;
+    }
+
+    &__form-select {
+        width: 100%;
+        height: 40px;
+    }
+
+    &__btn {
+        background-color: $ctaBtnBackgroundColor;
+        color: $ctaBtnColor;
+        border-color: $ctaBtnBackgroundColor;
+
+        &:hover {
+            background-color: $ctaBtnBackgroundColorHover;
+            border-color: $ctaBtnBackgroundColorHover;
+            color: $ctaBtnColorHover;
+        }
+    }
+
+    &__active {
+        display: block;
+    }
+}
