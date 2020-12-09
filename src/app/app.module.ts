@@ -17,6 +17,8 @@ import { RemoveComponent } from './icons/remove/remove.component';
 import { CloneComponent } from './icons/clone/clone.component';
 import { EditComponent } from './icons/edit/edit.component';
 import {RouterModule, Routes} from '@angular/router';
+import {FormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
 
 const appRoutes: Routes = [
   {path: 'admin', component: AdminComponent},
@@ -44,7 +46,9 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
