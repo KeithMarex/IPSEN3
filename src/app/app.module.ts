@@ -16,6 +16,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RemoveComponent } from './icons/remove/remove.component';
 import { CloneComponent } from './icons/clone/clone.component';
 import { EditComponent } from './icons/edit/edit.component';
+import {RouterModule, Routes} from '@angular/router';
+
+const appRoutes: Routes = [
+  {path: 'admin', component: AdminComponent},
+  {path: 'admin/dashboard', component: CollectionOverviewComponent},
+  {path: '', component: CustomerComponent}
+]
 
 @NgModule({
   declarations: [
@@ -36,7 +43,8 @@ import { EditComponent } from './icons/edit/edit.component';
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [],
   bootstrap: [AppComponent]
