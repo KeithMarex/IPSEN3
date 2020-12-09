@@ -27,7 +27,7 @@ export class LoginFormComponent implements OnInit {
   }
 
   onFormSubmit(postData: {email: string, password: string}){
-    this.http.post('https://ipsen3.nielsprins.com/api/user/checkUserCredentials', postData).subscribe(responseData => {
+    this.http.post('https://ipsen3api.nielsprins.com/user/checkUserCredentials', postData).subscribe(responseData => {
       if (responseData['login'] === 'failed'){
         this.setWarning();
       } else {
