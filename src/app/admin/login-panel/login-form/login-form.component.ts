@@ -1,5 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {Router, RouterModule} from "@angular/router";
 
 @Component({
   selector: 'app-login-form',
@@ -11,7 +12,7 @@ export class LoginFormComponent implements OnInit {
 
   @Output() changeView = new EventEmitter();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
   }
@@ -29,6 +30,8 @@ export class LoginFormComponent implements OnInit {
     this.http.post('https://ipsen3.nielsprins.com/api/user/checkUserCredentials', postData).subscribe(responseData => {
       if (responseData['login'] === 'failed'){
         this.setWarning();
+      } else {
+        this.router.navigate(['dashboard']);
       }
       console.log(responseData['login']);
     });
