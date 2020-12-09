@@ -3,12 +3,12 @@
 
 <form #postForm="ngForm" (ngSubmit)="onFormSubmit(postForm.value)">
   <label for="title">Email</label>
-  <div class="input-group mb-3">
-    <input type="text" class="form-control" id="title" required ngModel name="email"/>
+  <div class="form-group has-error">
+    <input type="text" [ngClass]="{'failure': !succes}" class="form-control" id="title" required ngModel name="email"/>
   </div>
   <label for="content">Wachtwoord</label>
   <div class="input-group mb-3">
-    <input type="text" class="form-control" id="content" required ngModel name="password"/>
+    <input type="text" [ngClass]="{'failure': !succes}" class="form-control" id="content" required ngModel name="password"/>
   </div>
 
   <div class="row align-items-center">
