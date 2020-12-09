@@ -127,5 +127,8 @@
       }
     }
   },
-  "defaultProject": "IPSEN3"
+  "defaultProject": "IPSEN3",
+  "cli": {
+    "analytics": false
+  }
 }
