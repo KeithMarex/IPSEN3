@@ -31,7 +31,7 @@ export class LoginFormComponent implements OnInit {
       if (responseData['login'] === 'failed'){
         this.setWarning();
       } else {
-        this.router.navigate(['dashboard']);
+        this.router.navigate([this.router.url + '/dashboard']);
       }
       console.log(responseData['login']);
     });
