@@ -1,15 +1,19 @@
 <h1>Login</h1>
 <p>Hier kunt u veilig inloggen op de beheerders portaal van ARAG legal.</p>
-<label for="basic-url">E-mail</label>
-<div class="input-group mb-3">
-  <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-</div>
-<label for="basic-url">Wachtwoord</label>
-<div class="input-group mb-3">
-  <input type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default">
-</div>
 
-<div class="row align-items-center">
-  <div class="col"><button type="button" class="btn btn-light" (click)="viewPass()">Wachtwoord vergeten?</button></div>
-  <div class="col text-right"><button type="button" class="btn btn-warning">Login</button></div>
-</div>
+<form #postForm="ngForm" (ngSubmit)="onFormSubmit(postForm.value)">
+  <label for="title">Email</label>
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" id="title" required ngModel name="email"/>
+  </div>
+  <label for="content">Wachtwoord</label>
+  <div class="input-group mb-3">
+    <input type="text" class="form-control" id="content" required ngModel name="password"/>
+  </div>
+
+  <div class="row align-items-center">
+    <div class="col no-padding"><button type="button" class="btn btn-light" (click)="viewPass()">Wachtwoord vergeten?</button></div>
+    <div class="col text-right no-padding"><button type="submit" class="btn btn-warning" [disabled]="!postForm.valid">Login</button></div>
+  </div>
+</form>
+

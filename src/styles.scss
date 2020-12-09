@@ -2,6 +2,7 @@
 @import "scss/reset";
 @import "scss/fonts";
 @import "scss/vars";
+@import "scss/icons";
 @import "scss/layout";
 
 // Layout files
@@ -9,3 +10,4 @@
 @import "scss/layout/admin-collection-content";
 
 // Components files
+@import "scss/components/admin-modal";
