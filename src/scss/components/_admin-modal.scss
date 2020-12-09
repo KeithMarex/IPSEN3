@@ -30,12 +30,12 @@
     &__btn-danger {
         background-color: $dangerBtnBackgroundColor;
         color: $dangerBtnColor;
-        border-color: $dangerBtnBackgroundColor;
+        border-color: $dangerBtnBackgroundColor !important;
 
         &:hover {
             background-color: $dangerBtnBackgroundColorHover;
             color: $dangerBtnColorHover;
-            border-color: $dangerBtnBackgroundColorHover;
+            border-color: $dangerBtnBackgroundColorHover !important;
         }
     }
 
