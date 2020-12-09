@@ -40,7 +40,7 @@ const appRoutes: Routes = [
     CollectionOverviewComponent,
     PasswordForgotComponent,
     LoginFormComponent,
-    HomepageComponent
+    HomepageComponent,
     RemoveComponent,
     CloneComponent,
     EditComponent
