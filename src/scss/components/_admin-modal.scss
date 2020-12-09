@@ -1,6 +1,6 @@
 .modal {
     background-color: rgba(0, 0, 0, 0.8);
-    
+
     &-dialog {
         position: absolute;
         top: 50%;
@@ -30,7 +30,7 @@
     &__btn-danger {
         background-color: $dangerBtnBackgroundColor;
         color: $dangerBtnColor;
-        border-color: $dangerBtnBackgroundColor !important;
+        border-color: $dangerBtnBackgroundColor;
 
         &:hover {
             background-color: $dangerBtnBackgroundColorHover;
