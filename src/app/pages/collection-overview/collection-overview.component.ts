@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Router, RouterModule } from "@angular/router";
 import api from '../../api/base-url';
+import {configurationService} from "../../shared/configuration.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-collection-overview',
@@ -13,7 +13,7 @@ export class CollectionOverviewComponent implements OnInit {
 
   collections = [{id: 'test', name: 'haha', type: 'concept', version: 1}];
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private conf: configurationService) { }
 
   ngOnInit(): void {
     this.getTestData();
@@ -25,6 +25,16 @@ export class CollectionOverviewComponent implements OnInit {
   }
 
   convertDataToObject(response) {
+    let timerInterval
+    Swal.fire({
+      title: 'Welkom ' + this.conf.user.voornaam + '!',
+      timer: 1500,
+      showConfirmButton: false,
+      willClose: () => {
+        clearInterval(timerInterval)
+      }
+    })
+
     response.forEach(e => {
       const row = { id: e.id, name: e.name, type: e.type, version: e.version }
       this.collections.push(row);
