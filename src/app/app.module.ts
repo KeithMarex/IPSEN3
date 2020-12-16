@@ -20,6 +20,8 @@ import { EditComponent } from './icons/edit/edit.component';
 import {RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import {configurationService} from "./shared/configuration.service";
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 const appRoutes: Routes = [
   {path: 'admin', component: AdminComponent},
@@ -50,9 +52,10 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     RouterModule.forRoot(appRoutes),
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    SweetAlert2Module.forRoot()
   ],
-  providers: [],
+  providers: [configurationService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,6 +1,8 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router, RouterModule} from "@angular/router";
+import {configurationService} from "../../../shared/configuration.service";
+import {UserModel} from "../../../shared/models/user.model";
 
 @Component({
   selector: 'app-login-form',
@@ -12,12 +14,11 @@ export class LoginFormComponent implements OnInit {
 
   @Output() changeView = new EventEmitter();
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private conf: configurationService) { }
 
   ngOnInit(): void {
   }
 
-  // tslint:disable-next-line:typedef
   viewPass() {
     this.changeView.emit();
   }
@@ -28,12 +29,16 @@ export class LoginFormComponent implements OnInit {
 
   onFormSubmit(postData: {email: string, password: string}){
     this.http.post('https://ipsen3api.nielsprins.com/user/checkUserCredentials', postData).subscribe(responseData => {
-      if (responseData['login'] === 'failed'){
+      if (responseData['login'] !== 'success'){
         this.setWarning();
       } else {
+        console.log(responseData['result']['id']);
+        const m = responseData['result'];
+        this.conf.user = new UserModel(m['id'], m['email'], m['permission_group'], 'Piet', 'Paulusma');
+        console.log(this.conf.user);
         this.router.navigate([this.router.url + '/dashboard']);
       }
-      console.log(responseData['login']);
+      console.log(responseData);
     });
   }
 

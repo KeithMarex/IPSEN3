@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import Swal from "sweetalert2";
+import {configurationService} from "../../shared/configuration.service";
 
 @Component({
   selector: 'app-collection-overview',
@@ -8,9 +10,17 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 })
 export class CollectionOverviewComponent implements OnInit {
 
-  constructor() { }
+  constructor(private conf: configurationService) { }
 
   ngOnInit(): void {
+    let timerInterval
+    Swal.fire({
+      title: 'Welkom ' + this.conf.user.voornaam + '!',
+      timer: 1500,
+      showConfirmButton: false,
+      willClose: () => {
+        clearInterval(timerInterval)
+      }
+    })
   }
-
 }
