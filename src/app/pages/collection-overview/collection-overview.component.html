@@ -17,9 +17,8 @@
             </div>
             <div class="sidebar-content container-fluid">
                 <div class="sidebar-content__row row">
-                    <ul class="sidebar-content__list content-list">
-                        <li class="content-list__item active"><a href="#">Reisvoucher</a></li>
-                        <li class="content-list__item"><a href="#">Reisvoucher 2</a></li>
+                    <ul class="sidebar-content__list content-list" >
+                        <li class="content-list__item" *ngFor="let el of collections" #collections><a href="#">{{ el.name }}</a></li>
                     </ul>
                 </div>
             </div>
