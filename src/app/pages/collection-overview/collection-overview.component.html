@@ -81,7 +81,7 @@
 </div>
 
 <!-- Create new Collection modal -->
-<div class="modal " tabindex="-1">
+<div class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -91,17 +91,20 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Kies een status voor de volgende collectie:</p>
-                <p>Reisvoucher - v1.2</p>
-                <select class="modal__form-select form-select form-select-sm" aria-label=".form-select-sm example">
-                    <option selected>Concept</option>
-                    <option value="1">Archieved</option>
-                    <option value="2">Published</option>
-                </select>
+                <p>Voer de volgende gegevens in:</p>
+                <div class="form-row">
+                    <div class="col">
+                        <label for="validationServer01">Titel</label>
+                        <input type="text" class="form-control is-invalid" id="validationServer01" value="Reisvoucher" required>
+                        <div id="validationServer01Feedback" class="invalid-feedback">
+                            Naam is al gekozen
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-light" data-dismiss="modal">Annuleren</button>
-                <button type="button" class="modal__btn btn btn-primary">Aanpassen</button>
+                <button type="button" class="modal__btn btn btn-primary">Aanmaken</button>
             </div>
         </div>
     </div>
@@ -160,7 +163,7 @@
 
 
 <!-- Remove collection modal Active:  modal__active -->
-<div class="modal modal__active" tabindex="-1">
+<div class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
