@@ -2,44 +2,32 @@
 <div class="jumbotron vertical-center">
   <div class="container modal-login">
     <div class="row">
-        <div class="container align-items-center">
-          <br>
-          <h1>Reisvoucher</h1>
-          <br>
-          <h3 for="basic-url">Wat heeft u geboekt?</h3>
-          <div class="input-group mb-3">
-            <div class="dropdown">
-              <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropdown button
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-              </div>
+      <div class="container align-items-center">
+        <br>
+        <h1>{{getCollectionName()}}</h1>
+        <br><br>
+        <h3 for="basic-url">{{getCurrentQuestionText()}}</h3>
+        <div class="dropdown">
+          <button class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Your Answer
+            <span class="caret"></span></button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <div *ngFor="let answer of currentAnswers">
+              <a class="dropdown-item" href="#" (click)="onNextQuestionClicked(answer)">{{answer.getText()}}</a>
             </div>
           </div>
-          <h3 for="basic-url">Heeft u uw vliegtickets rechtstreeks bij een luchtmaatschappij geboekt?</h3>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-            <label class="form-check-label" for="exampleRadios1">
-              Default radio
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-            <label class="form-check-label" for="exampleRadios2">
-              Second default radio
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3" disabled>
-            <label class="form-check-label" for="exampleRadios3">
-              Disabled radio
-            </label>
-          </div>
-          <br>
         </div>
+        <br><br>
+<!--        <div *ngIf="!isFirstQuestion">-->
+          <div class="btn" type="button" id="previousQuestionButton" (click)="onPreviousQuestionClicked()">
+            <img src="../../../assets/question_progress/left_arrow_sign.png" width="32" height="32" class="d-inline-block align-bottom" alt="" loading="lazy">
+          </div>
+<!--        </div>-->
+        <div class="btn" type="button" id="nextQuestionButton" hidden="hidden">
+          <img src="../../../assets/question_progress/right_arrow_sign.png" width="32" height="32" class="d-inline-block align-bottom" alt="" loading="lazy">
+        </div>
+        <br>
+      </div>
     </div>
   </div>
 </div>

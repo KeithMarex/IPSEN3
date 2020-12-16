@@ -13,16 +13,19 @@ import { CollectionOverviewComponent } from './pages/collection-overview/collect
 import { PasswordForgotComponent } from './admin/login-panel/password-forgot/password-forgot.component';
 import { LoginFormComponent } from './admin/login-panel/login-form/login-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HomepageComponent } from './homepage/homepage.component';
 import { RemoveComponent } from './icons/remove/remove.component';
 import { CloneComponent } from './icons/clone/clone.component';
 import { EditComponent } from './icons/edit/edit.component';
 import {RouterModule, Routes} from '@angular/router';
+import {FormsModule} from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
 
 const appRoutes: Routes = [
   {path: 'admin', component: AdminComponent},
   {path: 'admin/dashboard', component: CollectionOverviewComponent},
   {path: '', component: CustomerComponent}
-]
+];
 
 @NgModule({
   declarations: [
@@ -37,6 +40,7 @@ const appRoutes: Routes = [
     CollectionOverviewComponent,
     PasswordForgotComponent,
     LoginFormComponent,
+    HomepageComponent,
     RemoveComponent,
     CloneComponent,
     EditComponent
@@ -44,7 +48,9 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
