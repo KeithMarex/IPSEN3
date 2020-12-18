@@ -34,7 +34,7 @@ export class LoginFormComponent implements OnInit {
       } else {
         console.log(responseData['result']['id']);
         const m = responseData['result'];
-        this.conf.user = new UserModel(m['id'], m['email'], m['permission_group'], m['voornaam'], m['achternaam']);
+        this.conf.user = new UserModel(m['id'], m['email'], m['permission_group'], m['first_name'], m['last_name']);
         console.log(this.conf.user);
         this.router.navigate([this.router.url + '/dashboard']);
       }
