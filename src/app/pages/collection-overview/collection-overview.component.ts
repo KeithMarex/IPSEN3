@@ -27,7 +27,7 @@ export class CollectionOverviewComponent implements OnInit {
   convertDataToObject(response) {
     let timerInterval
     Swal.fire({
-      title: 'Welkom ' + this.conf.user.voornaam + '!',
+      title: 'Welkom ' + this.conf.user.first_name + '!',
       timer: 1500,
       showConfirmButton: false,
       willClose: () => {
