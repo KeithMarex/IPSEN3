@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Router, RouterModule} from "@angular/router";
 import {configurationService} from "../../../shared/configuration.service";
 import {UserModel} from "../../../shared/models/user.model";
+import {Cookie} from 'ng2-cookies/ng2-cookies';
 
 @Component({
   selector: 'app-login-form',
@@ -32,6 +33,9 @@ export class LoginFormComponent implements OnInit {
       if (responseData['login'] !== 'success'){
         this.setWarning();
       } else {
+
+        Cookie.set('api_token', responseData['token'], 7);
+
         console.log(responseData['result']['id']);
         const m = responseData['result'];
         this.conf.user = new UserModel(m['id'], m['email'], m['permission_group'], m['first_name'], m['last_name']);
