@@ -26,7 +26,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 const appRoutes: Routes = [
   {path: 'admin', component: AdminComponent},
   {path: 'admin/dashboard', component: CollectionOverviewComponent},
-  {path: '', component: CustomerComponent}
+  {path: '', component: HomepageComponent}
 ];
 
 @NgModule({
