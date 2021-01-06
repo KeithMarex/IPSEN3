@@ -1,5 +1,6 @@
+/* tslint:disable:variable-name */
 export class CollectionModel {
-    private _id:  string;
+    private _id: string;
     private _name: string;
     private _type: string;
     private _version: number;
