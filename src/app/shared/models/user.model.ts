@@ -1,7 +1,7 @@
 import {Cookie} from 'ng2-cookies/ng2-cookies';
 import jwt_decode from 'jwt-decode';
 import {TokenModel} from './token.model';
-import api from '../../api/base-url';
+import api from '../../api/api';
 
 /* tslint:disable:variable-name */
 export class UserModel {
