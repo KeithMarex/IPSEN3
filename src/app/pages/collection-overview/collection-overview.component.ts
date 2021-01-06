@@ -29,14 +29,10 @@ export class CollectionOverviewComponent implements OnInit {
   }
 
   showWelcomeAlert(): void {
-    let timerInterval;
     Swal.fire({
       title: 'Welkom ' + this.loggedInUser.firstName + '!',
       timer: 1500,
       showConfirmButton: false,
-      willClose: () => {
-        clearInterval(timerInterval);
-      }
     });
   }
 
@@ -63,7 +59,7 @@ export class CollectionOverviewComponent implements OnInit {
     }
   }
 
-  async changeSelectedCollection(col: CollectionModel) {
+  async changeSelectedCollection(col: CollectionModel): Promise<void> {
     this.selectedCollectionIsEmpty = true;
     this.selectedCollections.splice(0);
     this.selectedCollectionName = col.name;
@@ -81,7 +77,7 @@ export class CollectionOverviewComponent implements OnInit {
   deleteCollection(collection, index): void {
     Swal.fire({
       title: 'Weet je zeker dat je deze boom wilt verwijderen?',
-      html: "Je kan deze actie hierna niet meer terugdraaien. <br><br><b>Info</b><br>Titel: " + collection.name + " <br>Type: " + collection.type + " <br> Versie: " + collection.version,
+      html: 'Je kan deze actie hierna niet meer terugdraaien. <br><br><b>Info</b><br>Titel: ' + collection.name + ' <br>Type: ' + collection.type + ' <br> Versie: ' + collection.version,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
