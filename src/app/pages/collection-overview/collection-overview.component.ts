@@ -63,6 +63,7 @@ export class CollectionOverviewComponent implements OnInit {
     this.selectedCollectionIsEmpty = true;
     this.selectedCollections.splice(0);
     this.selectedCollectionName = col.name;
+    this.selectedCollection = col;
 
     const response = await api.get('/collection/getAllByName/' + col.name);
     const j = response.data.result;
