@@ -18,7 +18,7 @@
             <div class="sidebar-content container-fluid">
                 <div class="sidebar-content__row row">
                     <ul class="sidebar-content__list content-list" >
-                        <li class="content-list__item" *ngFor="let el of collections" #collections><a>{{ el.name }}</a></li>
+                        <li class="content-list__item" *ngFor="let el of this.conf.collections" #collections><a>{{ el.name }}</a></li>
                     </ul>
                 </div>
             </div>
@@ -41,34 +41,14 @@
                           </tr>
                         </thead>
                         <tbody class="content-table__body">
-                          <tr class="content-table__row">
-                            <td>Reisvoucher</td>
-                            <td><span class="content-table__status concept">Concept</span></td>
-                            <td>v1.2</td>
+                          <tr class="content-table__row" *ngFor="let el of this.conf.collections; let i = index">
+                            <td>{{el.name}}</td>
+                            <td><span class="content-table__status concept">{{el.type}}</span></td>
+                            <td>{{el.version}}</td>
                             <td class="content-table__actions-cel">
                                 <icon-edit></icon-edit>
                                 <icon-clone></icon-clone>
-                                <icon-remove (click)="verwijderBoom($event)"></icon-remove>
-                            </td>
-                          </tr>
-                          <tr class="content-table__row">
-                            <td>Reisvoucher</td>
-                            <td><span class="content-table__status archieved">Concept</span></td>
-                            <td>v1.1</td>
-                            <td class="content-table__actions-cel">
-                                <icon-edit></icon-edit>
-                                <icon-clone></icon-clone>
-                                <icon-remove></icon-remove>
-                            </td>
-                          </tr>
-                          <tr class="content-table__row">
-                            <td>Reisvoucher</td>
-                            <td><span class="content-table__status published">Concept</span></td>
-                            <td>v1.0</td>
-                            <td class="content-table__actions-cel">
-                                <icon-edit></icon-edit>
-                                <icon-clone></icon-clone>
-                                <icon-remove></icon-remove>
+                                <icon-remove (click)="deleteCollection(el, i)"></icon-remove>
                             </td>
                           </tr>
                         </tbody>

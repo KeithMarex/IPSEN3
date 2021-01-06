@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import api from '../../api/base-url';
 import {configurationService} from "../../shared/configuration.service";
 import Swal from "sweetalert2";
+import {CollectionModel} from "../../shared/models/collection.model";
 
 @Component({
   selector: 'app-collection-overview',
@@ -11,9 +12,7 @@ import Swal from "sweetalert2";
 })
 export class CollectionOverviewComponent implements OnInit {
 
-  collections = [{id: 'test', name: 'haha', type: 'concept', version: 1}];
-
-  constructor(private conf: configurationService) { }
+  constructor(public conf: configurationService) { }
 
   ngOnInit(): void {
     this.getTestData();
@@ -36,28 +35,41 @@ export class CollectionOverviewComponent implements OnInit {
     })
 
     response.forEach(e => {
-      const row = { id: e.id, name: e.name, type: e.type, version: e.version }
-      this.collections.push(row);
+      const row = new CollectionModel(e.id, e.name, e.type, e.version);
+      this.conf.collections.push(row);
     });
   }
 
-  verwijderBoom(event) {
+  deleteCollection(collection, index) {
     Swal.fire({
       title: 'Weet je zeker dat je deze boom wilt verwijderen?',
-      html: "Je kan deze actie hierna niet meer terugdraaien. <br><br><b>Info</b><br>Titel: ... <br>Status: ... <br> Versie: ...",
+      html: "Je kan deze actie hierna niet meer terugdraaien. <br><br><b>Info</b><br>Titel: " + collection.name + " <br>Type: " + collection.type + " <br> Versie: " + collection.version,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       cancelButtonText: 'Annuleren',
       confirmButtonText: 'Verwijder'
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         // TODO: Api call on succes SWAL fire succes
-        Swal.fire({
-          title: 'Boom verwijderd',
-          icon: "success"
-        })
+        const response = await api.post('/collection/delete', {id: collection.id});
+        const r = response.data.result;
+        if (r){
+          Swal.fire({
+            title: 'Boom verwijderd',
+            icon: "success"
+          })
+          this.conf.collections.splice(index, 1);
+        } else {
+          Swal.fire({
+            title: 'Het ID is niet bekend',
+            text: 'Geselecteerde boom is niet verwijderd.',
+            icon: "error"
+          })
+        }
+
+
       }
     })
   }
