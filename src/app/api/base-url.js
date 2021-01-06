@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export default axios.create({
-    baseURL: 'https://ipsen3api.nielsprins.com/'
+    baseURL: 'http://localhost:3000'
 });

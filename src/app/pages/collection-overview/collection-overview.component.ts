@@ -14,13 +14,14 @@ export class CollectionOverviewComponent implements OnInit {
 
   selectedCollection: CollectionModel;
   selectedCollectionIsEmpty = true;
+  selectedCollections: CollectionModel[] = [];
 
 
   constructor(public conf: configurationService) {
   }
 
   ngOnInit(): void {
-    this.getTestData();
+    this.getOnInitData();
     this.showWelcomeAlert();
   }
 
@@ -28,7 +29,7 @@ export class CollectionOverviewComponent implements OnInit {
     // tslint:disable-next-line:prefer-const
     let timerInterval;
     Swal.fire({
-      title: 'Welkom ' + this.conf.user.voornaam + '!',
+      title: 'Welkom ' + this.conf.user.firstName + '!',
       timer: 1500,
       showConfirmButton: false,
       willClose: () => {
@@ -57,9 +58,18 @@ export class CollectionOverviewComponent implements OnInit {
     }
   }
 
-  changeSelectedCollection(col: CollectionModel): void {
+  async changeSelectedCollection(col: CollectionModel) {
+    this.selectedCollectionIsEmpty = true;
+    this.selectedCollections.splice(0);
     this.selectedCollection = col;
-    console.log(this.selectedCollection);
+
+    const response = await api.get('/collection/nodes/' + col.name);
+    const j = response.data.result;
+
+    for (let i = 0; i < j.length; i++){
+      const r = response.data.result[i];
+      this.selectedCollections.push(new CollectionModel(r['id'], r['name'], r['type'], r['version']));
+    }
   }
 
   deleteCollection(collection, index): void {
@@ -82,7 +92,7 @@ export class CollectionOverviewComponent implements OnInit {
             title: 'Boom verwijderd',
             icon: "success"
           })
-          this.conf.collections.splice(index, 1);
+          this.selectedCollections.splice(index, 1);
         } else {
           Swal.fire({
             title: 'Het ID is niet bekend',
