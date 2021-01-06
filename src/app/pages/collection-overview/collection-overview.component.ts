@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import api from '../../api/base-url';
-import {ConfigurationService} from "../../shared/configuration.service";
-import Swal from "sweetalert2";
-import {CollectionModel} from "../../shared/models/collection.model";
+import Swal from 'sweetalert2';
+import {CollectionModel} from '../../shared/models/collection.model';
 import {UserModel} from '../../shared/models/user.model';
 
 @Component({
@@ -13,13 +12,14 @@ import {UserModel} from '../../shared/models/user.model';
 })
 export class CollectionOverviewComponent implements OnInit {
   private loggedInUser;
+  collections: CollectionModel[] = [];
   selectedCollection: CollectionModel;
   selectedCollectionIsEmpty = true;
   selectedCollections: CollectionModel[] = [];
   selectedCollectionName = '';
 
 
-  constructor(public conf: ConfigurationService) {
+  constructor() {
     this.loggedInUser = UserModel.getLoggedInUser();
   }
 
@@ -48,15 +48,15 @@ export class CollectionOverviewComponent implements OnInit {
   convertDataToObject(response) {
     response.forEach(e => {
       const row = new CollectionModel(e.id, e.name, e.type, e.version);
-      this.conf.collections.push(row);
+      this.collections.push(row);
     });
 
     this.checkCollectionAvailability();
   }
 
   checkCollectionAvailability(): void {
-    if(this.conf.collections.length !== 0) {
-      this.changeSelectedCollection(this.conf.collections[0]);
+    if (this.collections.length !== 0) {
+      this.changeSelectedCollection(this.collections[0]);
     }
   }
 

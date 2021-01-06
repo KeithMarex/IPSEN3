@@ -3,7 +3,6 @@ import {Cookie} from 'ng2-cookies/ng2-cookies';
 
 /* tslint:disable:variable-name */
 export class UserModel {
-  private loggedInUser: UserModel;
   private readonly _id: string;
   private readonly _email: string;
   private readonly _userGroup: string;
