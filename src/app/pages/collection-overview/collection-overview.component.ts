@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import api from '../../api/base-url';
-import {configurationService} from "../../shared/configuration.service";
+import { configurationService } from "../../shared/configuration.service";
 import Swal from "sweetalert2";
+import { CollectionModel } from 'src/app/shared/models/collection.model';
 
 @Component({
   selector: 'app-collection-overview',
@@ -11,20 +12,18 @@ import Swal from "sweetalert2";
 })
 export class CollectionOverviewComponent implements OnInit {
 
-  collections = [{id: 'test', name: 'haha', type: 'concept', version: 1}];
+  selectedCollection: CollectionModel;
+  selectedCollectionIsEmpty: boolean = true;
+
 
   constructor(private conf: configurationService) { }
 
   ngOnInit(): void {
-    this.getTestData();
+    this.getOnInitData();
+    this.showWelcomeAlert();
   }
 
-  async getTestData() {
-    const response = await api.get('/collection/all');
-    this.convertDataToObject(response.data.result);
-  }
-
-  convertDataToObject(response) {
+  showWelcomeAlert() {
     let timerInterval
     Swal.fire({
       title: 'Welkom ' + this.conf.user.voornaam + '!',
@@ -34,10 +33,30 @@ export class CollectionOverviewComponent implements OnInit {
         clearInterval(timerInterval)
       }
     })
+  }
 
+  async getOnInitData() {
+    const response = await api.get('/collection/all');
+    this.convertDataToObject(response.data.result);
+  }
+
+  convertDataToObject(response) {
     response.forEach(e => {
       const row = { id: e.id, name: e.name, type: e.type, version: e.version }
-      this.collections.push(row);
+      console.log(row);
+      this.conf.collections.push(new CollectionModel(e.id, e.name, e.type, e.version));
     });
+    this.checkCollectionAvailability();
+  }
+
+  checkCollectionAvailability() {
+    if(this.conf.collections.length != 0) {
+      this.selectedCollection = this.conf.collections[0];
+      this.selectedCollectionIsEmpty = false;
+    }
+  }
+
+  changeSelectedCollection(col: CollectionModel) {
+    this.selectedCollection = col;
   }
 }
