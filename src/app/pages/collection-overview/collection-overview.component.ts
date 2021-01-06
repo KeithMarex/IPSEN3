@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import api from '../../api/base-url';
-import {configurationService} from "../../shared/configuration.service";
+import {ConfigurationService} from "../../shared/configuration.service";
 import Swal from "sweetalert2";
 import {CollectionModel} from "../../shared/models/collection.model";
+import {UserModel} from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-collection-overview',
@@ -11,14 +12,15 @@ import {CollectionModel} from "../../shared/models/collection.model";
   encapsulation: ViewEncapsulation.None
 })
 export class CollectionOverviewComponent implements OnInit {
-
+  private loggedInUser;
   selectedCollection: CollectionModel;
   selectedCollectionIsEmpty = true;
   selectedCollections: CollectionModel[] = [];
   selectedCollectionName = '';
 
 
-  constructor(public conf: configurationService) {
+  constructor(public conf: ConfigurationService) {
+    this.loggedInUser = UserModel.getLoggedInUser();
   }
 
   ngOnInit(): void {
@@ -29,7 +31,7 @@ export class CollectionOverviewComponent implements OnInit {
   showWelcomeAlert(): void {
     let timerInterval;
     Swal.fire({
-      title: 'Welkom ' + this.conf.user.firstName + '!',
+      title: 'Welkom ' + this.loggedInUser.firstName + '!',
       timer: 1500,
       showConfirmButton: false,
       willClose: () => {
