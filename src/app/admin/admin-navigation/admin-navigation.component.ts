@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {configurationService} from '../../shared/configuration.service';
+import {ConfigurationService} from '../../shared/configuration.service';
 import Swal from 'sweetalert2';
 import {HttpClient} from '@angular/common/http';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
@@ -12,7 +12,7 @@ import {Router} from '@angular/router';
 })
 export class AdminNavigationComponent implements OnInit {
 
-  constructor(public conf: configurationService, private http: HttpClient, private route: Router) {
+  constructor(public conf: ConfigurationService, private http: HttpClient, private route: Router) {
   }
 
   ngOnInit(): void {
@@ -136,7 +136,7 @@ export class AdminNavigationComponent implements OnInit {
       allowOutsideClick: false,
       showConfirmButton: false,
       timer: 1000
-    }).then((result) => {
+    }).then(() => {
       this.route.navigate(['/']);
     });
   }
