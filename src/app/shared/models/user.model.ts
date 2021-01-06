@@ -1,6 +1,7 @@
-import api from '../../api/base-url';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
 import jwt_decode from 'jwt-decode';
+import {TokenModel} from './token.model';
+import api from '../../api/base-url';
 
 /* tslint:disable:variable-name */
 export class UserModel {
@@ -18,23 +19,28 @@ export class UserModel {
     this._lastName = lastName;
   }
 
-  static getLoggedInUser(): UserModel {
-    const token = Cookie.get('token');
+  static getLoggedInUser(redirectToLogin = true): UserModel {
+    const token = Cookie.get('user_token');
 
     if (token != null) {
+      try {
+        const userData: TokenModel = jwt_decode(token);
 
-      const userData = jwt_decode(token);
+        api.post('/user/checkToken', {token}).then((response) => {
+          if (response.data.login !== 'success') {
+            Cookie.delete('user_token', '/');
+          }
+        });
 
-      api.post('/user/checkToken', {token}).then((response) => {
-        if (response.data.login !== 'success') {
-          Cookie.delete('token');
-        }
-      });
-
-      // @ts-ignore
-      return new UserModel(userData.id, userData.email, userData.permission_group, userData.first_name, userData.last_name);
+        return new UserModel(userData.id, userData.email, userData.permission_group, userData.first_name, userData.last_name);
+      } catch (error) {
+        Cookie.delete('user_token', '/');
+      }
     }
-    return null;
+
+    if (redirectToLogin) {
+      window.location.replace('/admin');
+    }
   }
 
   get id(): string {

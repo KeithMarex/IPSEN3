@@ -19,7 +19,7 @@ export class LoginFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const user = UserModel.getLoggedInUser();
+    const user = UserModel.getLoggedInUser(false);
     if (user) {
       this.router.navigate([this.router.url + '/dashboard']);
     }
@@ -34,8 +34,7 @@ export class LoginFormComponent implements OnInit {
       if (response.data.login !== 'success') {
         this.success = false;
       } else {
-        Cookie.set('token', response.data.token, 7);
-        this.router.navigate([this.router.url + '/dashboard']);
+        Cookie.set('user_token', response.data.token, 7, '/');
       }
     });
   }
