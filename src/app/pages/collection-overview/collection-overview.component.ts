@@ -64,7 +64,7 @@ export class CollectionOverviewComponent implements OnInit {
     this.selectedCollections.splice(0);
     this.selectedCollectionName = col.name;
 
-    const response = await api.get('/collection/nodes/' + col.name);
+    const response = await api.get('/collection/getAllByName/' + col.name);
     const j = response.data.result;
 
     for (let i = 0; i < j.length; i++){
