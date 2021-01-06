@@ -18,7 +18,6 @@ export class CollectionOverviewComponent implements OnInit {
   selectedCollections: CollectionModel[] = [];
   selectedCollectionName = '';
 
-
   constructor() {
   }
 
@@ -93,14 +92,14 @@ export class CollectionOverviewComponent implements OnInit {
         if (r){
           Swal.fire({
             title: 'Boom verwijderd',
-            icon: "success"
+            icon: 'success'
           })
           this.selectedCollections.splice(index, 1);
         } else {
           Swal.fire({
             title: 'Het ID is niet bekend',
             text: 'Geselecteerde boom is niet verwijderd.',
-            icon: "error"
+            icon: 'error'
           })
         }
       }
