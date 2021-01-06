@@ -35,6 +35,7 @@ export class LoginFormComponent implements OnInit {
         this.success = false;
       } else {
         Cookie.set('user_token', response.data.token, 7, '/');
+        this.router.navigate([this.router.url + '/dashboard']);
       }
     });
   }
