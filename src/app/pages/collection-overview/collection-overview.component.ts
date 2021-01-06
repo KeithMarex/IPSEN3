@@ -16,7 +16,7 @@ export class CollectionOverviewComponent implements OnInit {
   selectedCollectionIsEmpty: boolean = true;
 
 
-  constructor(private conf: configurationService) { }
+  constructor(public conf: configurationService) { }
 
   ngOnInit(): void {
     this.getOnInitData();
@@ -58,5 +58,6 @@ export class CollectionOverviewComponent implements OnInit {
 
   changeSelectedCollection(col: CollectionModel) {
     this.selectedCollection = col;
+    console.log(this.selectedCollection);
   }
 }

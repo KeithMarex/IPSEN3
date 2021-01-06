@@ -18,7 +18,7 @@
             <div class="sidebar-content container-fluid">
                 <div class="sidebar-content__row row">
                     <ul class="sidebar-content__list content-list" >
-                        <li *ngFor="let el of this.conf.collections" [ngClass]="{'active': el.id === selectedCollection.id }" class="content-list__item" #this.conf.collections (click)="changeSelectedCollection(el)"><a id-value="{{ el.id }}">{{ el.name }}</a></li>
+                        <li *ngFor="let el of this.conf.collections" [ngClass]="{'active': el.id === selectedCollection.id }" class="content-list__item test" #this.conf.collections (click)="changeSelectedCollection(el)"><p>{{ el.name }}</p></li>
                     </ul>
                 </div>
             </div>

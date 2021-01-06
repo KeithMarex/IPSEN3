@@ -27,7 +27,7 @@ import { CollectionVersionsComponent } from './components/collections/collection
 const appRoutes: Routes = [
   {path: 'admin', component: AdminComponent},
   {path: 'admin/dashboard', component: CollectionOverviewComponent},
-  {path: '', component: CustomerComponent}
+  {path: '', component: HomepageComponent}
 ];
 
 @NgModule({

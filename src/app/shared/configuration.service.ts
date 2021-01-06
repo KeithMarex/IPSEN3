@@ -6,4 +6,5 @@ import { CollectionModel } from "./models/collection.model";
 export class configurationService {
   user: UserModel;
   collections: CollectionModel[] = [];
+  baseURL: 'https://ipsen3api.nielsprins.com/';
 }
