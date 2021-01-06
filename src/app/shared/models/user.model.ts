@@ -1,5 +1,6 @@
 import api from '../../api/base-url';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
+import jwt_decode from 'jwt-decode';
 
 /* tslint:disable:variable-name */
 export class UserModel {
@@ -21,12 +22,17 @@ export class UserModel {
     const token = Cookie.get('token');
 
     if (token != null) {
+
+      const userData = jwt_decode(token);
+
       api.post('/user/checkToken', {token}).then((response) => {
-        if (response.data.login === 'success') {
-          const userData = response.data.result;
-          return new UserModel(userData.id, userData.email, userData.permission_group, userData.first_name, userData.last_name);
+        if (response.data.login !== 'success') {
+          Cookie.delete('token');
         }
       });
+
+      // @ts-ignore
+      return new UserModel(userData.id, userData.email, userData.permission_group, userData.first_name, userData.last_name);
     }
     return null;
   }
