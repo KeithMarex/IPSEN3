@@ -1,24 +1,25 @@
+/* tslint:disable:variable-name */
 export class UserModel{
-  private _user_id: string;
+  private _id: string;
   private _email: string;
-  private _usergroup: string;
-  private _voornaam: string;
-  private _achternaam: string;
+  private _userGroup: string;
+  private _firstName: string;
+  private _lastName: string;
 
-  constructor(userId: string, email: string, usergroup: string, voornaam: string, achternaam: string) {
-    this._user_id = userId;
+  constructor(id: string, email: string, userGroup: string, firstName: string, lastName: string) {
+    this._id = id;
     this._email = email;
-    this._usergroup = usergroup;
-    this._voornaam = voornaam;
-    this._achternaam = achternaam;
+    this._userGroup = userGroup;
+    this._firstName = firstName;
+    this._lastName = lastName;
   }
 
-  get user_id(): string {
-    return this._user_id;
+  get id(): string {
+    return this._id;
   }
 
-  set user_id(value: string) {
-    this._user_id = value;
+  set id(value: string) {
+    this._id = value;
   }
 
   get email(): string {
@@ -29,27 +30,27 @@ export class UserModel{
     this._email = value;
   }
 
-  get usergroup(): string {
-    return this._usergroup;
+  get userGroup(): string {
+    return this._userGroup;
   }
 
-  set usergroup(value: string) {
-    this._usergroup = value;
+  set userGroup(value: string) {
+    this._userGroup = value;
   }
 
-  get voornaam(): string {
-    return this._voornaam;
+  get firstName(): string {
+    return this._firstName;
   }
 
-  set voornaam(value: string) {
-    this._voornaam = value;
+  set firstName(value: string) {
+    this._firstName = value;
   }
 
-  get achternaam(): string {
-    return this._achternaam;
+  get lastName(): string {
+    return this._lastName;
   }
 
-  set achternaam(value: string) {
-    this._achternaam = value;
+  set lastName(value: string) {
+    this._lastName = value;
   }
 }
