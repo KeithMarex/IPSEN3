@@ -15,6 +15,7 @@ export class CollectionOverviewComponent implements OnInit {
   selectedCollection: CollectionModel;
   selectedCollectionIsEmpty = true;
   selectedCollections: CollectionModel[] = [];
+  selectedCollectionName = '';
 
 
   constructor(public conf: configurationService) {
@@ -61,7 +62,7 @@ export class CollectionOverviewComponent implements OnInit {
   async changeSelectedCollection(col: CollectionModel) {
     this.selectedCollectionIsEmpty = true;
     this.selectedCollections.splice(0);
-    this.selectedCollection = col;
+    this.selectedCollectionName = col.name;
 
     const response = await api.get('/collection/nodes/' + col.name);
     const j = response.data.result;
