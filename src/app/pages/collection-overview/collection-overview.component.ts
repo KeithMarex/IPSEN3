@@ -43,7 +43,7 @@ export class CollectionOverviewComponent implements OnInit {
     this.convertDataToObject(response.data.result);
   }
 
-  convertDataToObject(response) {
+  convertDataToObject(response): void {
     response.forEach(e => {
       const row = new CollectionModel(e.id, e.name, e.type, e.version);
       this.collections.push(row);
@@ -67,16 +67,17 @@ export class CollectionOverviewComponent implements OnInit {
     const response = await api.get('/collection/getAllByName/' + col.name);
     const j = response.data.result;
 
-    for (let i = 0; i < j.length; i++){
+    for (let i = 0; i < j.length; i++) {
       const r = response.data.result[i];
-      this.selectedCollections.push(new CollectionModel(r['id'], r['name'], r['type'], r['version']));
+      this.selectedCollections.push(new CollectionModel(r.id, r.name, r.type, r.version));
     }
   }
 
   deleteCollection(collection, index): void {
     Swal.fire({
       title: 'Weet je zeker dat je deze boom wilt verwijderen?',
-      html: 'Je kan deze actie hierna niet meer terugdraaien. <br><br><b>Info</b><br>Titel: ' + collection.name + ' <br>Type: ' + collection.type + ' <br> Versie: ' + collection.version,
+      html: `Je kan deze actie hierna niet meer terugdraaien. <br><br><b>Info</b><br>Titel: ${collection.name} <br>
+                Type: ${collection.type} <br> Versie: ${collection.version}`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -89,53 +90,53 @@ export class CollectionOverviewComponent implements OnInit {
         const response = await api.post('/collection/delete', {id: collection.id});
         const r = response.data.result;
         await this.getOnInitData();
-        if (r){
+        if (r) {
           Swal.fire({
             title: 'Boom verwijderd',
             icon: 'success'
-          })
+          });
           this.selectedCollections.splice(index, 1);
         } else {
           Swal.fire({
             title: 'Het ID is niet bekend',
             text: 'Geselecteerde boom is niet verwijderd.',
             icon: 'error'
-          })
+          });
         }
       }
-    })
+    });
   }
 
-  changeStatus(el) {
+  changeStatus(el): void {
     Swal.fire({
       title: 'Kies status',
       text: el.name,
       input: 'radio',
       inputOptions: {
-              'concept': 'Concept',
-              'published': 'Published',
-              'archived': 'Archived'
-            },
+        concept: 'Concept',
+        published: 'Published',
+        archived: 'Archived'
+      },
       inputValidator: (value) => {
         if (!value) {
-          return 'Je moet iets kiezen!'
+          return 'Je moet iets kiezen!';
         }
       }
     }).then(async (result) => {
       const data = {id: el.id, type: result.value};
       const response = await api.post('/collection/update', data);
       const r = response.data.result;
-      if (r){
+      if (r) {
         Swal.fire({
           title: 'Collectie succesvol aangepast',
-          icon: "success"
-        })
+          icon: 'success',
+        });
         this.changeSelectedCollection(this.selectedCollection);
       }
-    })
+    });
   }
 
-  async newCollection() {
+  async newCollection(): Promise<void> {
     Swal.fire({
       title: 'Nieuwe collectie naam',
       input: 'text',
@@ -148,15 +149,15 @@ export class CollectionOverviewComponent implements OnInit {
       if (response.data.result) {
         Swal.fire({
           title: 'Collectie aangemaakt',
-          icon: "success"
-        })
+          icon: 'success',
+        });
       } else {
         Swal.fire({
           title: 'Collectie bestaat al',
           text: 'Er is geen nieuwe collectie aangemaakt.',
-          icon: "error"
-        })
+          icon: 'error',
+        });
       }
-    })
+    });
   }
 }
