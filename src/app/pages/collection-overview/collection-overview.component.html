@@ -51,8 +51,8 @@
                             <td><span class="content-table__status {{el.type}}" (click)="changeStatus(el)">{{el.type}}</span></td>
                             <td>{{el.version}}</td>
                             <td class="content-table__actions-cel">
-                                <icon-edit></icon-edit>
-                                <icon-clone (click)="changeStatus(el)"></icon-clone>
+                                <icon-edit (click)="changeStatus(el)"></icon-edit>
+                                <icon-clone></icon-clone>
                                 <icon-remove (click)="deleteCollection(el, i)"></icon-remove>
                             </td>
                           </tr>

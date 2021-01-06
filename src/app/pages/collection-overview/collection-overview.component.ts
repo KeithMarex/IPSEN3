@@ -107,7 +107,7 @@ export class CollectionOverviewComponent implements OnInit {
 
   changeStatus(el) {
     Swal.fire({
-      title: 'Select color',
+      title: 'Kies status',
       text: el.name,
       input: 'radio',
       inputOptions: {
@@ -130,12 +130,6 @@ export class CollectionOverviewComponent implements OnInit {
           icon: "success"
         })
         this.changeSelectedCollection(this.selectedCollection);
-      } else {
-        Swal.fire({
-          title: 'Fout',
-          text: 'Er heeft zich een fout voorgedaan',
-          icon: "error"
-        })
       }
     })
   }
