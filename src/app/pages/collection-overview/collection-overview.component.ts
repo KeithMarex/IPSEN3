@@ -1,8 +1,8 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import api from '../../api/base-url';
-import {ConfigurationService} from '../../shared/configuration.service';
-import Swal from 'sweetalert2';
-import {CollectionModel} from 'src/app/shared/models/collection.model';
+import {ConfigurationService} from "../../shared/configuration.service";
+import Swal from "sweetalert2";
+import {CollectionModel} from "../../shared/models/collection.model";
 import {UserModel} from '../../shared/models/user.model';
 
 @Component({
@@ -15,6 +15,8 @@ export class CollectionOverviewComponent implements OnInit {
   private loggedInUser;
   selectedCollection: CollectionModel;
   selectedCollectionIsEmpty = true;
+  selectedCollections: CollectionModel[] = [];
+  selectedCollectionName = '';
 
 
   constructor(public conf: ConfigurationService) {
@@ -27,7 +29,6 @@ export class CollectionOverviewComponent implements OnInit {
   }
 
   showWelcomeAlert(): void {
-    // tslint:disable-next-line:prefer-const
     let timerInterval;
     Swal.fire({
       title: 'Welkom ' + this.loggedInUser.firstName + '!',
@@ -44,45 +45,94 @@ export class CollectionOverviewComponent implements OnInit {
     this.convertDataToObject(response.data.result);
   }
 
-  convertDataToObject(response): void {
+  convertDataToObject(response) {
     response.forEach(e => {
-      const row = {id: e.id, name: e.name, type: e.type, version: e.version};
-      console.log(row);
-      this.conf.collections.push(new CollectionModel(e.id, e.name, e.type, e.version));
+      const row = new CollectionModel(e.id, e.name, e.type, e.version);
+      this.conf.collections.push(row);
     });
+
     this.checkCollectionAvailability();
   }
 
   checkCollectionAvailability(): void {
-    if (this.conf.collections.length !== 0) {
-      this.selectedCollection = this.conf.collections[0];
-      this.selectedCollectionIsEmpty = false;
+    if(this.conf.collections.length !== 0) {
+      this.changeSelectedCollection(this.conf.collections[0]);
     }
   }
 
-  changeSelectedCollection(col: CollectionModel): void {
+  async changeSelectedCollection(col: CollectionModel) {
+    this.selectedCollectionIsEmpty = true;
+    this.selectedCollections.splice(0);
+    this.selectedCollectionName = col.name;
     this.selectedCollection = col;
-    console.log(this.selectedCollection);
+
+    const response = await api.get('/collection/getAllByName/' + col.name);
+    const j = response.data.result;
+
+    for (let i = 0; i < j.length; i++){
+      const r = response.data.result[i];
+      this.selectedCollections.push(new CollectionModel(r['id'], r['name'], r['type'], r['version']));
+    }
   }
 
-  deleteCollection(): void {
+  deleteCollection(collection, index): void {
     Swal.fire({
       title: 'Weet je zeker dat je deze boom wilt verwijderen?',
-      html: 'Je kan deze actie hierna niet meer terugdraaien. <br><br><b>Info</b><br>Titel: ... <br>Status: ... <br> Versie: ...',
+      html: "Je kan deze actie hierna niet meer terugdraaien. <br><br><b>Info</b><br>Titel: " + collection.name + " <br>Type: " + collection.type + " <br> Versie: " + collection.version,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       cancelButtonText: 'Annuleren',
       confirmButtonText: 'Verwijder'
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
         // TODO: Api call on succes SWAL fire succes
-        Swal.fire({
-          title: 'Boom verwijderd',
-          icon: 'success'
-        });
+        const response = await api.post('/collection/delete', {id: collection.id});
+        const r = response.data.result;
+        if (r){
+          Swal.fire({
+            title: 'Boom verwijderd',
+            icon: "success"
+          })
+          this.selectedCollections.splice(index, 1);
+        } else {
+          Swal.fire({
+            title: 'Het ID is niet bekend',
+            text: 'Geselecteerde boom is niet verwijderd.',
+            icon: "error"
+          })
+        }
       }
-    });
+    })
+  }
+
+  changeStatus(el) {
+    Swal.fire({
+      title: 'Kies status',
+      text: el.name,
+      input: 'radio',
+      inputOptions: {
+              'concept': 'Concept',
+              'published': 'Published',
+              'archived': 'Archived'
+            },
+      inputValidator: (value) => {
+        if (!value) {
+          return 'Je moet iets kiezen!'
+        }
+      }
+    }).then(async (result) => {
+      const data = {id: el.id, type: result.value};
+      const response = await api.post('/collection/update', data);
+      const r = response.data.result;
+      if (r){
+        Swal.fire({
+          title: 'Collectie succesvol aangepast',
+          icon: "success"
+        })
+        this.changeSelectedCollection(this.selectedCollection);
+      }
+    })
   }
 }

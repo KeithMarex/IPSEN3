@@ -16,9 +16,6 @@ export class CollectionVersionsComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('ngOnChanges called');
-    console.log(changes);
-    console.log(this.selectedCollection);
   }
 
 }

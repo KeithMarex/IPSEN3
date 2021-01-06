@@ -1,46 +1,45 @@
-/* tslint:disable:variable-name */
-export class CollectionModel {
-    private _id: string;
-    private _name: string;
-    private _type: string;
-    private _version: number;
+export class CollectionModel{
+  private _id: string;
+  private _name: string;
+  private _type: string;
+  private _version: string;
 
-    constructor(id: string, name: string, type: string, version: number) {
-        this._id = id;
-        this._name = name;
-        this._type = type;
-        this._version = version;
-    }
+  get id(): string {
+    return this._id;
+  }
 
-    get id(): string {
-        return this._id;
-    }
+  set id(value: string) {
+    this._id = value;
+  }
 
-    set id(id: string) {
-        this._id = id;
-    }
+  get name(): string {
+    return this._name;
+  }
 
-    get name(): string {
-        return this._name;
-    }
+  set name(value: string) {
+    this._name = value;
+  }
 
-    set name(name: string) {
-        this._name = name;
-    }
+  get type(): string {
+    return this._type;
+  }
 
-    get type(): string {
-        return this._type;
-    }
+  set type(value: string) {
+    this._type = value;
+  }
 
-    set type(type: string) {
-        this._type = type;
-    }
+  get version(): string {
+    return this._version;
+  }
 
-    get version(): number {
-        return this._version;
-    }
+  set version(value: string) {
+    this._version = value;
+  }
 
-    set version(version: number) {
-        this._version = version;
-    }
+  constructor(id: string, name: string, type: string, version: string) {
+    this._id = id;
+    this._name = name;
+    this._type = type;
+    this._version = version;
+  }
 }
