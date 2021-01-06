@@ -12,35 +12,57 @@ import {CollectionModel} from "../../shared/models/collection.model";
 })
 export class CollectionOverviewComponent implements OnInit {
 
-  constructor(public conf: configurationService) { }
+  selectedCollection: CollectionModel;
+  selectedCollectionIsEmpty = true;
+
+
+  constructor(public conf: configurationService) {
+  }
 
   ngOnInit(): void {
     this.getTestData();
+    this.showWelcomeAlert();
   }
 
-  async getTestData() {
-    const response = await api.get('/collection/all');
-    this.convertDataToObject(response.data.result);
-  }
-
-  convertDataToObject(response) {
-    let timerInterval
+  showWelcomeAlert(): void {
+    // tslint:disable-next-line:prefer-const
+    let timerInterval;
     Swal.fire({
       title: 'Welkom ' + this.conf.user.voornaam + '!',
       timer: 1500,
       showConfirmButton: false,
       willClose: () => {
-        clearInterval(timerInterval)
+        clearInterval(timerInterval);
       }
-    })
+    });
+  }
 
+  async getOnInitData(): Promise<void> {
+    const response = await api.get('/collection/all');
+    this.convertDataToObject(response.data.result);
+  }
+
+  convertDataToObject(response) {
     response.forEach(e => {
       const row = new CollectionModel(e.id, e.name, e.type, e.version);
       this.conf.collections.push(row);
     });
+    this.checkCollectionAvailability();
   }
 
-  deleteCollection(collection, index) {
+  checkCollectionAvailability(): void {
+    if (this.conf.collections.length !== 0) {
+      this.selectedCollection = this.conf.collections[0];
+      this.selectedCollectionIsEmpty = false;
+    }
+  }
+
+  changeSelectedCollection(col: CollectionModel): void {
+    this.selectedCollection = col;
+    console.log(this.selectedCollection);
+  }
+
+  deleteCollection(collection, index): void {
     Swal.fire({
       title: 'Weet je zeker dat je deze boom wilt verwijderen?',
       html: "Je kan deze actie hierna niet meer terugdraaien. <br><br><b>Info</b><br>Titel: " + collection.name + " <br>Type: " + collection.type + " <br> Versie: " + collection.version,

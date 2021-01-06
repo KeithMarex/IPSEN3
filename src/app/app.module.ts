@@ -22,6 +22,7 @@ import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {configurationService} from "./shared/configuration.service";
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { CollectionVersionsComponent } from './components/collections/collection-versions/collection-versions.component';
 
 const appRoutes: Routes = [
   {path: 'admin', component: AdminComponent},
@@ -45,7 +46,8 @@ const appRoutes: Routes = [
     HomepageComponent,
     RemoveComponent,
     CloneComponent,
-    EditComponent
+    EditComponent,
+    CollectionVersionsComponent
   ],
   imports: [
     BrowserModule,

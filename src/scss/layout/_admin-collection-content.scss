@@ -35,7 +35,8 @@
         &:hover {
             cursor: pointer;
             background-color: #f8f8f8;
-            > .content-table__actions-cel {
+            
+            > &__actions-cel {
                 opacity: 100%;
             }
         }
