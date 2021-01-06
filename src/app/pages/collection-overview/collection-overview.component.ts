@@ -20,10 +20,10 @@ export class CollectionOverviewComponent implements OnInit {
 
 
   constructor() {
-    this.loggedInUser = UserModel.getLoggedInUser();
   }
 
   ngOnInit(): void {
+    this.loggedInUser = UserModel.getLoggedInUser();
     this.getOnInitData();
     this.showWelcomeAlert();
   }
