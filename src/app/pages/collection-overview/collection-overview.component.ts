@@ -93,6 +93,7 @@ export class CollectionOverviewComponent implements OnInit {
         // TODO: Api call on succes SWAL fire succes
         const response = await api.post('/collection/delete', {id: collection.id});
         const r = response.data.result;
+        await this.getOnInitData();
         if (r){
           Swal.fire({
             title: 'Boom verwijderd',
