@@ -1,7 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
-import {ConfigurationService} from '../../../shared/configuration.service';
 import {UserModel} from '../../../shared/models/user.model';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
 import api from '../../../api/base-url';
@@ -16,7 +15,7 @@ export class LoginFormComponent implements OnInit {
 
   @Output() changeView = new EventEmitter();
 
-  constructor(private http: HttpClient, private router: Router, private conf: ConfigurationService) {
+  constructor(private http: HttpClient, private router: Router) {
   }
 
   ngOnInit(): void {

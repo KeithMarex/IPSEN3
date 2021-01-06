@@ -20,7 +20,7 @@ import { EditComponent } from './icons/edit/edit.component';
 import {RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
-import {ConfigurationService} from "./shared/configuration.service";
+import {ConfigurationService} from './shared/configuration.service';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { CollectionVersionsComponent } from './components/collections/collection-versions/collection-versions.component';
 
