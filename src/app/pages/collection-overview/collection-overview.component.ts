@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import api from '../../api/api';
 import Swal from 'sweetalert2';
 import {CollectionModel} from '../../shared/models/collection.model';
@@ -24,19 +24,19 @@ export class CollectionOverviewComponent implements OnInit {
   ngOnInit(): void {
     this.loggedInUser = UserModel.getLoggedInUser();
     this.getOnInitData();
-    this.showWelcomeAlert();
+    // this.showWelcomeAlert();
   }
 
-  showWelcomeAlert(): void {
-    Swal.fire({
-      title: 'Welkom ' + this.loggedInUser.firstName + '!',
-      timer: 1500,
-      showConfirmButton: false,
-    });
-  }
+  // showWelcomeAlert(): void {
+  //   Swal.fire({
+  //     title: 'Welkom ' + this.loggedInUser.firstName + '!',
+  //     timer: 1500,
+  //     showConfirmButton: false,
+  //   });
+  // }
 
   async getOnInitData(): Promise<void> {
-    if (this.collections.length !== 0){
+    if (this.collections.length !== 0) {
       this.collections.length = 0;
     }
     const response = await api.get('/collection/all');
