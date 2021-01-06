@@ -126,8 +126,7 @@ export class AdminNavigationComponent implements OnInit {
   }
 
   logOut(): void {
-    Cookie.delete('email');
-    Cookie.delete('password');
+    Cookie.delete('token');
     Swal.fire({
       position: 'top-end',
       icon: 'success',

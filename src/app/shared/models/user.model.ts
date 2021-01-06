@@ -22,7 +22,7 @@ export class UserModel {
   static getLoggedInUser(redirectToLogin = true): UserModel {
     const token = Cookie.get('user_token');
 
-    if (token != null) {
+    if (token !== null) {
       try {
         const userData: TokenModel = jwt_decode(token);
 
