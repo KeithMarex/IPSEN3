@@ -58,7 +58,9 @@ export class AdminNavigationComponent implements OnInit {
     Swal.mixin({
       input: 'text',
       confirmButtonText: 'Volgende &rarr;',
+      cancelButtonText: '&larr; Vorige',
       showCancelButton: true,
+      reverseButtons: true,
       progressSteps: ['1', '2', '3', '4', '5']
     }).queue([
       {
