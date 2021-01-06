@@ -3,6 +3,9 @@ import {Question} from '../Nodes/question.model';
 import {Tree} from '../Nodes/tree.model';
 import {Answer} from '../Nodes/answer.model';
 import {NodeModel} from '../Nodes/node.model';
+import {HttpClient} from '@angular/common/http';
+import api from '../../api/base-url';
+
 
 @Component({
   selector: 'app-question',
@@ -17,16 +20,23 @@ export class QuestionComponent implements OnInit {
   isAnswered: boolean;
   preselectedAnswer: string;
 
-  constructor() {
+  constructor(private http: HttpClient) {
   }
 
   ngOnInit(): void {
     const collectionName = 'Reisvoucher'; // ToDo set collectionName
     this.tree = new Tree(collectionName);
-    this.tree.addNode(this.getFirstQuestion());
-    this.setCurrentAnswers();
-    this.updateIsFirstQuestion();
+    this.firstQuestionInTree().then(r => {
+      this.setCurrentAnswersFromApi().then(r => {
+        this.updateIsFirstQuestion();
+      });
+    });
     this.isAnswered = false;
+  }
+
+  async firstQuestionInTree(): Promise<void> {
+    const firstQuestion = await this.getFirstQuestionFromAPI();
+    this.tree.addNode(firstQuestion);
   }
 
   getCollectionName(): string {
@@ -40,6 +50,21 @@ export class QuestionComponent implements OnInit {
     const parentId = '0';
     const questionType = 'DropDown';
     return new Question(questionId, questionText, parentId, questionType);
+  }
+
+  async getFirstQuestionFromAPI(): Promise<Question> {
+    let firstQuestion;
+    let questionId;
+    let questionText;
+    const parentId = '0';
+    const questionType = 'DropDown';
+
+    await api.get('/question/getByCollection/QJk4CHFnsdX').then((responseData) => {
+      questionId = responseData.data.result.id;
+      questionText = responseData.data.result.name;
+    });
+    firstQuestion = new Question(questionId, questionText, parentId, questionType);
+    return firstQuestion;
   }
 
   getCurrentQuestionText(): string {
@@ -69,15 +94,27 @@ export class QuestionComponent implements OnInit {
     }
   }
 
+  async setCurrentAnswersFromApi(): Promise<void> {
+    this.currentAnswers = [];
+    const currentQuestionId = this.tree.getCurrentNode().getId();
+    const path = '/answer/getByQuestion/' + currentQuestionId;
+    await api.get(path).then((responseData) => {
+      console.log(responseData);
+      const answers = responseData.data.result;
+      for (let i = 0; i < answers.length; i++) {
+        const answer = new Answer(answers[i].id, answers[i].name, currentQuestionId);
+        this.currentAnswers.push(answer);
+      }
+    });
+  }
+
   nextQuestionExists(answer: Answer): boolean {
     // ToDo check this with api
     switch (answer.getId()) {
       case '2':
         return true;
-        break;
       case '3':
         return true;
-        break;
     }
     return false;
   }
