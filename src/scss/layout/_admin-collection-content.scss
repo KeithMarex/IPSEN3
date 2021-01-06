@@ -28,7 +28,7 @@
 
         &.concept { background-color: $statusConcept; }
         &.published { background-color: $statusPublished; }
-        &.archieved { background-color: $statusArchieved; }
+        &.archived { background-color: $statusArchived; }
     }
 
     &__row {

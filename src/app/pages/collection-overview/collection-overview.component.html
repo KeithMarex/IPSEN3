@@ -48,7 +48,7 @@
                         <tbody class="content-table__body">
                           <tr class="content-table__row" *ngFor="let el of this.selectedCollections; let i = index">
                             <td>{{el.name}}</td>
-                            <td><span class="content-table__status {{el.type}}" (click)="onClickOpenModalChangeStatus(el)">{{el.type}}</span></td>
+                            <td><span class="content-table__status {{el.type}}" (click)="changeStatus(el)">{{el.type}}</span></td>
                             <td>{{el.version}}</td>
                             <td class="content-table__actions-cel">
                                 <icon-edit></icon-edit>

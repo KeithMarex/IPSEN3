@@ -73,10 +73,6 @@ export class CollectionOverviewComponent implements OnInit {
     }
   }
 
-  onClickOpenModalChangeStatus(col: CollectionModel) {
-    console.log('test', col);
-  }
-
   deleteCollection(collection, index): void {
     Swal.fire({
       title: 'Weet je zeker dat je deze boom wilt verwijderen?',
@@ -133,6 +129,7 @@ export class CollectionOverviewComponent implements OnInit {
           title: 'Collectie succesvol aangepast',
           icon: "success"
         })
+        this.changeSelectedCollection(this.selectedCollection);
       } else {
         Swal.fire({
           title: 'Fout',
