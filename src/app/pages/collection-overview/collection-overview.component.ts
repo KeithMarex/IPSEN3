@@ -60,4 +60,25 @@ export class CollectionOverviewComponent implements OnInit {
     this.selectedCollection = col;
     console.log(this.selectedCollection);
   }
+
+  verwijderBoom(event) {
+    Swal.fire({
+      title: 'Weet je zeker dat je deze boom wilt verwijderen?',
+      html: "Je kan deze actie hierna niet meer terugdraaien. <br><br><b>Info</b><br>Titel: ... <br>Status: ... <br> Versie: ...",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: 'Annuleren',
+      confirmButtonText: 'Verwijder'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // TODO: Api call on succes SWAL fire succes
+        Swal.fire({
+          title: 'Boom verwijderd',
+          icon: "success"
+        })
+      }
+    })
+  }
 }

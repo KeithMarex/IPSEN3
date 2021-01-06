@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {configurationService} from "../../shared/configuration.service";
 import Swal from "sweetalert2";
 import {HttpClient} from "@angular/common/http";
+import {Cookie} from "ng2-cookies/ng2-cookies";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-admin-navigation',
@@ -10,7 +12,7 @@ import {HttpClient} from "@angular/common/http";
 })
 export class AdminNavigationComponent implements OnInit {
 
-  constructor(public conf: configurationService, private http: HttpClient) { }
+  constructor(public conf: configurationService, private http: HttpClient, private route: Router) { }
 
   ngOnInit(): void {
   }
@@ -58,7 +60,9 @@ export class AdminNavigationComponent implements OnInit {
     Swal.mixin({
       input: 'text',
       confirmButtonText: 'Volgende &rarr;',
+      cancelButtonText: '&larr; Vorige',
       showCancelButton: true,
+      reverseButtons: true,
       progressSteps: ['1', '2', '3', '4', '5']
     }).queue([
       {
@@ -106,5 +110,20 @@ export class AdminNavigationComponent implements OnInit {
       }
     })
 
+  }
+
+  logOut() {
+    Cookie.delete('email');
+    Cookie.delete('password');
+    Swal.fire({
+      position: 'top-end',
+      icon: 'success',
+      title: 'Succesvol uitgelogd',
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      timer: 1000
+    }).then((result) => {
+      this.route.navigate(['/']);
+    })
   }
 }
