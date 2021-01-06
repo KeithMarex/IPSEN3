@@ -53,9 +53,8 @@ export class CollectionOverviewComponent implements OnInit {
   }
 
   checkCollectionAvailability(): void {
-    if (this.conf.collections.length !== 0) {
-      this.selectedCollection = this.conf.collections[0];
-      this.selectedCollectionIsEmpty = false;
+    if(this.conf.collections.length !== 0) {
+      this.changeSelectedCollection(this.conf.collections[0]);
     }
   }
 
@@ -72,6 +71,10 @@ export class CollectionOverviewComponent implements OnInit {
       const r = response.data.result[i];
       this.selectedCollections.push(new CollectionModel(r['id'], r['name'], r['type'], r['version']));
     }
+  }
+
+  onClickOpenModalChangeStatus(col: CollectionModel) {
+    console.log('test', col);
   }
 
   deleteCollection(collection, index): void {
@@ -102,8 +105,6 @@ export class CollectionOverviewComponent implements OnInit {
             icon: "error"
           })
         }
-
-
       }
     })
   }
