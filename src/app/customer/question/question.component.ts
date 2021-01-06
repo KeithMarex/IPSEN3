@@ -19,19 +19,30 @@ export class QuestionComponent implements OnInit {
   isFirstQuestion: boolean;
   isAnswered: boolean;
   preselectedAnswer: string;
+  collectionId: string;
+  collectionName: string;
 
   constructor(private http: HttpClient) {
+    this.collectionId = 'QJk4CHFnsdX'; // ToDo get this from starting screen
   }
 
   ngOnInit(): void {
-    const collectionName = 'Reisvoucher'; // ToDo set collectionName
-    this.tree = new Tree(collectionName);
+    this.setCollectionNameFromApi().then(r => {
+      this.tree = new Tree(this.collectionName);
+    });
     this.firstQuestionInTree().then(r => {
-      this.setCurrentAnswersFromApi().then(r => {
+      this.setCurrentAnswersFromApi().then(s => {
         this.updateIsFirstQuestion();
       });
     });
     this.isAnswered = false;
+  }
+
+  async setCollectionNameFromApi(): Promise<void> {
+    const path = '/collection/' + this.collectionId;
+    await api.get(path).then((responseData) => {
+      this.collectionName = responseData.data.result.name;
+    });
   }
 
   async firstQuestionInTree(): Promise<void> {
@@ -59,7 +70,8 @@ export class QuestionComponent implements OnInit {
     const parentId = '0';
     const questionType = 'DropDown';
 
-    await api.get('/question/getByCollection/QJk4CHFnsdX').then((responseData) => {
+    const path = '/question/getByCollection/' + this.collectionId;
+    await api.get(path).then((responseData) => {
       questionId = responseData.data.result.id;
       questionText = responseData.data.result.name;
     });
@@ -101,6 +113,7 @@ export class QuestionComponent implements OnInit {
     await api.get(path).then((responseData) => {
       console.log(responseData);
       const answers = responseData.data.result;
+      // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < answers.length; i++) {
         const answer = new Answer(answers[i].id, answers[i].name, currentQuestionId);
         this.currentAnswers.push(answer);
@@ -117,6 +130,11 @@ export class QuestionComponent implements OnInit {
         return true;
     }
     return false;
+  }
+
+  nextQuestionExistsApi(answer: Answer): boolean {
+    // ToDo api version of the above;
+    return null;
   }
 
   getNextQuestion(answer: Answer): Question {
