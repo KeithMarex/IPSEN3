@@ -27,7 +27,6 @@ export class CollectionOverviewComponent implements OnInit {
   }
 
   showWelcomeAlert(): void {
-    // tslint:disable-next-line:prefer-const
     let timerInterval;
     Swal.fire({
       title: 'Welkom ' + this.conf.user.firstName + '!',
@@ -49,6 +48,7 @@ export class CollectionOverviewComponent implements OnInit {
       const row = new CollectionModel(e.id, e.name, e.type, e.version);
       this.conf.collections.push(row);
     });
+
     this.checkCollectionAvailability();
   }
 
@@ -104,6 +104,40 @@ export class CollectionOverviewComponent implements OnInit {
         }
 
 
+      }
+    })
+  }
+
+  changeStatus(el) {
+    Swal.fire({
+      title: 'Select color',
+      text: el.name,
+      input: 'radio',
+      inputOptions: {
+              'concept': 'Concept',
+              'published': 'Published',
+              'archived': 'Archived'
+            },
+      inputValidator: (value) => {
+        if (!value) {
+          return 'Je moet iets kiezen!'
+        }
+      }
+    }).then(async (result) => {
+      const data = {id: el.id, type: result.value};
+      const response = await api.post('/collection/update', data);
+      const r = response.data.result;
+      if (r){
+        Swal.fire({
+          title: 'Collectie succesvol aangepast',
+          icon: "success"
+        })
+      } else {
+        Swal.fire({
+          title: 'Fout',
+          text: 'Er heeft zich een fout voorgedaan',
+          icon: "error"
+        })
       }
     })
   }

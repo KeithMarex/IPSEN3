@@ -52,7 +52,7 @@
                             <td>{{el.version}}</td>
                             <td class="content-table__actions-cel">
                                 <icon-edit></icon-edit>
-                                <icon-clone></icon-clone>
+                                <icon-clone (click)="changeStatus(el)"></icon-clone>
                                 <icon-remove (click)="deleteCollection(el, i)"></icon-remove>
                             </td>
                           </tr>
