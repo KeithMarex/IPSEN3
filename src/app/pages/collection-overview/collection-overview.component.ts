@@ -41,8 +41,8 @@ export class CollectionOverviewComponent implements OnInit {
   }
 
   async getOnInitData(): Promise<void> {
-    if (this.conf.collections.length !== 0){
-      this.conf.collections.length = 0;
+    if (this.collections.length !== 0){
+      this.collections.length = 0;
     }
     const response = await api.get('/collection/all');
     this.convertDataToObject(response.data.result);
