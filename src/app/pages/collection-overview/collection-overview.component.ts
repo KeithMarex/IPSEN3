@@ -39,6 +39,9 @@ export class CollectionOverviewComponent implements OnInit {
   }
 
   async getOnInitData(): Promise<void> {
+    if (this.conf.collections.length !== 0){
+      this.conf.collections.length = 0;
+    }
     const response = await api.get('/collection/all');
     this.convertDataToObject(response.data.result);
   }
@@ -130,6 +133,31 @@ export class CollectionOverviewComponent implements OnInit {
           icon: "success"
         })
         this.changeSelectedCollection(this.selectedCollection);
+      }
+    })
+  }
+
+  async newCollection() {
+    Swal.fire({
+      title: 'Nieuwe collectie naam',
+      input: 'text',
+      inputLabel: 'Geef een nieuwe collectienaam op',
+      inputPlaceholder: 'Collectie naam...'
+    }).then(async (result) => {
+      const data = {name: result.value};
+      const response = await api.post('/collection/create', data);
+      await this.getOnInitData();
+      if (response.data.result) {
+        Swal.fire({
+          title: 'Collectie aangemaakt',
+          icon: "success"
+        })
+      } else {
+        Swal.fire({
+          title: 'Collectie bestaat al',
+          text: 'Er is geen nieuwe collectie aangemaakt.',
+          icon: "error"
+        })
       }
     })
   }
