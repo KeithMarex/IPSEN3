@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import api from '../../api/base-url';
-import {configurationService} from "../../shared/configuration.service";
-import Swal from "sweetalert2";
-import {CollectionModel} from "../../shared/models/collection.model";
+import Swal from 'sweetalert2';
+import {CollectionModel} from '../../shared/models/collection.model';
+import {UserModel} from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-collection-overview',
@@ -11,14 +11,16 @@ import {CollectionModel} from "../../shared/models/collection.model";
   encapsulation: ViewEncapsulation.None
 })
 export class CollectionOverviewComponent implements OnInit {
-
+  private loggedInUser;
+  collections: CollectionModel[] = [];
   selectedCollection: CollectionModel;
   selectedCollectionIsEmpty = true;
   selectedCollections: CollectionModel[] = [];
   selectedCollectionName = '';
 
 
-  constructor(public conf: configurationService) {
+  constructor() {
+    this.loggedInUser = UserModel.getLoggedInUser();
   }
 
   ngOnInit(): void {
@@ -27,18 +29,17 @@ export class CollectionOverviewComponent implements OnInit {
   }
 
   showWelcomeAlert(): void {
-    let timerInterval;
     Swal.fire({
-      title: 'Welkom ' + this.conf.user.firstName + '!',
+      title: 'Welkom ' + this.loggedInUser.firstName + '!',
       timer: 1500,
       showConfirmButton: false,
-      willClose: () => {
-        clearInterval(timerInterval);
-      }
     });
   }
 
   async getOnInitData(): Promise<void> {
+    if (this.collections.length !== 0){
+      this.collections.length = 0;
+    }
     const response = await api.get('/collection/all');
     this.convertDataToObject(response.data.result);
   }
@@ -46,19 +47,19 @@ export class CollectionOverviewComponent implements OnInit {
   convertDataToObject(response) {
     response.forEach(e => {
       const row = new CollectionModel(e.id, e.name, e.type, e.version);
-      this.conf.collections.push(row);
+      this.collections.push(row);
     });
 
     this.checkCollectionAvailability();
   }
 
   checkCollectionAvailability(): void {
-    if(this.conf.collections.length !== 0) {
-      this.changeSelectedCollection(this.conf.collections[0]);
+    if (this.collections.length !== 0) {
+      this.changeSelectedCollection(this.collections[0]);
     }
   }
 
-  async changeSelectedCollection(col: CollectionModel) {
+  async changeSelectedCollection(col: CollectionModel): Promise<void> {
     this.selectedCollectionIsEmpty = true;
     this.selectedCollections.splice(0);
     this.selectedCollectionName = col.name;
@@ -76,7 +77,7 @@ export class CollectionOverviewComponent implements OnInit {
   deleteCollection(collection, index): void {
     Swal.fire({
       title: 'Weet je zeker dat je deze boom wilt verwijderen?',
-      html: "Je kan deze actie hierna niet meer terugdraaien. <br><br><b>Info</b><br>Titel: " + collection.name + " <br>Type: " + collection.type + " <br> Versie: " + collection.version,
+      html: 'Je kan deze actie hierna niet meer terugdraaien. <br><br><b>Info</b><br>Titel: ' + collection.name + ' <br>Type: ' + collection.type + ' <br> Versie: ' + collection.version,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -88,6 +89,7 @@ export class CollectionOverviewComponent implements OnInit {
         // TODO: Api call on succes SWAL fire succes
         const response = await api.post('/collection/delete', {id: collection.id});
         const r = response.data.result;
+        await this.getOnInitData();
         if (r){
           Swal.fire({
             title: 'Boom verwijderd',
@@ -107,7 +109,7 @@ export class CollectionOverviewComponent implements OnInit {
 
   changeStatus(el) {
     Swal.fire({
-      title: 'Select color',
+      title: 'Kies status',
       text: el.name,
       input: 'radio',
       inputOptions: {
@@ -130,10 +132,29 @@ export class CollectionOverviewComponent implements OnInit {
           icon: "success"
         })
         this.changeSelectedCollection(this.selectedCollection);
+      }
+    })
+  }
+
+  async newCollection() {
+    Swal.fire({
+      title: 'Nieuwe collectie naam',
+      input: 'text',
+      inputLabel: 'Geef een nieuwe collectienaam op',
+      inputPlaceholder: 'Collectie naam...'
+    }).then(async (result) => {
+      const data = {name: result.value};
+      const response = await api.post('/collection/create', data);
+      await this.getOnInitData();
+      if (response.data.result) {
+        Swal.fire({
+          title: 'Collectie aangemaakt',
+          icon: "success"
+        })
       } else {
         Swal.fire({
-          title: 'Fout',
-          text: 'Er heeft zich een fout voorgedaan',
+          title: 'Collectie bestaat al',
+          text: 'Er is geen nieuwe collectie aangemaakt.',
           icon: "error"
         })
       }

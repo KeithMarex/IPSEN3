@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {configurationService} from '../../shared/configuration.service';
 import Swal from 'sweetalert2';
 import {HttpClient} from '@angular/common/http';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
 import {Router} from '@angular/router';
+import {UserModel} from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-admin-navigation',
@@ -12,7 +12,7 @@ import {Router} from '@angular/router';
 })
 export class AdminNavigationComponent implements OnInit {
 
-  constructor(public conf: configurationService, private http: HttpClient, private route: Router) {
+  constructor(private http: HttpClient, private route: Router) {
   }
 
   ngOnInit(): void {
@@ -35,13 +35,12 @@ export class AdminNavigationComponent implements OnInit {
       if (result.value) {
         // @ts-ignore
         const answers = JSON.parse(JSON.stringify(result.value));
+        const user = UserModel.getLoggedInUser();
         // TODO add confirm previous password
         if (answers[1] === answers[2]) {
           const postData = {
-            id: this.conf.user.id,
-            email: this.conf.user.email,
+            id: user.id,
             password: answers[2],
-            permission_group: this.conf.user.userGroup
           };
           console.log(postData);
           this.http.post('https://ipsen3api.nielsprins.com/user/update', postData).subscribe(responseData => {
@@ -136,7 +135,7 @@ export class AdminNavigationComponent implements OnInit {
       allowOutsideClick: false,
       showConfirmButton: false,
       timer: 1000
-    }).then((result) => {
+    }).then(() => {
       this.route.navigate(['/']);
     });
   }

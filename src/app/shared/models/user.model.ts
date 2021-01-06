@@ -1,10 +1,13 @@
+import api from '../../api/base-url';
+import {Cookie} from 'ng2-cookies/ng2-cookies';
+
 /* tslint:disable:variable-name */
-export class UserModel{
-  private _id: string;
-  private _email: string;
-  private _userGroup: string;
-  private _firstName: string;
-  private _lastName: string;
+export class UserModel {
+  private readonly _id: string;
+  private readonly _email: string;
+  private readonly _userGroup: string;
+  private readonly _firstName: string;
+  private readonly _lastName: string;
 
   constructor(id: string, email: string, userGroup: string, firstName: string, lastName: string) {
     this._id = id;
@@ -14,43 +17,37 @@ export class UserModel{
     this._lastName = lastName;
   }
 
-  get id(): string {
-    return this._id;
+  static getLoggedInUser(): UserModel {
+    const token = Cookie.get('token');
+
+    if (token != null) {
+      api.post('/user/checkToken', {token}).then((response) => {
+        if (response.data.login === 'success') {
+          const userData = response.data.result;
+          return new UserModel(userData.id, userData.email, userData.permission_group, userData.first_name, userData.last_name);
+        }
+      });
+    }
+    return null;
   }
 
-  set id(value: string) {
-    this._id = value;
+  get id(): string {
+    return this._id;
   }
 
   get email(): string {
     return this._email;
   }
 
-  set email(value: string) {
-    this._email = value;
-  }
-
   get userGroup(): string {
     return this._userGroup;
-  }
-
-  set userGroup(value: string) {
-    this._userGroup = value;
   }
 
   get firstName(): string {
     return this._firstName;
   }
 
-  set firstName(value: string) {
-    this._firstName = value;
-  }
-
   get lastName(): string {
     return this._lastName;
-  }
-
-  set lastName(value: string) {
-    this._lastName = value;
   }
 }

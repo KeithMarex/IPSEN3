@@ -9,7 +9,7 @@
                         <h1 class="sidebar__heading">Collecties</h1>
                     </div>
                     <div class=" sidebar__col col-sm-4">
-                        <button type="button" class="sidebar__btn btn">
+                        <button type="button" class="sidebar__btn btn" (click)="newCollection()">
                             Nieuw
                         </button>
                     </div>
@@ -18,7 +18,7 @@
             <div class="sidebar-content container-fluid">
                 <div class="sidebar-content__row row">
                     <ul class="sidebar-content__list content-list" >
-                        <li *ngFor="let el of this.conf.collections" [ngClass]="{'active': el.id === selectedCollection.id }" class="content-list__item" #this.conf.collections style="cursor: pointer" (click)="changeSelectedCollection(el)"><a>{{ el.name }}</a></li>
+                        <li *ngFor="let el of this.collections" [ngClass]="{'active': el.id === selectedCollection.id }" class="content-list__item" #this.collections style="cursor: pointer" (click)="changeSelectedCollection(el)"><a>{{ el.name }}</a></li>
                     </ul>
                 </div>
             </div>
@@ -51,8 +51,8 @@
                             <td><span class="content-table__status {{el.type}}" (click)="changeStatus(el)">{{el.type}}</span></td>
                             <td>{{el.version}}</td>
                             <td class="content-table__actions-cel">
-                                <icon-edit></icon-edit>
-                                <icon-clone (click)="changeStatus(el)"></icon-clone>
+                                <icon-edit (click)="changeStatus(el)"></icon-edit>
+                                <icon-clone></icon-clone>
                                 <icon-remove (click)="deleteCollection(el, i)"></icon-remove>
                             </td>
                           </tr>
