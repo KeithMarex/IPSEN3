@@ -26,7 +26,7 @@ import {CollectionVersionsComponent} from './components/collections/collection-v
 import {CollectionDetailsComponent} from './pages/collection-overview/collection-details/collection-details.component';
 
 const appRoutes: Routes = [
-  {path: 'collection/:param1', component: CustomerComponent},
+  {path: 'collection/:collectionId', component: CustomerComponent},
   {path: 'admin', component: AdminComponent},
   {path: 'admin/dashboard', component: CollectionOverviewComponent},
   {path: 'admin/collection', component: CollectionDetailsComponent},

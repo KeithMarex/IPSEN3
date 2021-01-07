@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Question} from '../Nodes/question.model';
 import {Tree} from '../Nodes/tree.model';
 import {Answer} from '../Nodes/answer.model';
 import {NodeModel} from '../Nodes/node.model';
 import {HttpClient} from '@angular/common/http';
-import api from '../../api/base-url';
+
+import {ActivatedRoute} from '@angular/router';
+import {Api} from '../../api/api';
 
 
 @Component({
@@ -14,6 +16,7 @@ import api from '../../api/base-url';
 })
 export class QuestionComponent implements OnInit {
 
+  api = Api.getApi();
   tree: Tree;
   currentAnswers: Answer[];
   isFirstQuestion: boolean;
@@ -22,11 +25,12 @@ export class QuestionComponent implements OnInit {
   collectionId: string;
   collectionName: string;
 
-  constructor(private http: HttpClient) {
-    this.collectionId = 'QJk4CHFnsdX'; // ToDo get this from starting screen
+  constructor(private http: HttpClient, private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
+    this.collectionId = this.route.snapshot.paramMap.get('collectionId');
+    console.log(this.collectionId);
     this.setCollectionNameFromApi().then(r => {
       this.tree = new Tree(this.collectionName);
     });
@@ -40,6 +44,7 @@ export class QuestionComponent implements OnInit {
 
   async setCollectionNameFromApi(): Promise<void> {
     const path = '/collection/' + this.collectionId;
+    const api = Api.getApi();
     await api.get(path).then((responseData) => {
       this.collectionName = responseData.data.result.name;
     });
@@ -71,7 +76,7 @@ export class QuestionComponent implements OnInit {
     const questionType = 'DropDown';
 
     const path = '/question/getByCollection/' + this.collectionId;
-    await api.get(path).then((responseData) => {
+    await this.api.get(path).then((responseData) => {
       questionId = responseData.data.result.id;
       questionText = responseData.data.result.name;
     });
@@ -110,7 +115,7 @@ export class QuestionComponent implements OnInit {
     this.currentAnswers = [];
     const currentQuestionId = this.tree.getCurrentNode().getId();
     const path = '/answer/getByQuestion/' + currentQuestionId;
-    await api.get(path).then((responseData) => {
+    await this.api.get(path).then((responseData) => {
       console.log(responseData);
       const answers = responseData.data.result;
       // tslint:disable-next-line:prefer-for-of
