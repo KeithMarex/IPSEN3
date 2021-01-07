@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {UserModel} from '../../../shared/models/user.model';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
-import api from '../../../api/base-url';
+import api from '../../../api/api';
 
 @Component({
   selector: 'app-login-form',
@@ -19,7 +19,7 @@ export class LoginFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const user = UserModel.getLoggedInUser();
+    const user = UserModel.getLoggedInUser(false);
     if (user) {
       this.router.navigate([this.router.url + '/dashboard']);
     }
@@ -34,7 +34,7 @@ export class LoginFormComponent implements OnInit {
       if (response.data.login !== 'success') {
         this.success = false;
       } else {
-        Cookie.set('token', response.data.token, 7);
+        Cookie.set('user_token', response.data.token, 7, '/');
         this.router.navigate([this.router.url + '/dashboard']);
       }
     });
