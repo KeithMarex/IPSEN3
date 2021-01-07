@@ -1,8 +1,8 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import api from '../../api/api';
 import Swal from 'sweetalert2';
 import {CollectionModel} from '../../shared/models/collection.model';
 import {UserModel} from '../../shared/models/user.model';
+import {Api} from '../../api/api';
 
 @Component({
   selector: 'app-collection-overview',
@@ -39,6 +39,7 @@ export class CollectionOverviewComponent implements OnInit {
     if (this.collections.length !== 0) {
       this.collections.length = 0;
     }
+    const api = Api.getApi();
     const response = await api.get('/collection/all');
     this.convertDataToObject(response.data.result);
   }
@@ -64,6 +65,7 @@ export class CollectionOverviewComponent implements OnInit {
     this.selectedCollectionName = col.name;
     this.selectedCollection = col;
 
+    const api = Api.getApi();
     const response = await api.get('/collection/getAllByName/' + col.name);
     const j = response.data.result;
 
@@ -87,6 +89,7 @@ export class CollectionOverviewComponent implements OnInit {
     }).then(async (result) => {
       if (result.isConfirmed) {
         // TODO: Api call on succes SWAL fire succes
+        const api = Api.getApi();
         const response = await api.post('/collection/delete', {id: collection.id});
         const r = response.data.result;
         await this.getOnInitData();
@@ -124,6 +127,7 @@ export class CollectionOverviewComponent implements OnInit {
       }
     }).then(async (result) => {
       const data = {id: el.id, type: result.value};
+      const api = Api.getApi();
       const response = await api.post('/collection/update', data);
       const r = response.data.result;
       if (r) {
@@ -144,6 +148,7 @@ export class CollectionOverviewComponent implements OnInit {
       inputPlaceholder: 'Collectie naam...'
     }).then(async (result) => {
       const data = {name: result.value};
+      const api = Api.getApi();
       const response = await api.post('/collection/create', data);
       await this.getOnInitData();
       if (response.data.result) {

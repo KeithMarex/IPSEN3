@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
 import {UserModel} from '../../../shared/models/user.model';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
-import api from '../../../api/api';
+import {Api} from '../../../api/api';
 
 @Component({
   selector: 'app-login-form',
@@ -30,6 +30,7 @@ export class LoginFormComponent implements OnInit {
   }
 
   onFormSubmit(postData: { email: string, password: string }): void {
+    const api = Api.getApi();
     api.post('/user/checkUserCredentials', postData).then((response) => {
       if (response.data.login !== 'success') {
         this.success = false;
