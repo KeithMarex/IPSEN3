@@ -1,28 +1,23 @@
 <nav class="navbar navbar-light bg-light">
-    <a class="navbar-brand ml-auto" routerLink="/admin">Admin</a>
+  <a class="navbar-brand ml-auto" routerLink="/admin">Admin</a>
 </nav>
 
 
 <div class="main">
-
-    <div class="container">
-
-        <h1>Waarmee kunnen wij u van dienst zijn?</h1>
-
-        <div class="dropdown">
-            <button class="btn btn-custom dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Selecteer vraagstuk
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Reisvoucher</a>
-                <a class="dropdown-item" href="#">Ticketmaster</a>
-                <a class="dropdown-item" href="#">Roblox Quiz</a>
-            </div>
-        </div>
-
+  <div class="container">
+    <h1>Waarmee kunnen wij u van dienst zijn?</h1>
+    <div class="dropdown">
+      <button class="btn btn-custom dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+        Selecteer een vragenboom
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div *ngFor="let collection of this.collections" class="dropdown-item"
+             (click)="goToSelection(collection.id)">{{ collection.name }}</div>
+      </div>
     </div>
 
-
+  </div>
 </div>
 
 <app-custom-navigation></app-custom-navigation>
