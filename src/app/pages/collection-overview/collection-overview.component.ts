@@ -3,7 +3,6 @@ import api from '../../api/api';
 import Swal from 'sweetalert2';
 import {CollectionModel} from '../../shared/models/collection.model';
 import {UserModel} from '../../shared/models/user.model';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-collection-overview',
@@ -25,15 +24,16 @@ export class CollectionOverviewComponent implements OnInit {
   ngOnInit(): void {
     this.loggedInUser = UserModel.getLoggedInUser();
     this.getOnInitData();
+    // this.showWelcomeAlert();
   }
 
-  showWelcomeAlert(): void {
-    Swal.fire({
-      title: 'Welkom ' + this.loggedInUser.firstName + '!',
-      timer: 1500,
-      showConfirmButton: false,
-    });
-  }
+  // showWelcomeAlert(): void {
+  //   Swal.fire({
+  //     title: 'Welkom ' + this.loggedInUser.firstName + '!',
+  //     timer: 1500,
+  //     showConfirmButton: false,
+  //   });
+  // }
 
   async getOnInitData(): Promise<void> {
     if (this.collections.length !== 0) {
@@ -88,6 +88,7 @@ export class CollectionOverviewComponent implements OnInit {
     }).then(async (result) => {
       if (result.isConfirmed) {
         // TODO: Api call on succes SWAL fire succes
+        const api = Api.getApi();
         const response = await api.post('/collection/delete', {id: collection.id});
         const r = response.data.result;
         await this.getOnInitData();
@@ -125,6 +126,7 @@ export class CollectionOverviewComponent implements OnInit {
       }
     }).then(async (result) => {
       const data = {id: el.id, type: result.value};
+      const api = Api.getApi();
       const response = await api.post('/collection/update', data);
       const r = response.data.result;
       if (r) {
@@ -145,6 +147,7 @@ export class CollectionOverviewComponent implements OnInit {
       inputPlaceholder: 'Collectie naam...'
     }).then(async (result) => {
       const data = {name: result.value};
+      const api = Api.getApi();
       const response = await api.post('/collection/create', data);
       await this.getOnInitData();
       if (response.data.result) {
