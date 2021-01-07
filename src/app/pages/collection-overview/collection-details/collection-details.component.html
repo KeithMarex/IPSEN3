@@ -20,25 +20,31 @@
     </div>
     <div class="admin-content col-sm-9">
       <div class="container-fluid">
+        <div class="admin-content__wrapper container-fluid">
+          <div class="admin-content__header row">
+            <div class="admin-content__col col">
+              <div class="row">
+                <h1>{{this.firstQuestion}}</h1>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="admin-content__content-table row">
           <table class="content-table table">
             <thead class="content-table__head">
             <tr>
               <th scope="col">Titel</th>
-              <th scope="col">Status</th>
-              <th scope="col">Versie</th>
               <th scope="col">&nbsp;</th>
             </tr>
             </thead>
             <tbody class="content-table__body">
-            <tr class="content-table__row" *ngFor="let el of this.selectedCollections; let i = index">
+            <tr class="content-table__row" *ngFor="let el of this.answers; let i = index">
               <td (click)="editCollection(el)">{{el.name}}</td>
-              <td><span class="content-table__status {{el.type}}" (click)="changeStatus(el)">{{el.type}}</span></td>
-              <td>{{el.version}}</td>
               <td class="content-table__actions-cel">
                 <icon-edit (click)="changeStatus(el)"></icon-edit>
                 <icon-clone></icon-clone>
                 <icon-remove (click)="deleteCollection(el, i)"></icon-remove>
+                <icon-arrow></icon-arrow>
               </td>
             </tr>
             </tbody>

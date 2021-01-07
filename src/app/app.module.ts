@@ -24,6 +24,7 @@ import {ConfigurationService} from './shared/configuration.service';
 import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
 import {CollectionVersionsComponent} from './components/collections/collection-versions/collection-versions.component';
 import {CollectionDetailsComponent} from './pages/collection-overview/collection-details/collection-details.component';
+import {ArrowComponent} from "./icons/arrow/arrow.component";
 
 const appRoutes: Routes = [
   {path: 'collection/:collectionId', component: CustomerComponent},
@@ -51,7 +52,8 @@ const appRoutes: Routes = [
     CloneComponent,
     EditComponent,
     CollectionVersionsComponent,
-    CollectionDetailsComponent
+    CollectionDetailsComponent,
+    ArrowComponent
   ],
   imports: [
     BrowserModule,
