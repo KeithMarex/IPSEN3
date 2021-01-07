@@ -24,7 +24,6 @@ export class UserModel {
     if (token !== null) {
       try {
         const userData: TokenModel = jwt_decode(token);
-
         return new UserModel(userData.id, userData.email, userData.permission_group, userData.first_name, userData.last_name);
       } catch (error) {
         Cookie.delete('user_token', '/');
