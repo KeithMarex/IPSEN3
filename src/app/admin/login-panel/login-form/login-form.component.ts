@@ -1,9 +1,9 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Router, RouterModule} from "@angular/router";
-import {configurationService} from "../../../shared/configuration.service";
-import {UserModel} from "../../../shared/models/user.model";
+import {Router} from '@angular/router';
+import {UserModel} from '../../../shared/models/user.model';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
+import {Api} from '../../../api/api';
 
 @Component({
   selector: 'app-login-form',
@@ -11,46 +11,33 @@ import {Cookie} from 'ng2-cookies/ng2-cookies';
   styleUrls: ['./login-form.component.scss']
 })
 export class LoginFormComponent implements OnInit {
-  succes = true;
+  success = true;
 
   @Output() changeView = new EventEmitter();
 
-  constructor(private http: HttpClient, private router: Router, private conf: configurationService) { }
-
-  ngOnInit(): void {
+  constructor(private http: HttpClient, private router: Router) {
   }
 
-  viewPass() {
+  ngOnInit(): void {
+    const user = UserModel.getLoggedInUser(false);
+    if (user) {
+      this.router.navigate([this.router.url + '/dashboard']);
+    }
+  }
+
+  viewPass(): void {
     this.changeView.emit();
   }
 
-  setWarning(){
-    this.succes = false;
-  }
-
-  onFormSubmit(postData: {email: string, password: string}){
-    this.http.post('https://ipsen3api.nielsprins.com/user/checkUserCredentials', postData).subscribe(responseData => {
-      if (responseData['login'] !== 'success'){
-        this.setWarning();
+  onFormSubmit(postData: { email: string, password: string }): void {
+    const api = Api.getApi();
+    api.post('/user/checkUserCredentials', postData).then((response) => {
+      if (response.data.login !== 'success') {
+        this.success = false;
       } else {
-
-        Cookie.set('api_token', responseData['token'], 7);
-
-        console.log(responseData['result']['id']);
-        const m = responseData['result'];
-        this.conf.user = new UserModel(m['id'], m['email'], m['permission_group'], m['first_name'], m['last_name']);
-        console.log(this.conf.user);
+        Cookie.set('user_token', response.data.token, 7, '/');
         this.router.navigate([this.router.url + '/dashboard']);
       }
-      console.log(responseData);
     });
-  }
-
-  onFetchPosts() {
-    // Send Http request
-  }
-
-  onClearPosts() {
-    // Send Http request
   }
 }

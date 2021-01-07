@@ -28,15 +28,16 @@
 
         &.concept { background-color: $statusConcept; }
         &.published { background-color: $statusPublished; }
-        &.archieved { background-color: $statusArchieved; }
+        &.archived { background-color: $statusArchived; }
     }
 
     &__row {
         &:hover {
             cursor: pointer;
             background-color: #f8f8f8;
+            
             > .content-table__actions-cel {
-                opacity: 100%;
+                opacity: 1;
             }
         }
     }

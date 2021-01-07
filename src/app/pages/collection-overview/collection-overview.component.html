@@ -9,7 +9,7 @@
                         <h1 class="sidebar__heading">Collecties</h1>
                     </div>
                     <div class=" sidebar__col col-sm-4">
-                        <button type="button" class="sidebar__btn btn">
+                        <button type="button" class="sidebar__btn btn" (click)="newCollection()">
                             Nieuw
                         </button>
                     </div>
@@ -18,16 +18,24 @@
             <div class="sidebar-content container-fluid">
                 <div class="sidebar-content__row row">
                     <ul class="sidebar-content__list content-list" >
-                        <li class="content-list__item" *ngFor="let el of collections" #collections><a href="#">{{ el.name }}</a></li>
+                        <li *ngFor="let el of this.collections" [ngClass]="{'active': el.id === selectedCollection.id }" class="content-list__item" #this.collections style="cursor: pointer" (click)="changeSelectedCollection(el)"><a>{{ el.name }}</a></li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="admin-content col-sm-9">
             <div class="admin-content__wrapper container-fluid">
-                <div class="admin-content__header row">
-                    <div class="admin-content__col col">
-                        <h1 class="admin-content__heading">Reisvoucher</h1>
+                <div class="admin-content__wrapper container-fluid">
+                    <div class="admin-content__header row">
+                        <div class="admin-content__col col">
+                            <div class="alert alert-primary" role="alert" *ngIf="!selectedCollectionIsEmpty">
+                                Selecteer een collectie om verder te gaan
+                            </div>
+                          <div class="row">
+                              <h1 *ngIf="selectedCollectionIsEmpty">{{this.selectedCollectionName}}</h1>
+                              <button *ngIf="selectedCollectionIsEmpty" class="sidebar__btn btn" style="margin: auto 0 0 auto">Live weergeven</button>
+                          </div>
+                        </div>
                     </div>
                 </div>
                 <div class="admin-content__content-table row">
@@ -41,34 +49,14 @@
                           </tr>
                         </thead>
                         <tbody class="content-table__body">
-                          <tr class="content-table__row">
-                            <td>Reisvoucher</td>
-                            <td><span class="content-table__status concept">Concept</span></td>
-                            <td>v1.2</td>
+                          <tr class="content-table__row" *ngFor="let el of this.selectedCollections; let i = index">
+                            <td (click)="editCollection(el)">{{el.name}}</td>
+                            <td><span class="content-table__status {{el.type}}" (click)="changeStatus(el)">{{el.type}}</span></td>
+                            <td>{{el.version}}</td>
                             <td class="content-table__actions-cel">
-                                <icon-edit></icon-edit>
+                                <icon-edit (click)="changeStatus(el)"></icon-edit>
                                 <icon-clone></icon-clone>
-                                <icon-remove></icon-remove>
-                            </td>
-                          </tr>
-                          <tr class="content-table__row">
-                            <td>Reisvoucher</td>
-                            <td><span class="content-table__status archieved">Concept</span></td>
-                            <td>v1.1</td>
-                            <td class="content-table__actions-cel">
-                                <icon-edit></icon-edit>
-                                <icon-clone></icon-clone>
-                                <icon-remove></icon-remove>
-                            </td>
-                          </tr>
-                          <tr class="content-table__row">
-                            <td>Reisvoucher</td>
-                            <td><span class="content-table__status published">Concept</span></td>
-                            <td>v1.0</td>
-                            <td class="content-table__actions-cel">
-                                <icon-edit></icon-edit>
-                                <icon-clone></icon-clone>
-                                <icon-remove></icon-remove>
+                                <icon-remove (click)="deleteCollection(el, i)"></icon-remove>
                             </td>
                           </tr>
                         </tbody>

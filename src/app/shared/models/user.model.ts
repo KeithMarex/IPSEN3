@@ -1,55 +1,57 @@
-export class UserModel{
-  private _user_id: string;
-  private _email: string;
-  private _usergroup: string;
-  private _voornaam: string;
-  private _achternaam: string;
+import {Cookie} from 'ng2-cookies/ng2-cookies';
+import jwt_decode from 'jwt-decode';
+import {TokenModel} from './token.model';
 
-  constructor(userId: string, email: string, usergroup: string, voornaam: string, achternaam: string) {
-    this._user_id = userId;
+/* tslint:disable:variable-name */
+export class UserModel {
+  private readonly _id: string;
+  private readonly _email: string;
+  private readonly _userGroup: string;
+  private readonly _firstName: string;
+  private readonly _lastName: string;
+
+  constructor(id: string, email: string, userGroup: string, firstName: string, lastName: string) {
+    this._id = id;
     this._email = email;
-    this._usergroup = usergroup;
-    this._voornaam = voornaam;
-    this._achternaam = achternaam;
+    this._userGroup = userGroup;
+    this._firstName = firstName;
+    this._lastName = lastName;
   }
 
-  get user_id(): string {
-    return this._user_id;
+  static getLoggedInUser(redirectToLogin = true): UserModel {
+    const token = Cookie.get('user_token');
+
+    if (token !== null) {
+      try {
+        const userData: TokenModel = jwt_decode(token);
+        return new UserModel(userData.id, userData.email, userData.permission_group, userData.first_name, userData.last_name);
+      } catch (error) {
+        Cookie.delete('user_token', '/');
+      }
+    }
+
+    if (redirectToLogin) {
+      window.location.replace('/admin');
+    }
   }
 
-  set user_id(value: string) {
-    this._user_id = value;
+  get id(): string {
+    return this._id;
   }
 
   get email(): string {
     return this._email;
   }
 
-  set email(value: string) {
-    this._email = value;
+  get userGroup(): string {
+    return this._userGroup;
   }
 
-  get usergroup(): string {
-    return this._usergroup;
+  get firstName(): string {
+    return this._firstName;
   }
 
-  set usergroup(value: string) {
-    this._usergroup = value;
-  }
-
-  get voornaam(): string {
-    return this._voornaam;
-  }
-
-  set voornaam(value: string) {
-    this._voornaam = value;
-  }
-
-  get achternaam(): string {
-    return this._achternaam;
-  }
-
-  set achternaam(value: string) {
-    this._achternaam = value;
+  get lastName(): string {
+    return this._lastName;
   }
 }
