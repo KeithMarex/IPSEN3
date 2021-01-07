@@ -3,6 +3,7 @@ import api from '../../api/api';
 import Swal from 'sweetalert2';
 import {CollectionModel} from '../../shared/models/collection.model';
 import {UserModel} from '../../shared/models/user.model';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-collection-overview',
@@ -18,22 +19,21 @@ export class CollectionOverviewComponent implements OnInit {
   selectedCollections: CollectionModel[] = [];
   selectedCollectionName = '';
 
-  constructor() {
+  constructor(private router: Router) {
   }
 
   ngOnInit(): void {
     this.loggedInUser = UserModel.getLoggedInUser();
     this.getOnInitData();
-    // this.showWelcomeAlert();
   }
 
-  // showWelcomeAlert(): void {
-  //   Swal.fire({
-  //     title: 'Welkom ' + this.loggedInUser.firstName + '!',
-  //     timer: 1500,
-  //     showConfirmButton: false,
-  //   });
-  // }
+  showWelcomeAlert(): void {
+    Swal.fire({
+      title: 'Welkom ' + this.loggedInUser.firstName + '!',
+      timer: 1500,
+      showConfirmButton: false,
+    });
+  }
 
   async getOnInitData(): Promise<void> {
     if (this.collections.length !== 0) {
@@ -50,6 +50,7 @@ export class CollectionOverviewComponent implements OnInit {
     });
 
     this.checkCollectionAvailability();
+    this.showWelcomeAlert();
   }
 
   checkCollectionAvailability(): void {
@@ -159,5 +160,9 @@ export class CollectionOverviewComponent implements OnInit {
         });
       }
     });
+  }
+
+  editCollection(el: CollectionModel): void {
+    this.router.navigate(['admin/collection', { id: el.id }]);
   }
 }

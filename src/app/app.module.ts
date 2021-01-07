@@ -23,10 +23,12 @@ import {HttpClientModule} from '@angular/common/http';
 import {ConfigurationService} from './shared/configuration.service';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { CollectionVersionsComponent } from './components/collections/collection-versions/collection-versions.component';
+import { CollectionDetailsComponent } from './pages/collection-overview/collection-details/collection-details.component';
 
 const appRoutes: Routes = [
   {path: 'admin', component: AdminComponent},
   {path: 'admin/dashboard', component: CollectionOverviewComponent},
+  {path: 'admin/collection', component: CollectionDetailsComponent},
   {path: '', component: HomepageComponent}
 ];
 
@@ -47,7 +49,8 @@ const appRoutes: Routes = [
     RemoveComponent,
     CloneComponent,
     EditComponent,
-    CollectionVersionsComponent
+    CollectionVersionsComponent,
+    CollectionDetailsComponent
   ],
   imports: [
     BrowserModule,
