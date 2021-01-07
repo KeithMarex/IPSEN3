@@ -111,7 +111,6 @@ export class QuestionComponent implements OnInit {
     const currentQuestionId = this.tree.getCurrentNode().getId();
     const path = '/answer/getByQuestion/' + currentQuestionId;
     await api.get(path).then((responseData) => {
-      console.log(responseData);
       const answers = responseData.data.result;
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < answers.length; i++) {
@@ -132,9 +131,21 @@ export class QuestionComponent implements OnInit {
     return false;
   }
 
-  nextQuestionExistsApi(answer: Answer): boolean {
-    // ToDo api version of the above;
-    return null;
+  async getNextQuestionDataApi(answer: Answer): Promise<'object'> {
+    const path = '/question/getByAnswer/' + answer.getId();
+    let refinedData;
+    await api.get(path).then((responseData) => {
+      refinedData = responseData.data.result;
+    });
+    return refinedData;
+  }
+
+  async nextQuestionExistsApi(questionData: 'object'): Promise<boolean> {
+    let exist = true;
+    if (!questionData) {
+      exist = false;
+    }
+    return exist;
   }
 
   getNextQuestion(answer: Answer): Question {
@@ -146,12 +157,24 @@ export class QuestionComponent implements OnInit {
     return new Question(questionId, questionText, parentId, questionType);
   }
 
-  onNextQuestionClicked(answer: Answer): void {
-    if (this.nextQuestionExists(answer)) {
-      const question = this.getNextQuestion(answer);
+  getNextQuestionFromData(questionData: 'object', previousNode: NodeModel): Question {
+    // @ts-ignore
+    const questionId = questionData.id;
+    // @ts-ignore
+    const questionText = questionData.name;
+    const parentId = previousNode.getId();
+    const questionType = 'DropDown';
+    return new Question(questionId, questionText, parentId, questionType);
+  }
+
+  async onNextQuestionClicked(answer: Answer): Promise<void> {
+    const questionData = await this.getNextQuestionDataApi(answer);
+    const answerExists = await this.nextQuestionExistsApi(questionData);
+    if (answerExists) {
+      const question = this.getNextQuestionFromData(questionData, answer);
       question.setPreviousNode(answer);
       this.tree.addNode(question);
-      this.setCurrentAnswers();
+      await this.setCurrentAnswersFromApi();
       this.updateIsFirstQuestion();
       this.isAnswered = false;
     }
