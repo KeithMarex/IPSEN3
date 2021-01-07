@@ -1,8 +1,9 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import api from '../../api/api';
+import {Api} from '../../api/api';
 import Swal from 'sweetalert2';
 import {CollectionModel} from '../../shared/models/collection.model';
 import {UserModel} from '../../shared/models/user.model';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-collection-overview',
@@ -24,22 +25,21 @@ export class CollectionOverviewComponent implements OnInit {
   ngOnInit(): void {
     this.loggedInUser = UserModel.getLoggedInUser();
     this.getOnInitData();
-    // this.showWelcomeAlert();
   }
 
-  // showWelcomeAlert(): void {
-  //   Swal.fire({
-  //     title: 'Welkom ' + this.loggedInUser.firstName + '!',
-  //     timer: 1500,
-  //     showConfirmButton: false,
-  //   });
-  // }
+  showWelcomeAlert(): void {
+    Swal.fire({
+      title: 'Welkom ' + this.loggedInUser.firstName + '!',
+      timer: 1500,
+      showConfirmButton: false,
+    });
+  }
 
   async getOnInitData(): Promise<void> {
     if (this.collections.length !== 0) {
       this.collections.length = 0;
     }
-    const response = await api.get('/collection/all');
+    const response = await Api.getApi().get('/collection/all');
     this.convertDataToObject(response.data.result);
   }
 
@@ -65,7 +65,7 @@ export class CollectionOverviewComponent implements OnInit {
     this.selectedCollectionName = col.name;
     this.selectedCollection = col;
 
-    const response = await api.get('/collection/getAllByName/' + col.name);
+    const response = await Api.getApi().get('/collection/getAllByName/' + col.name);
     const j = response.data.result;
 
     for (let i = 0; i < j.length; i++) {
