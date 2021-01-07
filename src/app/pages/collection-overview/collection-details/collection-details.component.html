@@ -1,5 +1,5 @@
 <app-admin-navigation></app-admin-navigation>
-<app-admin-breadcrumb></app-admin-breadcrumb>
+<app-admin-breadcrumb [active]="routes"></app-admin-breadcrumb>
 <div class="container-fluid" *ngIf="isDataAvailable">
   <div class="row">
     <div class="sidebar__wrapper col-sm-3 ">
@@ -7,11 +7,6 @@
         <div class="sidebar__header-row row">
           <div class="sidebar__col col-sm-8">
             <h1 class="sidebar__heading">{{this.selectedCollection.name}}</h1>
-          </div>
-          <div class=" sidebar__col col-sm-4">
-            <button type="button" class="sidebar__btn btn" (click)="newCollection()">
-              Nieuw
-            </button>
           </div>
         </div>
       </div>
@@ -24,20 +19,7 @@
       </div>
     </div>
     <div class="admin-content col-sm-9">
-      <div class="admin-content__wrapper container-fluid">
-        <div class="admin-content__wrapper container-fluid">
-          <div class="admin-content__header row">
-            <div class="admin-content__col col">
-              <div class="alert alert-primary" role="alert" *ngIf="!selectedCollectionIsEmpty">
-                Selecteer een collectie om verder te gaan
-              </div>
-              <div class="row">
-                <h1 *ngIf="selectedCollectionIsEmpty">{{this.selectedCollectionName}}</h1>
-                <button *ngIf="selectedCollectionIsEmpty" class="sidebar__btn btn" style="margin: auto 0 0 auto">Live weergeven</button>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="container-fluid">
         <div class="admin-content__content-table row">
           <table class="content-table table">
             <thead class="content-table__head">

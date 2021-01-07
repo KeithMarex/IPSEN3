@@ -13,6 +13,8 @@ export class CollectionDetailsComponent implements OnInit {
   selectedCollection: CollectionModel = null;
   isDataAvailable = false;
 
+  routes = ['Collections'];
+
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -21,6 +23,7 @@ export class CollectionDetailsComponent implements OnInit {
       const r = response.data.result;
       this.selectedCollection = new CollectionModel(r.id, r.name, r.type, r.version);
       this.isDataAvailable = true;
+      this.routes.push(this.selectedCollection.name);
     });
   }
 

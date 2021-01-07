@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-admin-breadcrumb',
@@ -6,6 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./admin-breadcrumb.component.scss']
 })
 export class AdminBreadcrumbComponent implements OnInit {
+
+  @Input() home = 'Dashboard';
+  @Input() active = [];
+
 
   constructor() { }
 
