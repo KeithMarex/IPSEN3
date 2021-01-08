@@ -24,7 +24,7 @@ import {ConfigurationService} from './shared/configuration.service';
 import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
 import {CollectionVersionsComponent} from './components/collections/collection-versions/collection-versions.component';
 import {CollectionDetailsComponent} from './pages/collection-overview/collection-details/collection-details.component';
-import {ArrowComponent} from "./icons/arrow/arrow.component";
+import {ArrowComponent} from './icons/arrow/arrow.component';
 
 const appRoutes: Routes = [
   {path: 'collection/:collectionId', component: CustomerComponent},
@@ -53,7 +53,7 @@ const appRoutes: Routes = [
     EditComponent,
     CollectionVersionsComponent,
     CollectionDetailsComponent,
-    ArrowComponent
+    ArrowComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,7 +61,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     FormsModule,
     HttpClientModule,
-    SweetAlert2Module.forRoot()
+    SweetAlert2Module.forRoot(),
   ],
   providers: [ConfigurationService],
   bootstrap: [AppComponent]
