@@ -148,9 +148,43 @@ export class CollectionOverviewComponent implements OnInit {
       await this.getOnInitData();
       if (response.data.result) {
         Swal.fire({
-          title: 'Collectie aangemaakt',
+          title: '<strong>' + data.name + '</strong>',
           icon: 'success',
-        });
+          html: `<p>Uw collectie is succesfol aangemaakt.</p>
+          <p>Ga hier verder om uw eerste vraag aan te maken.</p>
+          <label for="question">vraag</label>
+          <br>
+          <input type="text" placeholder="stel hier uw vraag" name="question">`,
+          input: 'text',
+          inputAttributes: {
+            autocapitalize: 'off'
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Look up',
+          showLoaderOnConfirm: true,
+          preConfirm: (login) => {
+            return fetch(`//api.github.com/users/${login}`)
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error(response.statusText)
+                }
+                return response.json()
+              })
+              .catch(error => {
+                Swal.showValidationMessage(
+                  `Request failed: ${error}`
+                )
+              })
+          },
+          allowOutsideClick: () => !Swal.isLoading()
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: `${result.value.login}'s avatar`,
+              imageUrl: result.value.avatar_url
+            })
+          }
+        })
       } else {
         Swal.fire({
           title: 'Collectie bestaat al',
