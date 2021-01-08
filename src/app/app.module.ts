@@ -53,7 +53,7 @@ const appRoutes: Routes = [
     EditComponent,
     CollectionVersionsComponent,
     CollectionDetailsComponent,
-    ArrowComponent
+    ArrowComponent,
   ],
   imports: [
     BrowserModule,
@@ -61,7 +61,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     FormsModule,
     HttpClientModule,
-    SweetAlert2Module.forRoot()
+    SweetAlert2Module.forRoot(),
   ],
   providers: [ConfigurationService],
   bootstrap: [AppComponent]

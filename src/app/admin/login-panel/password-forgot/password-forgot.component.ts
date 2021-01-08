@@ -21,7 +21,7 @@ export class PasswordForgotComponent implements OnInit {
 
   onFormSubmit(postData: {email: string}) {
     console.log(postData);
-    this.http.post('https://ipsen3api.nielsprins.com/user/resetPassword', postData).subscribe(responseData => {
+    this.http.post('http://localhost:3000/user/resetPassword', postData).subscribe(responseData => {
       console.log(responseData);
       if (responseData['result'] === true){
         Swal.fire({

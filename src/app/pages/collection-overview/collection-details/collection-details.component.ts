@@ -91,7 +91,9 @@ export class CollectionDetailsComponent implements OnInit {
         text: r
       });
     }
+  }
 
+  async editAnswer(el: AnswerModel): Promise<void> {
 
   }
 }
