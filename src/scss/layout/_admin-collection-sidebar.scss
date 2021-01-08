@@ -1,77 +1,76 @@
 .sidebar {
 
-    &__col {
-        padding-left: 0;
-        padding-right: 0;
+  &__col {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  &__wrapper {
+    background-color: #f8f8f8;
+    height: calc(100vh - (48px + 86px));
+    padding: 0;
+  }
+
+  &__header {
+    padding: 40px 0 0 0;
+
+    &-row {
+      padding: 0 20px 0 20px;
+
+      .btn {
+        float: right;
+      }
     }
+  }
 
-    &__wrapper {
-        background-color: #f8f8f8;
-        height: calc(100vh - (48px + 86px));
-        padding: 0;
+  &__heading {
+    font-family: $fontHeader;
+    font-weight: 1000;
+  }
+
+  &__btn {
+    background-color: $ctaBtnBackgroundColor;
+    color: $ctaBtnColor;
+
+    &:hover {
+      background-color: $ctaBtnBackgroundColorHover;
+      color: $ctaBtnColorHover;
     }
+  }
 
-    &__header {
-        padding: 40px 0 0 0;
-        
-        &-row {
-            padding: 0 20px 0 20px;
-
-            .btn {
-                float: right;
-            }
-        }
-    }
-
-    &__heading {
-        font-family: $fontHeader;
-        font-weight: 1000;
-    }
-
-    &__btn {
-        background-color: $ctaBtnBackgroundColor;
-        color: $ctaBtnColor;
-
-        &:hover {
-            background-color: $ctaBtnBackgroundColorHover;
-            color: $ctaBtnColorHover;
-        }
-    }
-
-    &-content {
-        padding-top: 40px;
-        padding-left: 20px;
-    }
+  &-content {
+    padding-top: 40px;
+    padding-left: 20px;
+  }
 }
 
 .content-list {
-    list-style: none;
-    display: block;
-    padding: 0;
-    margin: 0;
-    width: 100%;
+  list-style: none;
+  display: block;
+  padding: 0;
+  margin: 0;
+  width: 100%;
 
-    &__item {
-        margin-bottom: 10px;
-        border-radius: 5px 0 0 5px;
+  &__item {
+    margin-bottom: 10px;
+    border-radius: 5px 0 0 5px;
 
-        a {
-            width: 100%;
-            color: $textColor;
-            text-decoration: none;
-            display: block;
-            padding: 15px 0px 15px 30px;
-            border-radius: 5px;
-            transition: all .2s ease-in;
-        }
-
-        &.active {
-            background-color: #fff;
-            font-weight: 700;
-        }
-
-        &:hover {
-            background-color: #fff;
-        }
+    a {
+      width: 100%;
+      color: $textColor;
+      text-decoration: none;
+      display: block;
+      padding: 15px 0px 15px 30px;
+      border-radius: 5px;
     }
+
+    &.active {
+      background-color: #fff;
+      font-weight: 700;
+    }
+
+    &:hover {
+      background-color: #fff;
+    }
+  }
 }

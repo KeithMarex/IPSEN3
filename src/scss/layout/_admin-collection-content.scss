@@ -1,47 +1,48 @@
 .admin-content {
-    padding-left: 0;
-    padding-right: 0;
+  padding-left: 0;
+  padding-right: 0;
 
-    &__wrapper {
-        padding: 40px 20px 20px 20px;
-    }
+  &__wrapper {
+    padding: 40px 20px 20px 20px;
+  }
 
-    &__heading {
-        font-family: $fontHeader;
-        font-weight: 700;
-        margin-left: 20px;
-        margin-right: 20px;
-    }
+  &__heading {
+    font-family: $fontHeader;
+    font-weight: 700;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
 
-    &__content-table {
-        padding: 40px 20px 40px 20px;
-    }
+  &__content-table {
+    padding: 40px 20px 40px 20px;
+  }
 }
 
 .content-table {
 
-    &__status {
-        font-size: .8rem;
-        padding: 5px 10px;
-        border-radius: 25px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  &__status {
+    font-size: .8rem;
+    padding: 5px 10px;
+    border-radius: 25px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 
-        &.concept { background-color: $statusConcept; }
-        &.published { background-color: $statusPublished; }
-        &.archieved { background-color: $statusArchieved; }
-    }
+    &.concept { background-color: $statusConcept; }
+    &.published { background-color: $statusPublished; }
+    &.archived { background-color: $statusArchived; }
+  }
 
-    &__row {
-        &:hover {
-            cursor: pointer;
-            background-color: #f8f8f8;
-            > .content-table__actions-cel {
-                opacity: 100%;
-            }
-        }
-    }
+  &__row {
+    &:hover {
+      cursor: pointer;
+      background-color: #f8f8f8;
 
-    &__actions-cel {
-        opacity: 0;
+      > .content-table__actions-cel {
+        opacity: 1;
+      }
     }
+  }
+
+  &__actions-cel {
+    opacity: 0;
+  }
 }
