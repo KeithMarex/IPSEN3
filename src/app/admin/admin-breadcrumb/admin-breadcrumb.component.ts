@@ -1,4 +1,5 @@
 import {Component, Input, OnInit, Output} from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-admin-breadcrumb',
@@ -11,9 +12,12 @@ export class AdminBreadcrumbComponent implements OnInit {
   @Input() active = [];
 
 
-  constructor() { }
+  constructor(private route: Router) { }
 
   ngOnInit(): void {
   }
 
+  goToDashboard(): void {
+    this.route.navigate(['admin/dashboard']);
+  }
 }

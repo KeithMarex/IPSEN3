@@ -41,9 +41,9 @@
             <tr class="content-table__row" *ngFor="let el of this.answers; let i = index">
               <td (click)="editCollection(el)">{{el.name}}</td>
               <td class="content-table__actions-cel">
-                <icon-edit (click)="changeStatus(el)"></icon-edit>
+                <icon-edit (click)="editAnswer(el)"></icon-edit>
                 <icon-clone></icon-clone>
-                <icon-remove (click)="deleteCollection(el, i)"></icon-remove>
+                <icon-remove (click)="removeAnswer(el, i)"></icon-remove>
               </td>
             </tr>
             </tbody>

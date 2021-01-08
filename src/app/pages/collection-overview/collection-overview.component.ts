@@ -27,14 +27,6 @@ export class CollectionOverviewComponent implements OnInit {
     this.getOnInitData();
   }
 
-  showWelcomeAlert(): void {
-    Swal.fire({
-      title: 'Welkom ' + this.loggedInUser.firstName + '!',
-      timer: 1500,
-      showConfirmButton: false,
-    });
-  }
-
   async getOnInitData(): Promise<void> {
     if (this.collections.length !== 0) {
       this.collections.length = 0;
@@ -50,7 +42,6 @@ export class CollectionOverviewComponent implements OnInit {
     });
 
     this.checkCollectionAvailability();
-    this.showWelcomeAlert();
   }
 
   checkCollectionAvailability(): void {
