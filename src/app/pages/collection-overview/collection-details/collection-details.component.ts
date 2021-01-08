@@ -48,7 +48,7 @@ export class CollectionDetailsComponent implements OnInit {
   createAnswer(): void {
     Swal.fire({
       title: 'Nieuw antwoord',
-      html: 'Geef hieronder een nieuw antwoord op voor de vraag: <b>' + this.firstQuestion.name + '</b>',
+      html: 'Geef hieronder een nieuw antwoord op voor de vraag: <b>' + this.firstQuestion['name'] + '</b>',
       input: 'text',
       showCancelButton: true,
       cancelButtonText: 'Annuleren',
@@ -58,7 +58,7 @@ export class CollectionDetailsComponent implements OnInit {
         }
       }
     }).then(async (result) => {
-      const response = await Api.getApi().post('/answer/create', {name: result.value, question_id: this.firstQuestion.id});
+      const response = await Api.getApi().post('/answer/create', {name: result.value, question_id: this.firstQuestion['id']});
       const r = response.data;
       if (r.result && result.isConfirmed){
         this.answers.push(new AnswerModel(r.id, result.value));

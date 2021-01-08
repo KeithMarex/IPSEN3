@@ -1,9 +1,11 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, SimpleChanges, ViewEncapsulation} from '@angular/core';
 import {Api} from '../../api/api';
 import Swal from 'sweetalert2';
 import {CollectionModel} from '../../shared/models/collection.model';
 import {UserModel} from '../../shared/models/user.model';
+import {AnswerModel} from '../../shared/models/answer.model';
 import {Router} from '@angular/router';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-collection-overview',
@@ -20,6 +22,8 @@ export class CollectionOverviewComponent implements OnInit {
   selectedCollectionName = '';
 
   openFirstQuestionModal:boolean = false;
+  answerList:AnswerModel[] = [];
+  answerListCount:number = 0;
 
   constructor(private router: Router) {
   }
@@ -30,11 +34,12 @@ export class CollectionOverviewComponent implements OnInit {
   }
 
   showWelcomeAlert(): void {
-    Swal.fire({
+    /*Swal.fire({
       title: 'Welkom ' + this.loggedInUser.firstName + '!',
       timer: 1500,
       showConfirmButton: false,
     });
+    */
   }
 
   async getOnInitData(): Promise<void> {
@@ -154,48 +159,7 @@ export class CollectionOverviewComponent implements OnInit {
       await this.getOnInitData();
       if (response.data.result) {
         this.openFirstQuestionModal = true;
-        
-
-        /*
-        Swal.fire({
-          title: '<strong>' + data.name + '</strong>',
-          icon: 'success',
-          html: `<p>Uw collectie is succesfol aangemaakt.</p>
-          <p>Ga hier verder om uw eerste vraag aan te maken.</p>
-          <label for="question">vraag</label>
-          <br>
-          <input type="text" placeholder="stel hier uw vraag" name="question">`,
-          input: 'text',
-          inputAttributes: {
-            autocapitalize: 'off'
-          },
-          showCancelButton: true,
-          confirmButtonText: 'Look up',
-          showLoaderOnConfirm: true,
-          preConfirm: (login) => {
-            return fetch(`//api.github.com/users/${login}`)
-              .then(response => {
-                if (!response.ok) {
-                  throw new Error(response.statusText)
-                }
-                return response.json()
-              })
-              .catch(error => {
-                Swal.showValidationMessage(
-                  `Request failed: ${error}`
-                )
-              })
-          },
-          allowOutsideClick: () => !Swal.isLoading()
-        }).then((result) => {
-          if (result.isConfirmed) {
-            Swal.fire({
-              title: `${result.value.login}'s avatar`,
-              imageUrl: result.value.avatar_url
-            })
-          }
-        })
-        */
+        console.log('collection', response);
       } else {
         Swal.fire({
           title: 'Collectie bestaat al',
@@ -208,5 +172,51 @@ export class CollectionOverviewComponent implements OnInit {
 
   editCollection(el: CollectionModel): void {
     this.router.navigate(['admin/collection', { id: el.id }]);
+  }
+
+  onClickAddNewAnswer() {
+    this.answerList.push(new AnswerModel("answer-" + this.answerListCount.toString(), ''));
+    this.answerListCount++;
+    console.log(this.answerList);
+  }
+
+  async onSubmit(f:NgForm):Promise<void> {
+
+    const question:string = f['question'];
+    const type: string = f['type']; // Word dit niet gebruikt?
+    
+    const questionData = { 
+        name: question,
+        collection_id: this.selectedCollection.id,
+        answer_id: ''
+    };
+
+    const api = Api.getApi();
+
+    const response = await api.post('/question/create', questionData);
+    
+    if(response.data) {
+      Object.entries(f).forEach(async e => {
+
+        const [key, value] = e;
+        if(key.includes('answer')) {
+
+            const answerData = {
+                name: value,
+                question_id: response.data.id
+            }
+
+            const res = await api.post('/question/create', answerData);
+        }
+      });
+    }
+
+    this.closeFirstQuestionModal();
+  }
+
+  closeFirstQuestionModal() {
+    this.openFirstQuestionModal = false;
+    this.answerList = [];
+    this.answerListCount = 0;
   }
 }

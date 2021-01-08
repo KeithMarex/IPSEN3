@@ -68,30 +68,48 @@
 </div>
 
 <!-- Create new Collection modal -->
-<div class="modal" tabindex="-1" [ngClass]="{'modal_active': openFirstQuestionModal }">
+<div class="modal" tabindex="-1" [ngClass]="{ 'modal__active': openFirstQuestionModal }">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Collectie aanmaken</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title">Eerste vraag aanmaken</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeFirstQuestionModal();questionForm.resetForm();">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Voer de volgende gegevens in:</p>
-                <div class="form-row">
-                    <div class="col">
-                        <label for="validationServer01">Titel</label>
-                        <input type="text" class="form-control is-invalid" id="validationServer01" value="Reisvoucher" required>
-                        <div id="validationServer01Feedback" class="invalid-feedback">
-                            Naam is al gekozen
+                <p>Voer de volgende gegevens in van de eerste vraag:</p>
+                <form #questionForm="ngForm" (ngSubmit)="onSubmit(questionForm.value); questionForm.resetForm();">
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="validationDefault01">Vraag</label>
+                            <input type="text" class="form-control" id="validationDefault01" name="question" required ngModel>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Annuleren</button>
-                <button type="button" class="modal__btn btn btn-primary">Aanmaken</button>
+                    <div class="form-row">
+                        <label for="exampleFormControlSelect1">Type vraag</label>
+                        <select class="form-control" name="type" id="exampleFormControlSelect1" ngModel required>
+                            <option value="radio" selected="selected">radio buttons</option>
+                            <option value="checkbox">checkbox</option>
+                            <option value="dropdown">dropdown</option>
+                        </select>
+                    </div>
+                    <hr>
+                    <div class="form-row" >
+                        <label for="antwoord1">Antwoorden:</label>
+                        <div class="input-group modal__input-group" *ngFor="let el of answerList">
+                            <input type="text" class="form-control" placeholder="antwoord" aria-label="antwoord1" aria-describedby="basic-addon2" ngModel name="{{el.id}}">
+                            <div class="input-group-append">
+                                <span class="input-group-text modal__input-group-text">{{el.id}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <button type="button" class="btn btn-primary" (click)="onClickAddNewAnswer()">Nieuw antwoord</button>
+                    <hr>
+                    <button type="button" class="btn btn-light" data-dismiss="modal" (click)="closeFirstQuestionModal();questionForm.resetForm();">Annuleren</button>
+                    <button type="submit" class="modal__btn btn btn-primary">Aanmaken</button>
+                </form>
             </div>
         </div>
     </div>
