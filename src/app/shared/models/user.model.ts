@@ -1,7 +1,6 @@
 import {Cookie} from 'ng2-cookies/ng2-cookies';
 import jwt_decode from 'jwt-decode';
 import {TokenModel} from './token.model';
-import api from '../../api/api';
 
 /* tslint:disable:variable-name */
 export class UserModel {
@@ -25,13 +24,6 @@ export class UserModel {
     if (token !== null) {
       try {
         const userData: TokenModel = jwt_decode(token);
-
-        api.post('/user/checkToken', {token}).then((response) => {
-          if (response.data.login !== 'success') {
-            Cookie.delete('user_token', '/');
-          }
-        });
-
         return new UserModel(userData.id, userData.email, userData.permission_group, userData.first_name, userData.last_name);
       } catch (error) {
         Cookie.delete('user_token', '/');

@@ -24,14 +24,17 @@
             </div>
         </div>
         <div class="admin-content col-sm-9">
-            <div class="admin-content__wrapper container-fluid">
+            <div class="container-fluid">
                 <div class="admin-content__wrapper container-fluid">
                     <div class="admin-content__header row">
                         <div class="admin-content__col col">
                             <div class="alert alert-primary" role="alert" *ngIf="!selectedCollectionIsEmpty">
                                 Selecteer een collectie om verder te gaan
                             </div>
-                            <h1 class="admin-content__heading" *ngIf="selectedCollectionIsEmpty">{{this.selectedCollectionName}}</h1>
+                            <div class="row">
+                                <h1 *ngIf="selectedCollectionIsEmpty" class="admin-content__heading">{{this.selectedCollectionName}}</h1>
+                                <button *ngIf="selectedCollectionIsEmpty" class="sidebar__btn btn" style="margin: auto 0 0 auto">Live weergeven</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -47,7 +50,7 @@
                         </thead>
                         <tbody class="content-table__body">
                           <tr class="content-table__row" *ngFor="let el of this.selectedCollections; let i = index">
-                            <td>{{el.name}}</td>
+                            <td (click)="editCollection(el)">{{el.name}}</td>
                             <td><span class="content-table__status {{el.type}}" (click)="changeStatus(el)">{{el.type}}</span></td>
                             <td>{{el.version}}</td>
                             <td class="content-table__actions-cel">
@@ -65,7 +68,7 @@
 </div>
 
 <!-- Create new Collection modal -->
-<div class="modal" tabindex="-1">
+<div class="modal" tabindex="-1" [ngClass]="{'modal_active': openFirstQuestionModal }">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">

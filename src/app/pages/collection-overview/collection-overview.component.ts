@@ -1,8 +1,9 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import api from '../../api/api';
+import {Api} from '../../api/api';
 import Swal from 'sweetalert2';
 import {CollectionModel} from '../../shared/models/collection.model';
 import {UserModel} from '../../shared/models/user.model';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-collection-overview',
@@ -14,32 +15,33 @@ export class CollectionOverviewComponent implements OnInit {
   private loggedInUser;
   collections: CollectionModel[] = [];
   selectedCollection: CollectionModel;
-  selectedCollectionIsEmpty = true;
+  selectedCollectionIsEmpty:boolean = true;
   selectedCollections: CollectionModel[] = [];
   selectedCollectionName = '';
 
-  constructor() {
+  openFirstQuestionModal:boolean = false;
+
+  constructor(private router: Router) {
   }
 
   ngOnInit(): void {
     this.loggedInUser = UserModel.getLoggedInUser();
     this.getOnInitData();
-    // this.showWelcomeAlert();
   }
 
-  // showWelcomeAlert(): void {
-  //   Swal.fire({
-  //     title: 'Welkom ' + this.loggedInUser.firstName + '!',
-  //     timer: 1500,
-  //     showConfirmButton: false,
-  //   });
-  // }
+  showWelcomeAlert(): void {
+    Swal.fire({
+      title: 'Welkom ' + this.loggedInUser.firstName + '!',
+      timer: 1500,
+      showConfirmButton: false,
+    });
+  }
 
   async getOnInitData(): Promise<void> {
     if (this.collections.length !== 0) {
       this.collections.length = 0;
     }
-    const response = await api.get('/collection/all');
+    const response = await Api.getApi().get('/collection/all');
     this.convertDataToObject(response.data.result);
   }
 
@@ -50,6 +52,7 @@ export class CollectionOverviewComponent implements OnInit {
     });
 
     this.checkCollectionAvailability();
+    this.showWelcomeAlert();
   }
 
   checkCollectionAvailability(): void {
@@ -64,7 +67,7 @@ export class CollectionOverviewComponent implements OnInit {
     this.selectedCollectionName = col.name;
     this.selectedCollection = col;
 
-    const response = await api.get('/collection/getAllByName/' + col.name);
+    const response = await Api.getApi().get('/collection/getAllByName/' + col.name);
     const j = response.data.result;
 
     for (let i = 0; i < j.length; i++) {
@@ -87,6 +90,7 @@ export class CollectionOverviewComponent implements OnInit {
     }).then(async (result) => {
       if (result.isConfirmed) {
         // TODO: Api call on succes SWAL fire succes
+        const api = Api.getApi();
         const response = await api.post('/collection/delete', {id: collection.id});
         const r = response.data.result;
         await this.getOnInitData();
@@ -124,6 +128,7 @@ export class CollectionOverviewComponent implements OnInit {
       }
     }).then(async (result) => {
       const data = {id: el.id, type: result.value};
+      const api = Api.getApi();
       const response = await api.post('/collection/update', data);
       const r = response.data.result;
       if (r) {
@@ -144,9 +149,14 @@ export class CollectionOverviewComponent implements OnInit {
       inputPlaceholder: 'Collectie naam...'
     }).then(async (result) => {
       const data = {name: result.value};
+      const api = Api.getApi();
       const response = await api.post('/collection/create', data);
       await this.getOnInitData();
       if (response.data.result) {
+        this.openFirstQuestionModal = true;
+        
+
+        /*
         Swal.fire({
           title: '<strong>' + data.name + '</strong>',
           icon: 'success',
@@ -185,6 +195,7 @@ export class CollectionOverviewComponent implements OnInit {
             })
           }
         })
+        */
       } else {
         Swal.fire({
           title: 'Collectie bestaat al',
@@ -193,5 +204,9 @@ export class CollectionOverviewComponent implements OnInit {
         });
       }
     });
+  }
+
+  editCollection(el: CollectionModel): void {
+    this.router.navigate(['admin/collection', { id: el.id }]);
   }
 }

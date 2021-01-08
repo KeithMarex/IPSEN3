@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Question} from '../Nodes/question.model';
 import {Tree} from '../Nodes/tree.model';
 import {Answer} from '../Nodes/answer.model';
 import {NodeModel} from '../Nodes/node.model';
+import {HttpClient} from '@angular/common/http';
+
+import {ActivatedRoute} from '@angular/router';
+import {Api} from '../../api/api';
+
 
 @Component({
   selector: 'app-question',
@@ -11,22 +16,43 @@ import {NodeModel} from '../Nodes/node.model';
 })
 export class QuestionComponent implements OnInit {
 
+  api = Api.getApi();
   tree: Tree;
   currentAnswers: Answer[];
   isFirstQuestion: boolean;
   isAnswered: boolean;
   preselectedAnswer: string;
+  collectionId: string;
+  collectionName: string;
 
-  constructor() {
+  constructor(private http: HttpClient, private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    const collectionName = 'Reisvoucher'; // ToDo set collectionName
-    this.tree = new Tree(collectionName);
-    this.tree.addNode(this.getFirstQuestion());
-    this.setCurrentAnswers();
-    this.updateIsFirstQuestion();
+    this.collectionId = this.route.snapshot.paramMap.get('collectionId');
+    console.log(this.collectionId);
+    this.setCollectionNameFromApi().then(r => {
+      this.tree = new Tree(this.collectionName);
+    });
+    this.firstQuestionInTree().then(r => {
+      this.setCurrentAnswersFromApi().then(s => {
+        this.updateIsFirstQuestion();
+      });
+    });
     this.isAnswered = false;
+  }
+
+  async setCollectionNameFromApi(): Promise<void> {
+    const path = '/collection/' + this.collectionId;
+    const api = Api.getApi();
+    await api.get(path).then((responseData) => {
+      this.collectionName = responseData.data.result.name;
+    });
+  }
+
+  async firstQuestionInTree(): Promise<void> {
+    const firstQuestion = await this.getFirstQuestionFromAPI();
+    this.tree.addNode(firstQuestion);
   }
 
   getCollectionName(): string {
@@ -40,6 +66,22 @@ export class QuestionComponent implements OnInit {
     const parentId = '0';
     const questionType = 'DropDown';
     return new Question(questionId, questionText, parentId, questionType);
+  }
+
+  async getFirstQuestionFromAPI(): Promise<Question> {
+    let firstQuestion;
+    let questionId;
+    let questionText;
+    const parentId = '0';
+    const questionType = 'DropDown';
+
+    const path = '/question/getByCollection/' + this.collectionId;
+    await this.api.get(path).then((responseData) => {
+      questionId = responseData.data.result.id;
+      questionText = responseData.data.result.name;
+    });
+    firstQuestion = new Question(questionId, questionText, parentId, questionType);
+    return firstQuestion;
   }
 
   getCurrentQuestionText(): string {
@@ -69,17 +111,35 @@ export class QuestionComponent implements OnInit {
     }
   }
 
+  async setCurrentAnswersFromApi(): Promise<void> {
+    this.currentAnswers = [];
+    const currentQuestionId = this.tree.getCurrentNode().getId();
+    const path = '/answer/getByQuestion/' + currentQuestionId;
+    await this.api.get(path).then((responseData) => {
+      console.log(responseData);
+      const answers = responseData.data.result;
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < answers.length; i++) {
+        const answer = new Answer(answers[i].id, answers[i].name, currentQuestionId);
+        this.currentAnswers.push(answer);
+      }
+    });
+  }
+
   nextQuestionExists(answer: Answer): boolean {
     // ToDo check this with api
     switch (answer.getId()) {
       case '2':
         return true;
-        break;
       case '3':
         return true;
-        break;
     }
     return false;
+  }
+
+  nextQuestionExistsApi(answer: Answer): boolean {
+    // ToDo api version of the above;
+    return null;
   }
 
   getNextQuestion(answer: Answer): Question {
