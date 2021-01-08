@@ -2,7 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {CollectionModel} from '../../../shared/models/collection.model';
 import {Api} from '../../../api/api';
-import {AnswerModel} from "../../../shared/models/answer.model";
+import {AnswerModel} from '../../../shared/models/answer.model';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-collection-details',
@@ -18,6 +19,14 @@ export class CollectionDetailsComponent implements OnInit {
 
   routes = ['Collections'];
 
+  Toast = Swal.mixin({
+    toast: true,
+    position: 'bottom-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
+
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -25,7 +34,7 @@ export class CollectionDetailsComponent implements OnInit {
       const response = await Api.getApi().get('/collection/' + this.route.snapshot.paramMap.get('id'));
       const firstQuestion = await Api.getApi().get('/question/getByCollection/' + this.route.snapshot.paramMap.get('id'));
       const answers = await Api.getApi().get('/answer/getByQuestion/' + firstQuestion.data.result.id);
-      this.firstQuestion = firstQuestion.data.result.name;
+      this.firstQuestion = firstQuestion.data.result;
       const r = response.data.result;
       this.selectedCollection = new CollectionModel(r.id, r.name, r.type, r.version);
       this.routes.push(this.selectedCollection.name);
@@ -36,4 +45,33 @@ export class CollectionDetailsComponent implements OnInit {
     });
   }
 
+  createAnswer(): void {
+    Swal.fire({
+      title: 'Nieuw antwoord',
+      html: 'Geef hieronder een nieuw antwoord op voor de vraag: <b>' + this.firstQuestion.name + '</b>',
+      input: 'text',
+      showCancelButton: true,
+      cancelButtonText: 'Annuleren',
+      inputValidator: (value) => {
+        if (!value) {
+          return 'Je moet een naam opgeven';
+        }
+      }
+    }).then(async (result) => {
+      const response = await Api.getApi().post('/answer/create', {name: result.value, question_id: this.firstQuestion.id});
+      const r = response.data;
+      if (r.result && result.isConfirmed){
+        this.answers.push(new AnswerModel(r.id, result.value));
+        await this.Toast.fire({
+          icon: 'success',
+          title: 'Antwoord aangemaakt'
+        });
+      } else if (!r.result && result.isConfirmed) {
+        await this.Toast.fire({
+          icon: 'error',
+          title: 'Er heeft zich een fout voorgedaan'
+        });
+      }
+    });
+  }
 }
