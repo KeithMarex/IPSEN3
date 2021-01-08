@@ -1,9 +1,11 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, SimpleChanges, ViewEncapsulation} from '@angular/core';
 import {Api} from '../../api/api';
 import Swal from 'sweetalert2';
 import {CollectionModel} from '../../shared/models/collection.model';
 import {UserModel} from '../../shared/models/user.model';
+import {AnswerModel} from '../../shared/models/answer.model';
 import {Router} from '@angular/router';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-collection-overview',
@@ -15,9 +17,13 @@ export class CollectionOverviewComponent implements OnInit {
   private loggedInUser;
   collections: CollectionModel[] = [];
   selectedCollection: CollectionModel;
-  selectedCollectionIsEmpty = true;
+  selectedCollectionIsEmpty:boolean = true;
   selectedCollections: CollectionModel[] = [];
   selectedCollectionName = '';
+
+  openFirstQuestionModal:boolean = false;
+  answerList:AnswerModel[] = [];
+  answerListCount:number = 0;
 
   constructor(private router: Router) {
   }
@@ -27,9 +33,18 @@ export class CollectionOverviewComponent implements OnInit {
     this.getOnInitData();
   }
 
+
+  showWelcomeAlert(): void {
+    Swal.fire({
+      title: 'Welkom ' + this.loggedInUser.firstName + '!',
+      timer: 1500,
+      showConfirmButton: false,
+    });
+  }
+
   async getOnInitData(): Promise<void> {
     if (this.collections.length !== 0) {
-      this.collections.length = 0;
+      this.collections = [];
     }
     const response = await Api.getApi().get('/collection/all');
     this.convertDataToObject(response.data.result);
@@ -130,6 +145,16 @@ export class CollectionOverviewComponent implements OnInit {
     });
   }
 
+  cloneCollection(collection): void {
+    const api = Api.getApi();
+    api.post('/collection/copy', {copy_collection_id: collection.id}).then((response) => {
+      if (response.data.result) {
+        collection.id = response.data.id;
+        this.getOnInitData();
+      }
+    });
+  }
+
   async newCollection(): Promise<void> {
     Swal.fire({
       title: 'Nieuwe collectie naam',
@@ -142,10 +167,8 @@ export class CollectionOverviewComponent implements OnInit {
       const response = await api.post('/collection/create', data);
       await this.getOnInitData();
       if (response.data.result) {
-        Swal.fire({
-          title: 'Collectie aangemaakt',
-          icon: 'success',
-        });
+        this.openFirstQuestionModal = true;
+        console.log('collection', response);
       } else {
         Swal.fire({
           title: 'Collectie bestaat al',
@@ -157,6 +180,52 @@ export class CollectionOverviewComponent implements OnInit {
   }
 
   editCollection(el: CollectionModel): void {
-    this.router.navigate(['admin/collection', { id: el.id }]);
+    this.router.navigate(['admin/collection', {id: el.id}]);
+  }
+
+  onClickAddNewAnswer() {
+    this.answerList.push(new AnswerModel("answer-" + this.answerListCount.toString(), ''));
+    this.answerListCount++;
+    console.log(this.answerList);
+  }
+
+  async onSubmit(f:NgForm):Promise<void> {
+
+    const question:string = f['question'];
+    const type: string = f['type']; // Word dit niet gebruikt?
+    
+    const questionData = { 
+        name: question,
+        collection_id: this.selectedCollection.id,
+        answer_id: ''
+    };
+
+    const api = Api.getApi();
+
+    const response = await api.post('/question/create', questionData);
+    
+    if(response.data) {
+      Object.entries(f).forEach(async e => {
+
+        const [key, value] = e;
+        if(key.includes('answer')) {
+
+            const answerData = {
+                name: value,
+                question_id: response.data.id
+            }
+
+            const res = await api.post('/question/create', answerData);
+        }
+      });
+    }
+
+    this.closeFirstQuestionModal();
+  }
+
+  closeFirstQuestionModal() {
+    this.openFirstQuestionModal = false;
+    this.answerList = [];
+    this.answerListCount = 0;
   }
 }

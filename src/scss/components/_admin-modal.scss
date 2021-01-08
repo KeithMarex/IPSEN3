@@ -42,4 +42,13 @@
     &__active {
         display: block;
     }
+
+    &__input-group-text {
+        max-width: 90px;
+        overflow: hidden;
+    }
+
+    &__input-group {
+        margin-bottom: 10px;
+    }
 }
