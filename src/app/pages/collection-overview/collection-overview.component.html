@@ -49,16 +49,18 @@
                           </tr>
                         </thead>
                         <tbody class="content-table__body">
-                          <tr class="content-table__row" *ngFor="let el of this.selectedCollections; let i = index">
-                            <td (click)="editCollection(el)">{{el.name}}</td>
-                            <td><span class="content-table__status {{el.type}}" (click)="changeStatus(el)">{{el.type}}</span></td>
-                            <td>{{el.version}}</td>
-                            <td class="content-table__actions-cel">
-                                <icon-edit (click)="changeStatus(el)"></icon-edit>
-                                <icon-clone></icon-clone>
-                                <icon-remove (click)="deleteCollection(el, i)"></icon-remove>
-                            </td>
-                          </tr>
+                        <tr class="content-table__row"
+                            *ngFor="let collection of this.selectedCollections; let i = index">
+                          <td (click)="editCollection(collection)">{{collection.name}}</td>
+                          <td><span class="content-table__status {{collection.type}}"
+                                    (click)="changeStatus(collection)">{{collection.type}}</span></td>
+                          <td>{{collection.version}}</td>
+                          <td class="content-table__actions-cel">
+                            <icon-edit (click)="changeStatus(collection)"></icon-edit>
+                            <icon-clone (click)="cloneCollection(collection)"></icon-clone>
+                            <icon-remove (click)="deleteCollection(collection, i)"></icon-remove>
+                          </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
