@@ -97,18 +97,6 @@
                         </select>
                     </div>
                     <hr>
-                    <div class="form-row" >
-                        <label for="antwoord1">Antwoorden:</label>
-                        <div class="input-group modal__input-group" *ngFor="let el of answerList">
-                            <input type="text" class="form-control" placeholder="antwoord" aria-label="antwoord1" aria-describedby="basic-addon2" ngModel name="{{el.id}}">
-                            <div class="input-group-append">
-                                <span class="input-group-text modal__input-group-text">{{el.id}}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <button type="button" class="btn btn-primary" (click)="onClickAddNewAnswer()">Nieuw antwoord</button>
-                    <hr>
                     <button type="button" class="btn btn-light" data-dismiss="modal" (click)="closeFirstQuestionModal();questionForm.resetForm();">Annuleren</button>
                     <button type="submit" class="modal__btn btn btn-primary">Aanmaken</button>
                 </form>

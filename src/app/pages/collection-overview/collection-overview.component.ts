@@ -17,13 +17,23 @@ export class CollectionOverviewComponent implements OnInit {
   private loggedInUser;
   collections: CollectionModel[] = [];
   selectedCollection: CollectionModel;
-  selectedCollectionIsEmpty:boolean = true;
+  selectedCollectionIsEmpty = true;
   selectedCollections: CollectionModel[] = [];
   selectedCollectionName = '';
 
-  openFirstQuestionModal:boolean = false;
-  answerList:AnswerModel[] = [];
-  answerListCount:number = 0;
+  newCollectionId;
+
+  openFirstQuestionModal = false;
+  answerList: AnswerModel[] = [];
+  answerListCount = 0;
+
+  Toast = Swal.mixin({
+    toast: true,
+    position: 'bottom-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
 
   constructor(private router: Router) {
   }
@@ -31,15 +41,6 @@ export class CollectionOverviewComponent implements OnInit {
   ngOnInit(): void {
     this.loggedInUser = UserModel.getLoggedInUser();
     this.getOnInitData();
-  }
-
-
-  showWelcomeAlert(): void {
-    Swal.fire({
-      title: 'Welkom ' + this.loggedInUser.firstName + '!',
-      timer: 1500,
-      showConfirmButton: false,
-    });
   }
 
   async getOnInitData(): Promise<void> {
@@ -165,11 +166,11 @@ export class CollectionOverviewComponent implements OnInit {
       const data = {name: result.value};
       const api = Api.getApi();
       const response = await api.post('/collection/create', data);
-      await this.getOnInitData();
       if (response.data.result) {
+        await this.getOnInitData();
+        this.newCollectionId = response.data.id;
         this.openFirstQuestionModal = true;
-        console.log('collection', response);
-      } else {
+      } else if (!response.data.result && result.isConfirmed){
         Swal.fire({
           title: 'Collectie bestaat al',
           text: 'Er is geen nieuwe collectie aangemaakt.',
@@ -183,44 +184,32 @@ export class CollectionOverviewComponent implements OnInit {
     this.router.navigate(['admin/collection', {id: el.id}]);
   }
 
-  onClickAddNewAnswer() {
-    this.answerList.push(new AnswerModel("answer-" + this.answerListCount.toString(), ''));
-    this.answerListCount++;
-    console.log(this.answerList);
-  }
-
-  async onSubmit(f:NgForm):Promise<void> {
-
-    const question:string = f['question'];
+  async onSubmit(f: NgForm): Promise<void> {
+    const question: string = f['question'];
     const type: string = f['type']; // Word dit niet gebruikt?
-    
-    const questionData = { 
+
+    const questionData = {
         name: question,
-        collection_id: this.selectedCollection.id,
-        answer_id: ''
+        collection_id: this.newCollectionId
     };
 
     const api = Api.getApi();
+    const post = await api.post('/question/create', questionData);
 
-    const response = await api.post('/question/create', questionData);
-    
-    if(response.data) {
-      Object.entries(f).forEach(async e => {
+    this.closeFirstQuestionModal();
 
-        const [key, value] = e;
-        if(key.includes('answer')) {
-
-            const answerData = {
-                name: value,
-                question_id: response.data.id
-            }
-
-            const res = await api.post('/question/create', answerData);
-        }
+    if (post.data.result){
+      await this.Toast.fire({
+        icon: 'success',
+        title: 'Niewe collectie succesvol aangemaakt'
+      });
+    } else {
+      await this.Toast.fire({
+        icon: 'error',
+        title: 'Er is iets fout gegaan'
       });
     }
 
-    this.closeFirstQuestionModal();
   }
 
   closeFirstQuestionModal() {
