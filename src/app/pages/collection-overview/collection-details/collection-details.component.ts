@@ -74,4 +74,26 @@ export class CollectionDetailsComponent implements OnInit {
       }
     });
   }
+
+  async removeAnswer(el: AnswerModel, i: number): Promise<void> {
+    const response = await Api.getApi().post('/answer/delete', {id: el.id});
+    const r = response.data;
+    if (r.result){
+      this.answers.splice(i, 1);
+      await this.Toast.fire({
+        icon: 'success',
+        title: 'Antwoord verwijderd'
+      });
+    } else {
+      await this.Toast.fire({
+        icon: 'error',
+        title: 'Er heeft zich een fout vergedaan',
+        text: r
+      });
+    }
+  }
+
+  async editAnswer(el: AnswerModel): Promise<void> {
+
+  }
 }

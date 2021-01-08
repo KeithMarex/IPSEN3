@@ -33,18 +33,18 @@ export class CollectionOverviewComponent implements OnInit {
     this.getOnInitData();
   }
 
+
   showWelcomeAlert(): void {
-    /*Swal.fire({
+    Swal.fire({
       title: 'Welkom ' + this.loggedInUser.firstName + '!',
       timer: 1500,
       showConfirmButton: false,
     });
-    */
   }
 
   async getOnInitData(): Promise<void> {
     if (this.collections.length !== 0) {
-      this.collections.length = 0;
+      this.collections = [];
     }
     const response = await Api.getApi().get('/collection/all');
     this.convertDataToObject(response.data.result);
@@ -57,7 +57,6 @@ export class CollectionOverviewComponent implements OnInit {
     });
 
     this.checkCollectionAvailability();
-    this.showWelcomeAlert();
   }
 
   checkCollectionAvailability(): void {
@@ -146,6 +145,16 @@ export class CollectionOverviewComponent implements OnInit {
     });
   }
 
+  cloneCollection(collection): void {
+    const api = Api.getApi();
+    api.post('/collection/copy', {copy_collection_id: collection.id}).then((response) => {
+      if (response.data.result) {
+        collection.id = response.data.id;
+        this.getOnInitData();
+      }
+    });
+  }
+
   async newCollection(): Promise<void> {
     Swal.fire({
       title: 'Nieuwe collectie naam',
@@ -171,7 +180,7 @@ export class CollectionOverviewComponent implements OnInit {
   }
 
   editCollection(el: CollectionModel): void {
-    this.router.navigate(['admin/collection', { id: el.id }]);
+    this.router.navigate(['admin/collection', {id: el.id}]);
   }
 
   onClickAddNewAnswer() {

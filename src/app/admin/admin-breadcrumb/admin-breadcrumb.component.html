@@ -1,6 +1,6 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb fix">
-        <li class="breadcrumb-item" [ngClass]="{'active': active[0] === ''}"><a>{{home}}</a></li>
+        <li class="breadcrumb-item" [ngClass]="{'active': active[0] === ''}"><a (click)="goToDashboard()" style="cursor: pointer">{{home}}</a></li>
         <li *ngFor="let i of active" class="breadcrumb-item active" aria-current="page">{{i}}</li>
     </ol>
 </nav>

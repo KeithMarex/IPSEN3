@@ -27,6 +27,7 @@ import {CollectionDetailsComponent} from './pages/collection-overview/collection
 import {ArrowComponent} from "./icons/arrow/arrow.component";
 import { ModalComponent } from './components/modal/modal.component';
 
+
 const appRoutes: Routes = [
   {path: 'collection/:collectionId', component: CustomerComponent},
   {path: 'admin', component: AdminComponent},
@@ -55,7 +56,7 @@ const appRoutes: Routes = [
     CollectionVersionsComponent,
     ModalComponent,
     CollectionDetailsComponent,
-    ArrowComponent
+    ArrowComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,7 +64,7 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     FormsModule,
     HttpClientModule,
-    SweetAlert2Module.forRoot()
+    SweetAlert2Module.forRoot(),
   ],
   providers: [ConfigurationService],
   bootstrap: [AppComponent]
