@@ -24,7 +24,7 @@
           <div class="admin-content__header row">
             <div class="admin-content__col col">
               <div class="row">
-                <h1>{{this.firstQuestion}}</h1>
+                <h1>{{this.firstQuestion['name']}}</h1>
               </div>
             </div>
           </div>
@@ -34,7 +34,7 @@
             <thead class="content-table__head">
             <tr>
               <th scope="col">Titel</th>
-              <th scope="col">&nbsp;</th>
+              <th scope="col"><button (click)="createAnswer()" class="sidebar__btn btn">Nieuw</button></th>
             </tr>
             </thead>
             <tbody class="content-table__body">
@@ -44,7 +44,6 @@
                 <icon-edit (click)="changeStatus(el)"></icon-edit>
                 <icon-clone></icon-clone>
                 <icon-remove (click)="deleteCollection(el, i)"></icon-remove>
-                <icon-arrow></icon-arrow>
               </td>
             </tr>
             </tbody>
