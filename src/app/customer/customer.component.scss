@@ -1,0 +1,52 @@
+@font-face {
+    font-family: "TisaWeb";
+    src: url(../../assets/fonts/TisaWeb-Regular/TisaWeb-Regular.woff);
+  }
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+  
+  * {
+    font-family: TisaWeb, serif;
+  }
+  
+  .bg-image {
+    width: 100%;
+    border-radius: 0px 25px 25px 0px;
+  }
+  
+  .bg-image-col {
+    padding: 0;
+  }
+  
+  .vertical-center {
+    min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+    min-height: 100vh; /* These two lines are counted as one :-)       */
+  
+    display: flex;
+    align-items: center;
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  .modal-login {
+    background-color: white;
+    border-radius: 25px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+  
+.container
+{
+    padding: 10px 10px 10px 10px;
+}
+
+.jumbotron
+{
+    background-color: #FFD806;
+    background-image: url("../../assets/background-login-image@2x.png");
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    height: 90vh;
+}

@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Api } from '../api/api';
+import { Answer } from '../shared/models/answer';
+import { Question } from '../shared/models/question';
 
 @Component({
   selector: 'app-customer',
@@ -6,10 +10,58 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./customer.component.scss']
 })
 export class CustomerComponent implements OnInit {
+  collectionId : string;
+  collectionName : string;
+  currentQuestion : Question;
+  questionStack : Question[] = [];
+  constructor(private route: ActivatedRoute, private router : Router) {}
 
-  constructor() {}
+  async ngOnInit(): Promise<void> {
+    this.collectionId = this.route.snapshot.paramMap.get('collectionId');
+    console.log(this.collectionId);
+    //this.currentQuestion = 
 
-  ngOnInit(): void {
+    this.setCollectionName();
+
+    await Question.getQuestionByCollectionID(this.collectionId).then(response =>
+      {
+        this.currentQuestion = response;
+      });
+  }
+
+  setCollectionName()
+  {
+    const api = Api.getApi();
+    api.get('/collection/' + this.collectionId).then(response => {
+      if(response.data.result)
+      {
+        this.collectionName = response.data.result.name;
+      }
+    });
+  }
+
+  async onAnswered(answer : Answer)
+  {
+    console.log(answer);
+    await Question.getQuestionByByAnswerID(answer.id).then(question => {
+      this.questionStack.push(this.currentQuestion); // we pushen de huidige vraag op de stack, zodat het mogelijk is om terug te gaan.
+      this.currentQuestion = question;
+    });
+  }
+
+  onGoBack()
+  {
+    if (this.questionStack.length > 0)
+    {
+      // er bestaat een vorige vraag.
+      this.currentQuestion = this.questionStack[this.questionStack.length -1];
+      this.questionStack.pop();
+    }
+    else
+    {
+      // er is geen vorige vraag. Keer terug naar homepage
+      this.router.navigateByUrl("/");
+    }
   }
 
 }
