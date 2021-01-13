@@ -33,7 +33,7 @@
                             </div>
                             <div class="row">
                                 <h1 *ngIf="selectedCollectionIsEmpty" class="admin-content__heading">{{this.selectedCollectionName}}</h1>
-                                <button *ngIf="selectedCollectionIsEmpty" class="sidebar__btn btn" style="margin: auto 0 0 auto">Live weergeven</button>
+                                <button *ngIf="selectedCollectionIsEmpty" class="sidebar__btn btn" (click)="liveViewClicked()" style="margin: auto 0 0 auto">Live weergeven</button>
                             </div>
                         </div>
                     </div>
