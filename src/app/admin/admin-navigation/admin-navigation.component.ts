@@ -129,7 +129,7 @@ export class AdminNavigationComponent implements OnInit {
   }
 
   logOut(): void {
-    Cookie.delete('token');
+    Cookie.delete('user_token');
     Swal.fire({
       position: 'top-end',
       icon: 'success',
