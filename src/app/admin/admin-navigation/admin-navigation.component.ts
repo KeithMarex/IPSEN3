@@ -4,6 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
 import {Router} from '@angular/router';
 import {UserModel} from '../../shared/models/user.model';
+import {Api} from '../../api/api';
 
 @Component({
   selector: 'app-admin-navigation',
@@ -43,13 +44,15 @@ export class AdminNavigationComponent implements OnInit {
             password: answers[2],
           };
           console.log(postData);
-          this.http.post('https://ipsen3api.nielsprins.com/user/update', postData).subscribe(responseData => {
-            console.log(responseData);
-          });
-          Swal.fire({
-            icon: 'success',
-            title: 'Nieuw wachtwoord ingesteld!',
-            confirmButtonText: 'Oke'
+
+          const api = Api.getApi();
+          api.post('/user/update', postData).then((response) => {
+            console.log(response);
+            Swal.fire({
+              icon: 'success',
+              title: 'Nieuw wachtwoord ingesteld!',
+              confirmButtonText: 'Oke'
+            });
           });
         } else {
           Swal.fire({
@@ -103,9 +106,10 @@ export class AdminNavigationComponent implements OnInit {
           permission_group: answers[4]
         };
         console.log(postData);
-        this.http.post('https://ipsen3api.nielsprins.com/user/create', postData).subscribe(responseData => {
-          console.log(responseData);
-          if (responseData['result'] === true) {
+        const api = Api.getApi();
+        api.post('/user/create', postData).then((response) => {
+          console.log(response);
+          if (response.data.result === true) {
             Swal.fire({
               icon: 'success',
               title: 'Gebruiker ' + answers[2] + ' aangemaakt!',
@@ -122,7 +126,6 @@ export class AdminNavigationComponent implements OnInit {
         });
       }
     });
-
   }
 
   logOut(): void {
