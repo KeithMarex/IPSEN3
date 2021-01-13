@@ -13,7 +13,9 @@ export class CustomerComponent implements OnInit {
   collectionId : string;
   collectionName : string;
   currentQuestion : Question;
+  lastAnswer : Answer;
   questionStack : Question[] = [];
+  answerStack : Answer[] = [];
   constructor(private route: ActivatedRoute, private router : Router) {}
 
   async ngOnInit(): Promise<void> {
@@ -45,6 +47,7 @@ export class CustomerComponent implements OnInit {
     console.log(answer);
     await Question.getQuestionByByAnswerID(answer.id).then(question => {
       this.questionStack.push(this.currentQuestion); // we pushen de huidige vraag op de stack, zodat het mogelijk is om terug te gaan.
+      this.answerStack.push(answer);// ook pushen we het antwoord op de stack voor preselection in het geval van terugkeren
       this.currentQuestion = question;
     });
   }
@@ -55,7 +58,9 @@ export class CustomerComponent implements OnInit {
     {
       // er bestaat een vorige vraag.
       this.currentQuestion = this.questionStack[this.questionStack.length -1];
+      this.lastAnswer = this.answerStack[this.answerStack.length - 1];
       this.questionStack.pop();
+      this.answerStack.pop();
     }
     else
     {
