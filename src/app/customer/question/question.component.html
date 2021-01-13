@@ -13,7 +13,7 @@
             <span class="caret"></span></button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <div *ngFor="let answer of currentAnswers">
-              <a class="dropdown-item" href="#" (click)="onNextQuestionClicked(answer)">{{answer.getText()}}</a>
+              <a class="dropdown-item" (click)="onNextQuestionClicked(answer)">{{answer.getText()}}</a>
             </div>
           </div>
         </div>
