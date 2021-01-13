@@ -30,7 +30,6 @@ export class QuestionComponent implements OnInit {
 
   ngOnInit(): void {
     this.collectionId = this.route.snapshot.paramMap.get('collectionId');
-    console.log(this.collectionId);
     this.setCollectionNameFromApi().then(r => {
       this.tree = new Tree(this.collectionName);
     });
@@ -59,15 +58,6 @@ export class QuestionComponent implements OnInit {
     return this.tree.getCollectionName();
   }
 
-  getFirstQuestion(): Question {
-    // ToDo get question data from api
-    const questionId = '1';
-    const questionText = 'Waarmee kan ik u helpen?';
-    const parentId = '0';
-    const questionType = 'DropDown';
-    return new Question(questionId, questionText, parentId, questionType);
-  }
-
   async getFirstQuestionFromAPI(): Promise<Question> {
     let firstQuestion;
     let questionId;
@@ -88,35 +78,11 @@ export class QuestionComponent implements OnInit {
     return this.tree.getCurrentNode().getText();
   }
 
-  setCurrentAnswers(): void {
-    // ToDo gets answers from api and sets it in currentAnswers
-    switch (this.tree.getCurrentNode().getId()) {
-      case '1':
-        this.currentAnswers = [
-          new Answer('2', 'Ik wil geld in plaats van een voucher', '1'),
-          new Answer('3', 'Moet ik mijn voucher accepteren?', '1'),
-          new Answer('4', 'Ik wil mijn reis annuleren, wat zijn mijn rechten?', '1'),
-          new Answer('5', 'Ik kom terug uit code oranje', '1'),
-          new Answer('6', 'Overig', '1'),
-          new Answer('7', 'Mijn optie staat er niet bij', '1'),
-        ];
-        break;
-      case '8':
-        this.currentAnswers = [
-          new Answer('9', 'Ik wil geld in plaats van een voucher', '1'),
-          new Answer('11', 'Moet ik mijn voucher accepteren?', '1'),
-          new Answer('12', 'Ik wil mijn reis annuleren, wat zijn mijn rechten?', '1'),
-        ];
-        break;
-    }
-  }
-
   async setCurrentAnswersFromApi(): Promise<void> {
     this.currentAnswers = [];
     const currentQuestionId = this.tree.getCurrentNode().getId();
     const path = '/answer/getByQuestion/' + currentQuestionId;
     await this.api.get(path).then((responseData) => {
-      console.log(responseData);
       const answers = responseData.data.result;
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < answers.length; i++) {
@@ -126,37 +92,41 @@ export class QuestionComponent implements OnInit {
     });
   }
 
-  nextQuestionExists(answer: Answer): boolean {
-    // ToDo check this with api
-    switch (answer.getId()) {
-      case '2':
-        return true;
-      case '3':
-        return true;
+  async getNextQuestionDataApi(answer: Answer): Promise<'object'> {
+    const path = '/question/getByAnswer/' + answer.getId();
+    let refinedData;
+    await this.api.get(path).then((responseData) => {
+      refinedData = responseData.data.result;
+    });
+    return refinedData;
+  }
+
+  async nextQuestionExistsApi(questionData: 'object'): Promise<boolean> {
+    let exist = true;
+    if (!questionData) {
+      exist = false;
     }
-    return false;
+    return exist;
   }
 
-  nextQuestionExistsApi(answer: Answer): boolean {
-    // ToDo api version of the above;
-    return null;
-  }
-
-  getNextQuestion(answer: Answer): Question {
-    // ToDo get next question from api
-    const questionId = '8';
-    const questionText = 'Wat is uw situatie?';
-    const parentId = '4';
+  getNextQuestionFromData(questionData: 'object', previousNode: NodeModel): Question {
+    // @ts-ignore
+    const questionId = questionData.id;
+    // @ts-ignore
+    const questionText = questionData.name;
+    const parentId = previousNode.getId();
     const questionType = 'DropDown';
     return new Question(questionId, questionText, parentId, questionType);
   }
 
-  onNextQuestionClicked(answer: Answer): void {
-    if (this.nextQuestionExists(answer)) {
-      const question = this.getNextQuestion(answer);
+  async onNextQuestionClicked(answer: Answer): Promise<void> {
+    const questionData = await this.getNextQuestionDataApi(answer);
+    const answerExists = await this.nextQuestionExistsApi(questionData);
+    if (answerExists) {
+      const question = this.getNextQuestionFromData(questionData, answer);
       question.setPreviousNode(answer);
       this.tree.addNode(question);
-      this.setCurrentAnswers();
+      await this.setCurrentAnswersFromApi();
       this.updateIsFirstQuestion();
       this.isAnswered = false;
     }
@@ -164,10 +134,11 @@ export class QuestionComponent implements OnInit {
 
   onPreviousQuestionClicked(): void {
     const node: NodeModel = this.tree.pop();
-    this.setCurrentAnswers();
-    this.preselectedAnswer = node.getPreviousNode().getText();
-    this.isAnswered = true;
-    this.updateIsFirstQuestion();
+    this.setCurrentAnswersFromApi().then(r => {
+      this.preselectedAnswer = node.getPreviousNode().getText();
+      this.isAnswered = true;
+      this.updateIsFirstQuestion();
+    });
   }
 
   updateIsFirstQuestion(): void {
