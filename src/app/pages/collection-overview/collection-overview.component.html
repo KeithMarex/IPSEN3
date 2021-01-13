@@ -33,7 +33,7 @@
                             </div>
                             <div class="row">
                                 <h1 *ngIf="selectedCollectionIsEmpty" class="admin-content__heading">{{this.selectedCollectionName}}</h1>
-                                <button *ngIf="selectedCollectionIsEmpty" class="sidebar__btn btn" style="margin: auto 0 0 auto">Live weergeven</button>
+                                <button *ngIf="selectedCollectionIsEmpty" class="sidebar__btn btn" (click)="liveViewClicked()" style="margin: auto 0 0 auto">Live weergeven</button>
                             </div>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
 <!-- Create new Collection modal -->
 <div class="modal" tabindex="-1" [ngClass]="{ 'modal__active': openFirstQuestionModal }">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" style="padding: 0 20px 0 20px">
             <div class="modal-header">
                 <h5 class="modal-title">Eerste vraag aanmaken</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="closeFirstQuestionModal();questionForm.resetForm();">
