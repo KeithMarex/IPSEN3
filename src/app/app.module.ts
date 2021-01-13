@@ -26,6 +26,7 @@ import {CollectionVersionsComponent} from './components/collections/collection-v
 import {CollectionDetailsComponent} from './pages/collection-overview/collection-details/collection-details.component';
 import {ArrowComponent} from './icons/arrow/arrow.component';
 import {ModalComponent} from './components/modal/modal.component';
+import { CollectionLiveComponent } from './pages/collection-overview/collection-live/collection-live.component';
 
 
 const appRoutes: Routes = [
@@ -33,6 +34,7 @@ const appRoutes: Routes = [
   {path: 'admin', component: AdminComponent},
   {path: 'admin/dashboard', component: CollectionOverviewComponent},
   {path: 'admin/collection/:collectionId', component: CollectionDetailsComponent},
+  {path: 'admin/dashboard/live/:collectionId', component: CollectionLiveComponent},
   {path: '', component: HomepageComponent}
 ];
 
@@ -57,6 +59,7 @@ const appRoutes: Routes = [
     ModalComponent,
     CollectionDetailsComponent,
     ArrowComponent,
+    CollectionLiveComponent,
   ],
   imports: [
     BrowserModule,

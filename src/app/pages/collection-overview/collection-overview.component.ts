@@ -217,4 +217,11 @@ export class CollectionOverviewComponent implements OnInit {
     this.answerList = [];
     this.answerListCount = 0;
   }
+
+  liveViewClicked(): void {
+    // ToDo
+    console.log(this.selectedCollection.name);
+    // this.router.navigate([this.router.url + '/live/' + this.selectedCollection.id]);
+    this.router.navigate([this.router.url + '/live/' + this.selectedCollection.id]);
+  }
 }

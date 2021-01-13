@@ -38,7 +38,8 @@ export class CollectionDetailsComponent implements OnInit {
       const r = response.data.result;
       this.selectedCollection = new CollectionModel(r.id, r.name, r.type, r.version);
       this.routes.push(this.selectedCollection.name);
-      for (let i = 0; i < answers.data.result.length; i++) {
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < answers.data.result.length; i++){
         this.answers.push(new AnswerModel(answers.data.result[i].id, answers.data.result[i].name));
       }
       this.isDataAvailable = true;
@@ -47,62 +48,70 @@ export class CollectionDetailsComponent implements OnInit {
 
   async createAnswer(): Promise<void> {
     await Swal.fire({
-      html: `<h1><b>Nieuw</b></h1>
+      html: `<h1><b>Nieuw antwoord</b></h1>
              <hr>
-             <label for="swal-input2">Nieuw antwoord</label>
-             <input id="swal-input2" class="swal2-input">
+             <input id="swal-input2" class="swal2-input" placeholder="Vul hier een nieuw antwoord in...">
              <hr>
-             <label for="sel1">Nieuw vervolg</label>
+             <label for="sel1">Vervolg op antwoord</label>
              <select class="form-control" id="sel1">
                 <option value="Vraag">Vraag</option>
                 <option value="Notificatie">Notificatie</option>
                 <option value="Email">Email</option>
               </select>
+              <br>
         `,
       focusConfirm: false,
+      confirmButtonText: 'Oke',
       preConfirm: () => {
-        return [
-          (document.getElementById('swal-input2') as HTMLInputElement).value,
-          (document.getElementById('sel1') as HTMLInputElement).value
-        ];
-      }
+        // tslint:disable-next-line:max-line-length
+        if ((document.getElementById('swal-input2') as HTMLInputElement).value && (document.getElementById('sel1') as HTMLInputElement).value) {
+          return [
+            (document.getElementById('swal-input2') as HTMLInputElement).value,
+            (document.getElementById('sel1') as HTMLInputElement).value
+          ];
+        } else {
+          Swal.showValidationMessage('Je moet waardes opgeven');
+        }
+      },
     }).then(async (result) => {
-      await Swal.fire({
-        input: 'textarea',
-        inputLabel: 'Nieuwe ' + result.value[1].toLowerCase() + ' voor ' + result.value[0],
-        inputPlaceholder: 'Type je boodschap hier...',
-        inputAttributes: {
-          'aria-label': 'Type your message here'
-        },
-        showCancelButton: true
-      }).then(async (result2) => {
-        const response = await Api.getApi().post('/answer/create', {
-          name: result.value[0],
-          question_id: this.firstQuestion['id']
-        });
-        const r = response.data;
+      if (result.isConfirmed) {
+        await Swal.fire({
+          input: 'textarea',
+          inputLabel: 'Nieuwe ' + result.value[1].toLowerCase() + ' voor ' + result.value[0],
+          inputPlaceholder: 'Type je boodschap hier...',
+          inputAttributes: {
+            'aria-label': 'Type your message here'
+          },
+          showCancelButton: true,
+          confirmButtonText: 'Oke',
+          cancelButtonText: 'Annuleren',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Je moet iets opgeven!';
+            }
+          }
+        }).then(async (result2) => {
+          if (result2.isConfirmed && result2.value) {
+            await this.Toast.fire({
+              icon: 'success',
+              title: 'Antwoord aangemaakt'
+            });
 
-        const response2 = await Api.getApi().post('/question/create', {
-          name: result2.value,
-          answer_id: r.id
-        });
-        const d = response2.data;
-        console.log(response2);
+            const response = await Api.getApi().post('/answer/create', {
+              name: result.value[0],
+              question_id: this.firstQuestion.id
+            });
+            const r = response.data;
 
-        if (result2.isConfirmed) {
-          this.answers.push(new AnswerModel(r.id, result.value[0]));
-          await this.Toast.fire({
-            icon: 'success',
-            title: 'Antwoord aangemaakt'
-          });
-        }
-        else if (result.isConfirmed) {
-          await this.Toast.fire({
-            icon: 'error',
-            title: 'Er heeft zich een fout voorgedaan'
-          });
-        }
-      });
+            const response2 = await Api.getApi().post('/question/create', {
+              name: result2.value,
+              answer_id: r.id
+            });
+
+            this.answers.push(new AnswerModel(r.id, result.value[0]));
+          }
+        });
+      }
     });
   }
 
@@ -163,6 +172,7 @@ export class CollectionDetailsComponent implements OnInit {
     this.firstQuestion = firstQuestion.data.result;
 
     const answers = await Api.getApi().get('/answer/getByQuestion/' + firstQuestion.data.result.id);
+    // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < answers.data.result.length; i++){
       this.answers.push(new AnswerModel(answers.data.result[i].id, answers.data.result[i].name));
     }
