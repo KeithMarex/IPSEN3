@@ -99,7 +99,7 @@ export class CollectionDetailsComponent implements OnInit {
 
             const response = await Api.getApi().post('/answer/create', {
               name: result.value[0],
-              question_id: this.firstQuestion.id
+              question_id: this.firstQuestion['id']
             });
             const r = response.data;
 

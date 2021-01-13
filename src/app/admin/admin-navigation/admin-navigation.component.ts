@@ -43,11 +43,9 @@ export class AdminNavigationComponent implements OnInit {
             id: user.id,
             password: answers[2],
           };
-          console.log(postData);
 
           const api = Api.getApi();
           api.post('/user/update', postData).then((response) => {
-            console.log(response);
             Swal.fire({
               icon: 'success',
               title: 'Nieuw wachtwoord ingesteld!',
@@ -105,10 +103,8 @@ export class AdminNavigationComponent implements OnInit {
           password: answers[1],
           permission_group: answers[4]
         };
-        console.log(postData);
         const api = Api.getApi();
         api.post('/user/create', postData).then((response) => {
-          console.log(response);
           if (response.data.result === true) {
             Swal.fire({
               icon: 'success',
