@@ -24,15 +24,17 @@ import {ConfigurationService} from './shared/configuration.service';
 import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
 import {CollectionVersionsComponent} from './components/collections/collection-versions/collection-versions.component';
 import {CollectionDetailsComponent} from './pages/collection-overview/collection-details/collection-details.component';
-import {ArrowComponent} from "./icons/arrow/arrow.component";
-import { ModalComponent } from './components/modal/modal.component';
+import {ArrowComponent} from './icons/arrow/arrow.component';
+import {ModalComponent} from './components/modal/modal.component';
+import { CollectionLiveComponent } from './pages/collection-overview/collection-live/collection-live.component';
 
 
 const appRoutes: Routes = [
   {path: 'collection/:collectionId', component: CustomerComponent},
   {path: 'admin', component: AdminComponent},
   {path: 'admin/dashboard', component: CollectionOverviewComponent},
-  {path: 'admin/collection', component: CollectionDetailsComponent},
+  {path: 'admin/collection/:collectionId', component: CollectionDetailsComponent},
+  {path: 'admin/dashboard/live/:collectionId', component: CollectionLiveComponent},
   {path: '', component: HomepageComponent}
 ];
 
@@ -57,6 +59,7 @@ const appRoutes: Routes = [
     ModalComponent,
     CollectionDetailsComponent,
     ArrowComponent,
+    CollectionLiveComponent,
   ],
   imports: [
     BrowserModule,
