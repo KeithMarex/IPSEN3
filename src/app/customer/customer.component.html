@@ -14,7 +14,7 @@
             <span class="caret"></span></button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <div *ngFor="let answer of currentQuestion.answers">
-              <a class="dropdown-item" (click)="onAnswered(answer)">{{ answer.name }}</a>
+              <a class="dropdown-item" (click)="onAnswered(answer)" [ngClass]="{'active': lastAnswer && lastAnswer.id == answer.id}">{{ answer.name }}</a>
             </div>
           </div>
         </div>

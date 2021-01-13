@@ -1,11 +1,11 @@
-import {Component, OnInit, SimpleChanges, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {Api} from '../../api/api';
 import Swal from 'sweetalert2';
 import {CollectionModel} from '../../shared/models/collection.model';
 import {UserModel} from '../../shared/models/user.model';
 import {AnswerModel} from '../../shared/models/answer.model';
 import {Router} from '@angular/router';
-import { NgForm } from '@angular/forms';
+import {NgForm} from '@angular/forms';
 
 @Component({
   selector: 'app-collection-overview',
@@ -181,7 +181,7 @@ export class CollectionOverviewComponent implements OnInit {
   }
 
   editCollection(el: CollectionModel): void {
-    this.router.navigate(['admin/collection', {id: el.id}]);
+    this.router.navigate(['admin/collection/' + el.id]);
   }
 
   async onSubmit(f: NgForm): Promise<void> {
