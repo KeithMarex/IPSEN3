@@ -31,14 +31,14 @@ export class CollectionDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(async (params) => {
-      const response = await Api.getApi().get('/collection/' + this.route.snapshot.paramMap.get('id'));
-      const firstQuestion = await Api.getApi().get('/question/getByCollection/' + this.route.snapshot.paramMap.get('id'));
+      const response = await Api.getApi().get('/collection/' + this.route.snapshot.paramMap.get('collectionId'));
+      const firstQuestion = await Api.getApi().get('/question/getByCollection/' + this.route.snapshot.paramMap.get('collectionId'));
       const answers = await Api.getApi().get('/answer/getByQuestion/' + firstQuestion.data.result.id);
       this.firstQuestion = firstQuestion.data.result;
       const r = response.data.result;
       this.selectedCollection = new CollectionModel(r.id, r.name, r.type, r.version);
       this.routes.push(this.selectedCollection.name);
-      for (let i = 0; i < answers.data.result.length; i++){
+      for (let i = 0; i < answers.data.result.length; i++) {
         this.answers.push(new AnswerModel(answers.data.result[i].id, answers.data.result[i].name));
       }
       this.isDataAvailable = true;
