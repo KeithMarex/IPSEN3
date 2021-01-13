@@ -1,6 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import Swal from "sweetalert2";
+import {HttpClient} from '@angular/common/http';
+import Swal from 'sweetalert2';
+import {Api} from '../../../api/api';
 
 @Component({
   selector: 'app-password-forgot',
@@ -10,25 +11,27 @@ import Swal from "sweetalert2";
 export class PasswordForgotComponent implements OnInit {
   @Output() changeView = new EventEmitter();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   ngOnInit(): void {
   }
 
-  viewLogin() {
+  viewLogin(): void {
     this.changeView.emit();
   }
 
-  onFormSubmit(postData: {email: string}) {
+  onFormSubmit(postData: { email: string }): void {
     console.log(postData);
-    this.http.post('http://localhost:3000/user/resetPassword', postData).subscribe(responseData => {
+    const api = Api.getApi();
+    api.post('/user/resetPassword', postData).then((responseData) => {
       console.log(responseData);
-      if (responseData['result'] === true){
+      if (responseData.data.result === true) {
         Swal.fire({
-          icon: "success",
+          icon: 'success',
           title: 'Wachtwoord aangevraagd!',
           text: 'Controleer je email'
-        })
+        });
         this.changeView.emit();
       }
     });
