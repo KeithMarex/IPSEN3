@@ -5,7 +5,7 @@ import {Answer} from '../Nodes/answer.model';
 import {NodeModel} from '../Nodes/node.model';
 import {HttpClient} from '@angular/common/http';
 
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Api} from '../../api/api';
 
 
@@ -25,7 +25,8 @@ export class QuestionComponent implements OnInit {
   collectionId: string;
   collectionName: string;
 
-  constructor(private http: HttpClient, private route: ActivatedRoute) {
+  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {
+
   }
 
   ngOnInit(): void {
