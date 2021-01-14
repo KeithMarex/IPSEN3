@@ -70,8 +70,12 @@
             font-weight: 700;
         }
 
-        &:hover {
+        li:hover {
             background-color: #fff;
+        }
+
+        div:hover {
+          background-color: #fff;
         }
     }
 }
