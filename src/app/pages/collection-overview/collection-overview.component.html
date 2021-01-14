@@ -11,10 +11,10 @@
                 </div>
               <div class="row">
                 <div class=" sidebar__col col-sm-12">
-                  <button type="button" class="sidebar__btn btn" (click)="newCategory()" style="margin: 0 10px 0 10px">
+                  <button type="button" class="sidebar__btn btn" (click)="newCategory()" style="margin: 0 20px 0 20px">
                     Nieuwe categorie
                   </button>
-                  <button type="button" class="sidebar__btn btn" (click)="newCollection()" style="float: right; margin: 0 10px 0 10px">
+                  <button type="button" class="sidebar__btn btn" (click)="newCollection()" style="float: right; margin: 0 20px 0 20px">
                     Nieuwe collectie
                   </button>
                 </div>
@@ -23,8 +23,8 @@
             <div class="sidebar-content container-fluid">
                 <div class="sidebar-content__row row">
                     <ul class="sidebar-content__list content-list" >
-                        <li *ngFor="let el of this.categorien; let i = index" [ngClass]="{'active': el.id === selectedCollection.id }" class="content-list__item" #this.collections style="cursor: pointer" (click)="chooseCategory(el, i)">
-                          <div class="row">
+                        <li *ngFor="let el of this.categorien; let i = index" [ngClass]="{'active': el.id === selectedCollection.id }" class="content-list__item" #this.collections style="cursor: pointer">
+                          <div class="row" (click)="chooseCategory(el, i)">
                             <div class="col-md-3">
                               <img width="100%" src="{{el.icon_url}}" alt="">
                             </div>
