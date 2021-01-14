@@ -8,17 +8,36 @@
                     <div class="sidebar__col col-sm-8">
                         <h1 class="sidebar__heading">Collecties</h1>
                     </div>
-                    <div class=" sidebar__col col-sm-4">
-                        <button type="button" class="sidebar__btn btn" (click)="newCollection()">
-                            Nieuw
-                        </button>
-                    </div>
                 </div>
+              <div class="row">
+                <div class=" sidebar__col col-sm-12">
+                  <button type="button" class="sidebar__btn btn" (click)="newCategory()" style="margin: 0 10px 0 10px">
+                    Nieuwe categorie
+                  </button>
+                  <button type="button" class="sidebar__btn btn" (click)="newCollection()" style="float: right; margin: 0 10px 0 10px">
+                    Nieuwe collectie
+                  </button>
+                </div>
+              </div>
             </div>
             <div class="sidebar-content container-fluid">
                 <div class="sidebar-content__row row">
                     <ul class="sidebar-content__list content-list" >
-                        <li *ngFor="let el of this.collections" [ngClass]="{'active': el.id === selectedCollection.id }" class="content-list__item" #this.collections style="cursor: pointer" (click)="changeSelectedCollection(el)"><a>{{ el.name }}</a></li>
+                        <li *ngFor="let el of this.categorien; let i = index" [ngClass]="{'active': el.id === selectedCollection.id }" class="content-list__item" #this.collections style="cursor: pointer" (click)="chooseCategory(el, i)">
+                          <div class="row">
+                            <div class="col-md-3">
+                              <img width="100%" src="{{el.icon_url}}" alt="">
+                            </div>
+                            <div class="col-md-8">
+                              <a style="padding-left: 0"><strong>{{ el.name }}</strong></a>
+                            </div>
+                          </div>
+                          <ul *ngIf="this.selectedIndex === i" style="list-style-type: none">
+                            <li *ngFor="let col of this.collectionsFromCategory" (click)="changeSelectedCollection(col)">
+                              <a>{{col.name}}</a>
+                            </li>
+                          </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -52,10 +71,10 @@
                             *ngFor="let collection of this.selectedCollections; let i = index">
                           <td (click)="editCollection(collection)">{{collection.name}}</td>
                           <td><span class="content-table__status {{collection.type}}"
-                                    (click)="changeStatus(collection)">{{collection.type}}</span></td>
+                                    (click)="changeStatus(collection, i)">{{collection.type}}</span></td>
                           <td>{{collection.version}}</td>
                           <td class="content-table__actions-cel">
-                            <icon-edit (click)="changeStatus(collection)"></icon-edit>
+                            <icon-edit (click)="changeStatus(collection, i)"></icon-edit>
                             <icon-clone (click)="cloneCollection(collection)"></icon-clone>
                             <icon-remove (click)="deleteCollection(collection, i)"></icon-remove>
                             <button *ngIf="selectedCollectionIsEmpty" class="sidebar__btn btn" style="margin: auto 0 0 auto; float: right">Live weergeven</button>
