@@ -9,6 +9,16 @@
     <div class="dropdown">
       <button class="btn btn-custom dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
+        Selecteer een categorie
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <div *ngFor="let category of this.categories" class="dropdown-item"
+             (click)="onSelectCategory(category.id)">{{ category.name }}</div>
+      </div>
+    </div>
+    <div class="dropdown" *ngIf="selectedCategoryId != null">
+      <button class="btn btn-custom dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
         Selecteer een vragenboom
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
