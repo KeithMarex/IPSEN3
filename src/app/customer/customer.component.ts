@@ -16,13 +16,10 @@ export class CustomerComponent implements OnInit {
   lastAnswer : Answer;
   questionStack : Question[] = [];
   answerStack : Answer[] = [];
+
   constructor(private route: ActivatedRoute, private router : Router) {}
 
   async ngOnInit(): Promise<void> {
-    this.collectionId = this.route.snapshot.paramMap.get('collectionId');
-    console.log(this.collectionId);
-    //this.currentQuestion = 
-
     this.setCollectionName();
 
     await Question.getQuestionByCollectionID(this.collectionId).then(response =>
@@ -33,6 +30,8 @@ export class CustomerComponent implements OnInit {
 
   setCollectionName()
   {
+    this.collectionId = this.route.snapshot.paramMap.get('collectionId');
+    console.log(this.collectionId);
     const api = Api.getApi();
     api.get('/collection/' + this.collectionId).then(response => {
       if(response.data.result)
