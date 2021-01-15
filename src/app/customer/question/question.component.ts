@@ -16,7 +16,7 @@ import {Api} from '../../api/api';
 })
 export class QuestionComponent implements OnInit {
 
-  api = Api.getApi();
+  api;
   tree: Tree;
   currentAnswers: Answer[];
   isFirstQuestion: boolean;
@@ -30,12 +30,14 @@ export class QuestionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.collectionId = this.route.snapshot.paramMap.get('collectionId');
+    this.api = Api.getApi();
+    this.collectionId = this.route.snapshot.paramMap.get('collectionId'); // This is if there is a url
+    // this.collectionId = "5MDed2Wplvc" // The hardcoded version
     this.setCollectionNameFromApi().then(r => {
       this.tree = new Tree(this.collectionName);
     });
-    this.firstQuestionInTree().then(r => {
-      this.setCurrentAnswersFromApi().then(s => {
+    this.firstQuestionInTree().then(() => {
+      this.setCurrentAnswersFromApi().then(() => {
         this.updateIsFirstQuestion();
       });
     });
@@ -44,8 +46,7 @@ export class QuestionComponent implements OnInit {
 
   async setCollectionNameFromApi(): Promise<void> {
     const path = '/collection/' + this.collectionId;
-    const api = Api.getApi();
-    await api.get(path).then((responseData) => {
+    await this.api.get(path).then((responseData) => {
       this.collectionName = responseData.data.result.name;
     });
   }
@@ -64,7 +65,7 @@ export class QuestionComponent implements OnInit {
     let questionId;
     let questionText;
     const parentId = '0';
-    const questionType = 'DropDown';
+    const questionType = 'DropDown'; // ToDo enumeration maken
 
     const path = '/question/getByCollection/' + this.collectionId;
     await this.api.get(path).then((responseData) => {
@@ -143,8 +144,8 @@ export class QuestionComponent implements OnInit {
   }
 
   updateIsFirstQuestion(): void {
-    if (this.tree.getCurrentNodeIndex() > 0) {
-      this.isFirstQuestion = false;
+    if (this.tree.getCurrentNodeIndex() > 0) { // moet != zijn
+      this.isFirstQuestion = false; // kijk hiernaar
     }
     this.isFirstQuestion = true;
   }

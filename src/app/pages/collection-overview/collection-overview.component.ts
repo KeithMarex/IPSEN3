@@ -219,9 +219,6 @@ export class CollectionOverviewComponent implements OnInit {
   }
 
   liveViewClicked(): void {
-    // ToDo
-    console.log(this.selectedCollection.name);
-    // this.router.navigate([this.router.url + '/live/' + this.selectedCollection.id]);
     this.router.navigate([this.router.url + '/live/' + this.selectedCollection.id]);
   }
 }
