@@ -40,6 +40,7 @@ export class CollectionOverviewComponent implements OnInit {
     timer: 3000,
     timerProgressBar: true,
   });
+  private selectedCategory: CategoryModel;
 
   constructor(private router: Router) {
   }
@@ -83,16 +84,19 @@ export class CollectionOverviewComponent implements OnInit {
   }
 
   async chooseCategory(el: CategoryModel, index): Promise<void> {
-    this.collectionsFromCategory.splice(0);
+    if (el !== undefined){
+      this.collectionsFromCategory.splice(0);
+      this.selectedCategory = el;
 
-    this.selectedIndex = index;
+      this.selectedIndex = index;
 
-    const response = await Api.getApi().get('/collection/all/' + el.id);
-    const j = response.data.result;
+      const response = await Api.getApi().get('/collection/all/' + el.id);
+      const j = response.data.result;
 
-    for (let i = 0; i < j.length; i++) {
-      const r = response.data.result[i];
-      this.collectionsFromCategory.push(new CollectionModel(r.id, r.name, r.type, r.version));
+      for (let i = 0; i < j.length; i++) {
+        const r = response.data.result[i];
+        this.collectionsFromCategory.push(new CollectionModel(r.id, r.name, r.type, r.version));
+      }
     }
   }
 
@@ -139,6 +143,8 @@ export class CollectionOverviewComponent implements OnInit {
             icon: 'success'
           });
           this.selectedCollections.splice(index, 1);
+          this.getOnInitData();
+          this.chooseCategory(this.selectedCategory, this.selectedIndex);
         } else {
           Swal.fire({
             title: 'Het ID is niet bekend',
@@ -197,20 +203,43 @@ export class CollectionOverviewComponent implements OnInit {
       inputLabel: 'Geef een nieuwe collectienaam op',
       inputPlaceholder: 'Collectie naam...'
     }).then(async (result) => {
-      const data = {name: result.value};
-      const api = Api.getApi();
-      const response = await api.post('/collection/create', data);
-      if (response.data.result) {
-        await this.getOnInitData();
-        this.newCollectionId = response.data.id;
-        this.openFirstQuestionModal = true;
-      } else if (!response.data.result && result.isConfirmed){
-        Swal.fire({
-          title: 'Collectie bestaat al',
-          text: 'Er is geen nieuwe collectie aangemaakt.',
-          icon: 'error',
-        });
-      }
+      const json = {};
+      const categorie = await Api.getApi().get('/category/all');
+      categorie.data.result.forEach(f => {
+        json[f.id] = f.name;
+      });
+
+      Swal.fire({
+        title: 'Kies een categorie',
+        input: 'select',
+        inputOptions: json,
+        showDenyButton: true,
+        confirmButtonText: `Kies`,
+        showCloseButton: true,
+        inputValidator: (value) => {
+          if (!value) {
+            return 'Je moet een categorie selecteren!';
+          }
+        }
+      }).then(async a => {
+        if (a.isConfirmed){
+          const response = await Api.getApi().post('/collection/create', {name: result.value});
+          const resp = await Api.getApi().post('/link/add/category-to-collection/', {category_id: a.value, collection_id: response.data.id});
+          if (resp.data.result){
+            this.Toast.fire({
+              icon: 'success',
+              title: 'Collectie is aangemaakt!'
+            });
+            this.getOnInitData();
+            this.chooseCategory(this.selectedCategory, this.selectedIndex);
+          } else {
+            this.Toast.fire({
+              icon: 'error',
+              title: 'Deze collectie bestaat al!'
+            });
+          }
+        }
+      });
     });
   }
 
@@ -267,7 +296,6 @@ export class CollectionOverviewComponent implements OnInit {
       denyButtonText: `Wijzig een categorie`,
       showCloseButton: true,
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         Swal.fire({
           title: 'Een nieuwe categorie',
