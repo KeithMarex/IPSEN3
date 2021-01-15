@@ -54,6 +54,10 @@ export class CollectionOverviewComponent implements OnInit {
       this.collections = [];
     }
 
+    if (this.categorien.length !== 0) {
+      this.categorien = [];
+    }
+
     const categorie = await Api.getApi().get('/category/all');
     categorie.data.result.forEach(e => {
       this.categorien.push(new CategoryModel(e.id, e.name, e.icon));
@@ -286,6 +290,7 @@ export class CollectionOverviewComponent implements OnInit {
                   icon: 'success',
                   title: 'Nieuwe categorie succesvol aangemaakt'
                 });
+                this.getOnInitData();
               }
             });
           }
@@ -294,27 +299,86 @@ export class CollectionOverviewComponent implements OnInit {
         Swal.fire({
           title: 'Wat wil je met een categorie doen?',
           showDenyButton: true,
-          confirmButtonText: `Koppelingen`,
-          denyButtonText: `Aanpassen`,
+          confirmButtonText: `Verander een categorie`,
+          denyButtonText: `Verwijder een categorie`,
           showCloseButton: true,
-        }).then(e => {
+        }).then(async e => {
           if (e.isConfirmed){
+            const json = {};
+            const categorie = await Api.getApi().get('/category/all');
+            categorie.data.result.forEach(f => {
+              json[f.id] = f.name;
+            });
+
             Swal.fire({
-              title: 'Wat wil je met een koppeling doen?',
+              title: 'Kies een categorie',
+              input: 'select',
+              inputOptions: json,
               showDenyButton: true,
-              confirmButtonText: `Koppel een collectie`,
-              denyButtonText: `Ontkoppel een collectie`,
+              confirmButtonText: `Kies`,
               showCloseButton: true,
-            })
-          } else if (e.isDenied){}
-          Swal.fire({
-            title: 'Wat wil je aanpassen aan een categorie?',
-            showDenyButton: true,
-            confirmButtonText: `Verander een categorie`,
-            denyButtonText: `Verwijder een categorie`,
-            showCloseButton: true,
-          })
-        })
+            }).then(g => {
+              if (g.isConfirmed){
+                Swal.fire({
+                  title: 'Vul een nieuwe naam in voor de collectie',
+                  input: 'text',
+                  inputLabel: 'Nieuwe naam',
+                  showCancelButton: true,
+                  inputValidator: (value) => {
+                    if (!value) {
+                      return 'You need to write something!';
+                    }
+                  }
+                }).then(async h => {
+                  if (h.isConfirmed){
+                    const resp = await Api.getApi().post('/category/update', {id: g.value, name: h.value});
+                    if (resp.data.result){
+                      this.Toast.fire({
+                        icon: 'success',
+                        title: 'Succesvol aangepast!'
+                      });
+                      this.getOnInitData();
+                    } else {
+                      this.Toast.fire({
+                        icon: 'error',
+                        title: 'Er is iets fout gegaan.'
+                      });
+                    }
+                  }
+                });
+              }
+            });
+          } else if (e.isDenied) {
+            const json = {};
+            const categorie = await Api.getApi().get('/category/all');
+            categorie.data.result.forEach(f => {
+              json[f.id] = f.name;
+            });
+            Swal.fire({
+              title: 'Kies een categorie',
+              input: 'select',
+              inputOptions: json,
+              showCancelButton: true,
+              cancelButtonText: 'Annuleren',
+              confirmButtonText: `Verwijder`,
+              showCloseButton: true,
+            }).then(async j => {
+              const resp = await Api.getApi().post('/category/delete', {id: j.value});
+              if (resp.data.result){
+                this.Toast.fire({
+                  icon: 'success',
+                  title: 'Succesvol aangepast!'
+                });
+                this.getOnInitData();
+              } else {
+                this.Toast.fire({
+                  icon: 'error',
+                  title: 'Er is iets fout gegaan.'
+                });
+              }
+            });
+          }
+        });
       }
     });
   }
