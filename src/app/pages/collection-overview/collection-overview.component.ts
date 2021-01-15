@@ -6,6 +6,7 @@ import {UserModel} from '../../shared/models/user.model';
 import {AnswerModel} from '../../shared/models/answer.model';
 import {Router} from '@angular/router';
 import {NgForm} from '@angular/forms';
+import {CategoryModel} from '../../shared/models/category.model';
 
 @Component({
   selector: 'app-collection-overview',
@@ -16,10 +17,15 @@ import {NgForm} from '@angular/forms';
 export class CollectionOverviewComponent implements OnInit {
   private loggedInUser;
   collections: CollectionModel[] = [];
+  categorien: CategoryModel[] = [];
   selectedCollection: CollectionModel;
   selectedCollectionIsEmpty = true;
   selectedCollections: CollectionModel[] = [];
   selectedCollectionName = '';
+
+  // Linker balk
+  selectedIndex;
+  collectionsFromCategory: CollectionModel[] = [];
 
   newCollectionId;
 
@@ -47,6 +53,12 @@ export class CollectionOverviewComponent implements OnInit {
     if (this.collections.length !== 0) {
       this.collections = [];
     }
+
+    const categorie = await Api.getApi().get('/category/all');
+    categorie.data.result.forEach(e => {
+      this.categorien.push(new CategoryModel(e.id, e.name, e.icon));
+    });
+
     const response = await Api.getApi().get('/collection/all');
     this.convertDataToObject(response.data.result);
   }
@@ -62,14 +74,32 @@ export class CollectionOverviewComponent implements OnInit {
 
   checkCollectionAvailability(): void {
     if (this.collections.length !== 0) {
-      this.changeSelectedCollection(this.collections[0]);
+      this.changeSelectedCollection(this.collections[2]);
+    }
+  }
+
+  async chooseCategory(el: CategoryModel, index): Promise<void> {
+    this.collectionsFromCategory.splice(0);
+
+    this.selectedIndex = index;
+
+    const response = await Api.getApi().get('/collection/all/' + el.id);
+    const j = response.data.result;
+
+    for (let i = 0; i < j.length; i++) {
+      const r = response.data.result[i];
+      this.collectionsFromCategory.push(new CollectionModel(r.id, r.name, r.type, r.version));
     }
   }
 
   async changeSelectedCollection(col: CollectionModel): Promise<void> {
-    this.selectedCollectionIsEmpty = true;
     this.selectedCollections.splice(0);
     this.selectedCollectionName = col.name;
+
+    if (this.selectedCollection !== undefined && this.selectedCollection.id !== col.id){
+      // Doe niks
+    }
+
     this.selectedCollection = col;
 
     const response = await Api.getApi().get('/collection/getAllByName/' + col.name);
@@ -116,7 +146,7 @@ export class CollectionOverviewComponent implements OnInit {
     });
   }
 
-  changeStatus(el): void {
+  changeStatus(el, index): void {
     Swal.fire({
       title: 'Kies status',
       text: el.name,
@@ -141,7 +171,7 @@ export class CollectionOverviewComponent implements OnInit {
           title: 'Collectie succesvol aangepast',
           icon: 'success',
         });
-        this.changeSelectedCollection(this.selectedCollection);
+        this.changeSelectedCollection(el);
       }
     });
   }
@@ -223,5 +253,67 @@ export class CollectionOverviewComponent implements OnInit {
     console.log(this.selectedCollection.name);
     // this.router.navigate([this.router.url + '/live/' + this.selectedCollection.id]);
     this.router.navigate([this.router.url + '/live/' + this.selectedCollection.id]);
+  }
+
+  newCategory(): void {
+    Swal.fire({
+      title: 'Wat wil je doen?',
+      showDenyButton: true,
+      confirmButtonText: `Maak een nieuwe categorie`,
+      denyButtonText: `Wijzig een categorie`,
+      showCloseButton: true,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Een nieuwe categorie',
+          html: '<label for="swal-input1">Naam</label>' +
+            '<input id="swal-input1" class="swal2-input">' +
+            '<label for="swal-input2" type="text">Icoon URL</label>' +
+            '<input id="swal-input2" class="swal2-input">',
+          confirmButtonText: 'Maak',
+          preConfirm: () => {
+            return [
+              (document.getElementById('swal-input1') as HTMLInputElement).value,
+              (document.getElementById('swal-input2') as HTMLInputElement).value,
+            ];
+          }
+        }).then((result2) => {
+          if (result2.isConfirmed){
+            Api.getApi().post('/category/create', {name: result2.value[0], icon: result2.value[1]}).then((response) => {
+              if (response.data.result) {
+                this.Toast.fire({
+                  icon: 'success',
+                  title: 'Nieuwe categorie succesvol aangemaakt'
+                });
+              }
+            });
+          }
+        });
+      } else if (result.isDenied) {
+        Swal.fire('Deze functionaliteit bestaat nog niet.', '', 'info');
+      }
+    });
+    // Swal.fire({
+    //   title: 'Nieuwe categorie naam',
+    //   input: 'text',
+    //   inputLabel: 'Geef een nieuwe collectienaam op',
+    //   inputPlaceholder: 'Collectie naam...'
+    // }).then(async (result) => {
+    //   const data = {name: result.value};
+    //   const api = Api.getApi();
+    //   const response = await api.post('/collection/create', data);
+    //   if (response.data.result) {
+    //     await this.getOnInitData();
+    //     this.newCollectionId = response.data.id;
+    //     this.openFirstQuestionModal = true;
+    //   } else if (!response.data.result && result.isConfirmed){
+    //     Swal.fire({
+    //       title: 'Collectie bestaat al',
+    //       text: 'Er is geen nieuwe collectie aangemaakt.',
+    //       icon: 'error',
+    //     });
+    //   }
+    // });
   }
 }
