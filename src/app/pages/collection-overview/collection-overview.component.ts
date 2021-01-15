@@ -291,29 +291,31 @@ export class CollectionOverviewComponent implements OnInit {
           }
         });
       } else if (result.isDenied) {
-        Swal.fire('Deze functionaliteit bestaat nog niet.', '', 'info');
+        Swal.fire({
+          title: 'Wat wil je met een categorie doen?',
+          showDenyButton: true,
+          confirmButtonText: `Koppelingen`,
+          denyButtonText: `Aanpassen`,
+          showCloseButton: true,
+        }).then(e => {
+          if (e.isConfirmed){
+            Swal.fire({
+              title: 'Wat wil je met een koppeling doen?',
+              showDenyButton: true,
+              confirmButtonText: `Koppel een collectie`,
+              denyButtonText: `Ontkoppel een collectie`,
+              showCloseButton: true,
+            })
+          } else if (e.isDenied){}
+          Swal.fire({
+            title: 'Wat wil je aanpassen aan een categorie?',
+            showDenyButton: true,
+            confirmButtonText: `Verander een categorie`,
+            denyButtonText: `Verwijder een categorie`,
+            showCloseButton: true,
+          })
+        })
       }
     });
-    // Swal.fire({
-    //   title: 'Nieuwe categorie naam',
-    //   input: 'text',
-    //   inputLabel: 'Geef een nieuwe collectienaam op',
-    //   inputPlaceholder: 'Collectie naam...'
-    // }).then(async (result) => {
-    //   const data = {name: result.value};
-    //   const api = Api.getApi();
-    //   const response = await api.post('/collection/create', data);
-    //   if (response.data.result) {
-    //     await this.getOnInitData();
-    //     this.newCollectionId = response.data.id;
-    //     this.openFirstQuestionModal = true;
-    //   } else if (!response.data.result && result.isConfirmed){
-    //     Swal.fire({
-    //       title: 'Collectie bestaat al',
-    //       text: 'Er is geen nieuwe collectie aangemaakt.',
-    //       icon: 'error',
-    //     });
-    //   }
-    // });
   }
 }

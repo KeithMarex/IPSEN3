@@ -25,10 +25,10 @@
                     <ul class="sidebar-content__list content-list" >
                         <li *ngFor="let el of this.categorien; let i = index" [ngClass]="{'active': el.id === selectedCollection.id }" class="content-list__item" #this.collections style="cursor: pointer">
                           <div class="row" (click)="chooseCategory(el, i)">
-                            <div class="col-md-3">
+                            <div class="col-md-2" style="display: flex; align-items: center;">
                               <img width="100%" src="{{el.icon_url}}" alt="">
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-9">
                               <a style="padding-left: 0"><strong>{{ el.name }}</strong></a>
                             </div>
                           </div>
