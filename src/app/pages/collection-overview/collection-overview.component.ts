@@ -79,7 +79,7 @@ export class CollectionOverviewComponent implements OnInit {
 
   checkCollectionAvailability(): void {
     if (this.collections.length !== 0) {
-      this.changeSelectedCollection(this.collections[2]);
+      this.changeSelectedCollection(this.collections[0]);
     }
   }
 
@@ -230,6 +230,7 @@ export class CollectionOverviewComponent implements OnInit {
               icon: 'success',
               title: 'Collectie is aangemaakt!'
             });
+            this.openFirstQuestionModal = true;
             this.getOnInitData();
             this.chooseCategory(this.selectedCategory, this.selectedIndex);
           } else {
