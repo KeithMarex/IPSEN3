@@ -224,6 +224,7 @@ export class CollectionOverviewComponent implements OnInit {
       }).then(async a => {
         if (a.isConfirmed){
           const response = await Api.getApi().post('/collection/create', {name: result.value});
+          this.newCollectionId = response.data.id;
           const resp = await Api.getApi().post('/link/add/category-to-collection/', {category_id: a.value, collection_id: response.data.id});
           if (resp.data.result){
             this.Toast.fire({
@@ -259,6 +260,8 @@ export class CollectionOverviewComponent implements OnInit {
 
     const api = Api.getApi();
     const post = await api.post('/question/create', questionData);
+
+    console.log(post);
 
     this.closeFirstQuestionModal();
 
