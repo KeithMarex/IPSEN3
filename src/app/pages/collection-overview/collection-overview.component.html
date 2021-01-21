@@ -8,17 +8,36 @@
                     <div class="sidebar__col col-sm-8">
                         <h1 class="sidebar__heading">Collecties</h1>
                     </div>
-                    <div class=" sidebar__col col-sm-4">
-                        <button type="button" class="sidebar__btn btn" (click)="newCollection()">
-                            Nieuw
-                        </button>
-                    </div>
                 </div>
+              <div class="row">
+                <div class=" sidebar__col col-sm-12">
+                  <button type="button" class="sidebar__btn btn" (click)="newCategory()" style="margin: 0 20px 0 20px">
+                    Categorie
+                  </button>
+                  <button type="button" class="sidebar__btn btn" (click)="newCollection()" style="float: right; margin: 0 20px 0 20px">
+                    Nieuwe collectie
+                  </button>
+                </div>
+              </div>
             </div>
             <div class="sidebar-content container-fluid">
                 <div class="sidebar-content__row row">
                     <ul class="sidebar-content__list content-list" >
-                        <li *ngFor="let el of this.collections" [ngClass]="{'active': el.id === selectedCollection.id }" class="content-list__item" #this.collections style="cursor: pointer" (click)="changeSelectedCollection(el)"><a>{{ el.name }}</a></li>
+                        <li *ngFor="let el of this.categorien; let i = index" [ngClass]="{'active': el.id === selectedCollection.id }" class="content-list__item" style="cursor: pointer">
+                          <div class="row" (click)="chooseCategory(el, i)">
+                            <div class="col-md-2" style="display: flex; align-items: center;">
+                              <img width="100%" src="{{el.icon_url}}" alt="">
+                            </div>
+                            <div class="col-md-9">
+                              <a style="padding-left: 0"><strong>{{ el.name }}</strong></a>
+                            </div>
+                          </div>
+                          <ul *ngIf="this.selectedIndex === i" style="list-style-type: none">
+                            <li *ngFor="let col of this.collectionsFromCategory" (click)="changeSelectedCollection(col)">
+                              <a>{{col.name}}</a>
+                            </li>
+                          </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -33,7 +52,6 @@
                             </div>
                             <div class="row">
                                 <h1 *ngIf="selectedCollectionIsEmpty" class="admin-content__heading">{{this.selectedCollectionName}}</h1>
-                                <button *ngIf="selectedCollectionIsEmpty" class="sidebar__btn btn" (click)="liveViewClicked()" style="margin: auto 0 0 auto">Live weergeven</button>
                             </div>
                         </div>
                     </div>
@@ -49,16 +67,14 @@
                           </tr>
                         </thead>
                         <tbody class="content-table__body">
-                        <tr class="content-table__row"
-                            *ngFor="let collection of this.selectedCollections; let i = index">
+                        <tr class="content-table__row" *ngFor="let collection of this.selectedCollections; let i = index">
                           <td (click)="editCollection(collection)">{{collection.name}}</td>
-                          <td><span class="content-table__status {{collection.type}}"
-                                    (click)="changeStatus(collection)">{{collection.type}}</span></td>
-                          <td>{{collection.version}}</td>
+                          <td><span class="content-table__status {{collection.type}}" (click)="changeStatus(collection, i)">{{collection.type}}</span></td><td>{{collection.version}}</td>
                           <td class="content-table__actions-cel">
-                            <icon-edit (click)="changeStatus(collection)"></icon-edit>
+                            <icon-edit (click)="changeStatus(collection, i)"></icon-edit>
                             <icon-clone (click)="cloneCollection(collection)"></icon-clone>
                             <icon-remove (click)="deleteCollection(collection, i)"></icon-remove>
+                            <button *ngIf="selectedCollectionIsEmpty" class="sidebar__btn btn" style="margin: auto 0 0 auto; float: right">Live weergeven</button>
                           </td>
                         </tr>
                         </tbody>
@@ -91,89 +107,15 @@
                     <div class="form-row">
                         <label for="exampleFormControlSelect1">Type vraag</label>
                         <select class="form-control" name="type" id="exampleFormControlSelect1" ngModel required>
-                            <option value="radio" selected="selected">radio buttons</option>
-                            <option value="checkbox">checkbox</option>
-                            <option value="dropdown">dropdown</option>
+<!--                            <option value="radio" selected="selected">radio buttons</option>-->
+<!--                            <option value="checkbox">checkbox</option>-->
+                            <option value="dropdown" selected="selected">Dropdown</option>
                         </select>
                     </div>
                     <hr>
                     <button type="button" class="btn btn-light" data-dismiss="modal" (click)="closeFirstQuestionModal();questionForm.resetForm();">Annuleren</button>
                     <button type="submit" class="modal__btn btn btn-primary">Aanmaken</button>
                 </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Change status modal -->
-<div class="modal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Status aanpassen</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Kies een status voor de volgende collectie:</p>
-                <p>Reisvoucher - v1.2</p>
-                <select class="modal__form-select form-select form-select-sm" aria-label=".form-select-sm example">
-                    <option selected>Concept</option>
-                    <option value="1">Archieved</option>
-                    <option value="2">Published</option>
-                </select>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Annuleren</button>
-                <button type="button" class="modal__btn btn btn-primary">Aanpassen</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Copy collection modal Active:  modal__active -->
-<div class="modal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Collectie kopiëren</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Weet u zeker, dat u de volgende collectie wilt kopiëren</p>
-                <p>Reisvoucher - v1.2</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Annuleren</button>
-                <button type="button" class="modal__btn btn btn-primary">Kopiëren</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Remove collection modal Active:  modal__active -->
-<div class="modal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Collectie verwijderen</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Weet u zeker, dat u de volgende collectie wilt verwijderen:</p>
-                <p>Reisvoucher - v1.2</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Annuleren</button>
-                <button type="button" class="modal__btn modal__btn-danger btn btn-danger">verwijderen</button>
             </div>
         </div>
     </div>

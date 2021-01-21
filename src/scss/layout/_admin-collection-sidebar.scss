@@ -29,18 +29,18 @@
     }
 
     &__btn {
-        background-color: $ctaBtnBackgroundColor;
-        color: $ctaBtnColor;
+      background-color: $ctaBtnBackgroundColor;
+      color: $ctaBtnColor;
+      box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
 
-        &:hover {
-            background-color: $ctaBtnBackgroundColorHover;
-            color: $ctaBtnColorHover;
-        }
+      &:hover {
+        background-color: $ctaBtnBackgroundColorHover;
+        color: $ctaBtnColorHover;
+      }
     }
 
     &-content {
         padding-top: 40px;
-        padding-left: 20px;
     }
 }
 
@@ -69,8 +69,12 @@
             font-weight: 700;
         }
 
-        &:hover {
+        li:hover {
             background-color: #fff;
+        }
+
+        div:hover {
+          background-color: #fff;
         }
     }
 }

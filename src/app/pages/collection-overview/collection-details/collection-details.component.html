@@ -32,9 +32,9 @@
             </thead>
             <tbody class="content-table__body">
             <tr class="content-table__row" *ngFor="let el of this.answers; let i = index">
-              <td>{{el.name}}</td>
-              <td><span class="content-table__status">Bevat notificatie</span></td>
-              <td class="content-table__actions-cel">
+              <td class="va">{{el.name}}</td>
+              <td class="va"><span class="content-table__status">Bevat geen notificatie</span></td>
+              <td class="content-table__actions-cel va">
                 <icon-edit (click)="editAnswer(el, i)"></icon-edit>
                 <icon-remove (click)="removeAnswer(el, i)"></icon-remove>
                 <icon-arrow (click)="nextQuestion(el)"></icon-arrow>
