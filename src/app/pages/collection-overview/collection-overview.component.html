@@ -74,7 +74,7 @@
                             <icon-edit (click)="changeStatus(collection, i)"></icon-edit>
                             <icon-clone (click)="cloneCollection(collection)"></icon-clone>
                             <icon-remove (click)="deleteCollection(collection, i)"></icon-remove>
-                            <button *ngIf="selectedCollectionIsEmpty" class="sidebar__btn btn" style="margin: auto 0 0 auto; float: right">Live weergeven</button>
+                            <button *ngIf="selectedCollectionIsEmpty" class="sidebar__btn btn" style="margin: auto 0 0 auto; float: right" (click)="this.liveViewClicked(collection)">Live weergeven</button>
                           </td>
                         </tr>
                         </tbody>

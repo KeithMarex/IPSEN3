@@ -285,8 +285,8 @@ export class CollectionOverviewComponent implements OnInit {
     this.answerListCount = 0;
   }
 
-  liveViewClicked(): void {
-    this.router.navigate([this.router.url + '/live/' + this.selectedCollection.id]);
+  liveViewClicked(collection: CollectionModel): void {
+    this.router.navigate([this.router.url + '/live/' + collection.id]);
   }
 
   newCategory(): void {
