@@ -1,37 +1,43 @@
 import { Component, OnInit } from '@angular/core';
 import { customizeUtil, MindMapMain } from 'mind-map';
+import {Question} from '../../../shared/nodes/question.model';
+import {Api} from '../../../api/api';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Tree} from '../../../shared/nodes/tree.model';
+import {NodeModel} from '../../../shared/nodes/node.model';
+import {Answer} from '../../../shared/nodes/answer.model';
 
 const HIERARCHY_RULES = {
   ROOT: {
-    name: 'XX汽车有限公司',
+    name: 'Collection',
     backgroundColor: '#7EC6E1',
     getChildren: () => [
-      HIERARCHY_RULES.SALES_MANAGER,
-      HIERARCHY_RULES.SHOW_ROOM,
-      HIERARCHY_RULES.SALES_TEAM
+      HIERARCHY_RULES.QUESTION,
+      HIERARCHY_RULES.ANSWERS,
+      HIERARCHY_RULES.NOTIFICATION
     ]
   },
-  SALES_MANAGER: {
-    name: '销售经理',
+  QUESTION: {
+    name: 'Question',
     color: '#fff',
-    backgroundColor: '#616161',
+    backgroundColor: '#f4d03f',
     getChildren: () => [
-      HIERARCHY_RULES.SHOW_ROOM,
-      HIERARCHY_RULES.SALES_TEAM
+      HIERARCHY_RULES.ANSWERS,
+      HIERARCHY_RULES.NOTIFICATION
     ]
   },
-  SHOW_ROOM: {
-    name: '展厅',
+  ANSWERS: {
+    name: 'Answer',
     color: '#fff',
-    backgroundColor: '#989898',
+    backgroundColor: '#f9e79f',
     getChildren: () => [
-      HIERARCHY_RULES.SALES_TEAM
+      HIERARCHY_RULES.NOTIFICATION
     ]
   },
-  SALES_TEAM: {
-    name: '销售小组',
+  NOTIFICATION: {
+    name: 'Notification',
     color: '#fff',
-    backgroundColor: '#C6C6C6',
+    backgroundColor: '#f5b7b1',
     getChildren: () => []
   }
 };
@@ -46,96 +52,107 @@ const option = {
   enableDraggable: true,
 };
 
+const mind2 = {
+  format: 'nodeTree',
+  data: {
+    id: 1,
+    topic: 'Reisvoucher 2021',
+    selectedType: false,
+    backgroundColor: '#7EC6E1',
+    children: []
+  }
+};
+
 const mind = {
-  'format': 'nodeTree',
-  'data': {
-    'id': 43,
-    'topic': 'Reisvoucher',
-    'selectedType': false,
-    'backgroundColor': '#7EC6E1',
-    'children': [
+  format: 'nodeTree',
+  data: {
+    id: '5MDed2Wplvc',
+    topic: 'Reisvoucher 2021',
+    selectedType: false,
+    backgroundColor: '#7EC6E1',
+    children: [
       {
-        'id': 80,
-        'color': '#fff',
-        'topic': 'show room',
-        'direction': 'right',
-        'selectedType': '销售经理',
-        'backgroundColor': '#616161',
-        'children': []
+        id: 80,
+        color: '#fff',
+        topic: 'show room',
+        direction: 'right',
+        selectedType: 'Question',
+        backgroundColor: '#616161',
+        children: []
       },
       {
-        'id': 44,
-        'color': '#fff',
-        'topic': 'Iets',
-        'direction': 'right',
-        'selectedType': '销售经理',
-        'backgroundColor': '#616161',
-        'children': [
+        id: 44,
+        color: '#fff',
+        topic: 'Iets',
+        direction: 'right',
+        selectedType: 'Question',
+        backgroundColor: '#616161',
+        children: [
           {
-            'id': 46,
-            'color': '#fff',
-            'topic': 'Iets anders',
-            'direction': 'right',
-            'selectedType': '展厅',
-            'backgroundColor': '#989898',
-            'children': [
+            id: 46,
+            color: '#fff',
+            topic: 'Iets anders',
+            direction: 'right',
+            selectedType: 'Answer',
+            backgroundColor: '#989898',
+            children: [
               {
-                'id': 49,
-                'color': '#fff',
-                'topic': 'Nog iets',
-                'direction': 'right',
-                'selectedType': '销售小组',
-                'backgroundColor': '#C6C6C6',
-                'children': []
+                id: 49,
+                color: '#fff',
+                topic: 'Nog iets',
+                direction: 'right',
+                selectedType: 'Question',
+                backgroundColor: '#C6C6C6',
+                children: []
               },
               {
-                'id': 51,
-                'color': '#fff',
-                'topic': 'Weer iets',
-                'direction': 'right',
-                'selectedType': '销售小组',
-                'backgroundColor': '#C6C6C6',
-                'children': []
+                id: 51,
+                color: '#fff',
+                topic: 'Weer iets',
+                direction: 'right',
+                selectedType: 'Question',
+                backgroundColor: '#C6C6C6',
+                children: []
               },
               {
-                'id': 47,
-                'color': '#fff',
-                'topic': 'Een topic',
-                'direction': 'right',
-                'selectedType': '销售小组',
-                'backgroundColor': '#C6C6C6',
-                'children': []
+                id: 47,
+                color: '#fff',
+                topic: 'Een topic',
+                direction: 'right',
+                selectedType: 'Question',
+                backgroundColor: '#C6C6C6',
+                children: []
               },
               {
-                'id': 48,
-                'color': '#fff',
-                'topic': 'Nog een topic',
-                'direction': 'right',
-                'selectedType': '销售小组',
-                'backgroundColor': '#C6C6C6',
-                'children': []
+                id: 48,
+                color: '#fff',
+                topic: 'Nog een topic',
+                direction: 'right',
+                selectedType: 'Question',
+                backgroundColor: '#C6C6C6',
+                children: []
               },
               {
-                'id': 50,
-                'color': '#fff',
-                'topic': 'Oeh!',
-                'direction': 'right',
-                'selectedType': '销售小组',
-                'backgroundColor': '#C6C6C6',
-                'children': []
+                id: 50,
+                color: '#fff',
+                topic: 'Oeh!',
+                direction: 'right',
+                selectedType: 'Question',
+                backgroundColor: '#C6C6C6',
+                children: []
               }
             ]
           }
         ]
       },
       {
-        'id': 45,
-        'color': '#fff',
-        'topic': 'Hey, jij hier?',
-        'direction': 'right',
-        'selectedType': '销售经理',
-        'backgroundColor': '#616161',
-        'children': []
+        id: 45,
+        color: '#fff',
+        topic: 'Hey, jij hier?',
+        direction: 'right',
+        selectedType: 'Question',
+        backgroundColor: '#616161',
+        children: []
       }
     ]
   }
@@ -148,9 +165,28 @@ const mind = {
 })
 export class CollectionLiveComponent implements OnInit {
   mindMap;
+  mindMapData;
+  api;
+  tree: Tree;
+  collectionName: string;
+  collectionId: string;
+  expected: string;
+  result: string;
+  firstNodeId: string;
 
-  ngOnInit(): void {
-    this.mindMap = MindMapMain.show(option, mind);
+  constructor(private route: ActivatedRoute, private router: Router) {
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.api = Api.getApi();
+    await this.initialiseMindMapData().then(() => {
+      // this.mindMap = MindMapMain.show(option, mind);
+      // console.log(this.mindMapData);
+      console.log('mindMapData again: ', this.mindMapData);
+      this.mindMap = MindMapMain.show(option, this.mindMapData);
+      this.setFirstQuestionMindMap();
+      this.addNodesToMindMap();
+    });
   }
 
   removeNode(): void {
@@ -177,5 +213,156 @@ export class CollectionLiveComponent implements OnInit {
     const data = this.mindMap.getData().data;
     console.log('data: ', data);
     return data;
+  }
+
+  async getDataFromApi(url: string): Promise<string> {
+    return await this.api.get(url).then(response => {
+      return response.data.result;
+    });
+  }
+
+  setCollectionIdFromUrl(): void {
+    this.collectionId = this.route.snapshot.paramMap.get('collectionId');
+  }
+
+  async setCollectionNameFromApi(): Promise<void> {
+    const path = '/collection/' + this.collectionId;
+    return await this.getDataFromApi(path).then(response => {
+      // @ts-ignore
+      this.collectionName = response.name;
+    });
+  }
+
+  async initialiseTree(): Promise<void> {
+    this.setCollectionIdFromUrl();
+    await this.setCollectionNameFromApi().then(() => {
+      this.tree = new Tree(this.collectionName, this.collectionId);
+    });
+  }
+
+  async addNodesToTree(): Promise<void> {
+    await this.getNodesFromApi().then(nodes => {
+      console.log('nodes', nodes);
+      for (const node of nodes) {
+        console.log('node', node);
+        this.tree.addNode(node);
+        console.log('tree', this.tree);
+      }
+    });
+  }
+
+  addAllChildrenToMindMap(nodeId: string): void {
+    const currentNode = this.mindMap.getNode(nodeId);
+    const children = this.tree.getChildren(nodeId);
+    console.log('addAllChildren -> children: ', children);
+    for (const child of children) {
+      console.log('addAllChildren -> childId: ', child.getId());
+      this.mindMap.addNode(currentNode, child.getId(), child.getText());
+      this.addAllChildrenToMindMap(child.getId());
+    }
+  }
+
+  addNodesToMindMap(): void {
+    this.addAllChildrenToMindMap(this.firstNodeId);
+  }
+
+  setFirstQuestionMindMap(): void {
+    if (this.tree.size() === 0) {
+      return;
+    }
+    const rootNode = this.mindMap.getNode(this.collectionId);
+    const firstQuestion = this.tree.getRoot();
+    this.mindMap.addNode(rootNode, firstQuestion.getId(), firstQuestion.getText());
+    this.firstNodeId = firstQuestion.getId();
+  }
+
+  async initialiseMindMapData(): Promise<void> {
+    await this.initialiseTree().then(async r => {
+      console.log('initialising tree done');
+      await this.addNodesToTree().then(() => {
+        this.mindMapData = this.tree.toMindMap();
+        console.log('mind', mind);
+        console.log('mindMapData', this.mindMapData);
+      });
+    });
+  }
+
+  async getNodesFromApi(): Promise<Array<NodeModel>> {
+    // const question = new Question('1', 'Wat heeft u geboekt', this.collectionId, 'DropDown');
+    // const answer = new Answer('2', 'kippenpoten', '1');
+    // return [question, answer];
+    console.log('hoi');
+    const nodes: Array<NodeModel> = [];
+    const firstQuestion = await this.getFirstQuestionFromApi();
+    console.log('firstQuestion: ', firstQuestion);
+    nodes.push(firstQuestion);
+    const nodes2 = await this.getAllNodesFromApi2(firstQuestion);
+    for (const node2 of nodes2) {
+      if (node2.getId() !== undefined) {
+        nodes.push(node2);
+      }
+    }
+    return nodes;
+  }
+
+  async getAllNodesFromApi2(parentQuestion: Question): Promise<NodeModel[]> {
+    console.log('in getAllNodesFromApi2');
+    const nodes: Array<NodeModel> = [];
+    const answers = await this.getAnswersFromApi(parentQuestion.getId());
+    for (const answer of answers) {
+      nodes.push(answer);
+      const question = await this.getQuestionFromApi(answer.getId());
+      nodes.push(question);
+      const children = await this.getAllNodesFromApi2(question);
+      for (const child of children) {
+        nodes.push(child);
+      }
+    }
+    return nodes;
+  }
+
+  async getFirstQuestionFromApi(): Promise<Question> {
+    let firstQuestion;
+    let questionId;
+    let questionText;
+    const parentId = this.collectionId;
+    const questionType = 'DropDown'; // ToDo enumeration maken
+    const path = '/question/getByCollection/' + this.collectionId;
+    await Api.getApi().get(path).then((responseData) => {
+      console.log(responseData);
+      questionId = responseData.data.result.id;
+      questionText = responseData.data.result.name;
+      firstQuestion = new Question(questionId, questionText, parentId, questionType);
+    });
+    return firstQuestion;
+  }
+
+  async getAnswersFromApi(questionId: string): Promise<Answer[]> {
+    console.log('in getAllAnswers From Api');
+    console.log('questionId: ' + questionId);
+    const answers = [];
+    const path = '/answer/getByQuestion/' + questionId;
+    await this.api.get(path).then((responseData) => {
+      const answersData = responseData.data.result;
+      console.log('answerData', answersData);
+      // tslint:disable-next-line:prefer-for-of
+      for (let i = 0; i < answersData.length; i++) {
+        const answer = new Answer(answersData[i].id, answersData[i].name, questionId);
+        console.log('getAnswersFromApi -> answer', answer);
+        answers.push(answer);
+      }
+    });
+    return answers;
+  }
+
+  async getQuestionFromApi(answerId: string): Promise<Question> {
+    const path = '/question/getByAnswer/' + answerId;
+    let question;
+    const questionType = 'DropDown';
+    await this.api.get(path).then((responseData) => {
+      const questionData = responseData.data.result;
+      question = new Question(questionData.id, questionData.name, answerId, questionType);
+    });
+    return question;
   }
 }

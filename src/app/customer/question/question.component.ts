@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Question} from '../Nodes/question.model';
-import {Tree} from '../Nodes/tree.model';
-import {Answer} from '../Nodes/answer.model';
-import {NodeModel} from '../Nodes/node.model';
+import {Question} from '../../shared/nodes/question.model';
+import {Tree} from '../../shared/nodes/tree.model';
+import {Answer} from '../../shared/nodes/answer.model';
+import {NodeModel} from '../../shared/nodes/node.model';
 import {HttpClient} from '@angular/common/http';
 
 import {ActivatedRoute, Router} from '@angular/router';
@@ -34,7 +34,7 @@ export class QuestionComponent implements OnInit {
     this.collectionId = this.route.snapshot.paramMap.get('collectionId'); // This is if there is a url
     // this.collectionId = "5MDed2Wplvc" // The hardcoded version
     this.setCollectionNameFromApi().then(r => {
-      this.tree = new Tree(this.collectionName);
+      this.tree = new Tree(this.collectionName, this.collectionId);
     });
     this.firstQuestionInTree().then(() => {
       this.setCurrentAnswersFromApi().then(() => {
@@ -64,7 +64,7 @@ export class QuestionComponent implements OnInit {
     let firstQuestion;
     let questionId;
     let questionText;
-    const parentId = '0';
+    const parentId = this.collectionId;
     const questionType = 'DropDown'; // ToDo enumeration maken
 
     const path = '/question/getByCollection/' + this.collectionId;
@@ -94,7 +94,7 @@ export class QuestionComponent implements OnInit {
     });
   }
 
-  async getNextQuestionDataApi(answer: Answer): Promise<'object'> {
+  async getNextQuestionDataApi(answer: Answer): Promise<object> {
     const path = '/question/getByAnswer/' + answer.getId();
     let refinedData;
     await this.api.get(path).then((responseData) => {
@@ -103,7 +103,7 @@ export class QuestionComponent implements OnInit {
     return refinedData;
   }
 
-  async nextQuestionExistsApi(questionData: 'object'): Promise<boolean> {
+  async nextQuestionExistsApi(questionData: object): Promise<boolean> {
     let exist = true;
     if (!questionData) {
       exist = false;
@@ -111,7 +111,7 @@ export class QuestionComponent implements OnInit {
     return exist;
   }
 
-  getNextQuestionFromData(questionData: 'object', previousNode: NodeModel): Question {
+  getNextQuestionFromData(questionData: object, previousNode: NodeModel): Question {
     // @ts-ignore
     const questionId = questionData.id;
     // @ts-ignore

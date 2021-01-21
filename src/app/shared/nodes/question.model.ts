@@ -7,6 +7,8 @@ export class Question extends NodeModel{
 
   constructor(id: string, text: string, parentId: string, questionType: string) {
     super(id, text, parentId);
+    super.setMindMapColor('#f4d03f');
+    super.setMindMapType('Answer');
     this.questionType = questionType;
   }
 

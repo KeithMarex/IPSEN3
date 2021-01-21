@@ -1,54 +1,54 @@
-import { Api } from "src/app/api/api";
-import { Answer } from "./answer";
+import { Api } from 'src/app/api/api';
+import { Answer } from './answer';
 
 export class Question {
-    private _id : string;
-    private _name : string;
 
-    private _answers : Answer[] = [];
-
-    constructor(id : string, name : string)
+    constructor(id: string, name: string)
     {
         this._id = id;
         this._name = name;
 
-        //fetch alle vragen voor deze vraag.
+        // fetch alle vragen voor deze vraag.
         this.getAllAnswers();
-        console.log("Antwoorden:");
+        console.log('Antwoorden:');
         console.log(this._answers);
     }
 
-    get id() : string
+    get id(): string
     {
         return this._id;
     }
 
-    set id(value : string)
+    set id(value: string)
     {
         this._id = value;
     }
 
-    get name() : string
+    get name(): string
     {
         return this._name;
     }
 
-    set name(value : string)
+    set name(value: string)
     {
         this._name = value;
     }
 
-    get answers() : Answer[]
+    get answers(): Answer[]
     {
         return this._answers;
     }
 
-    set answers(value : Answer[])
+    set answers(value: Answer[])
     {
         this._answers = value;
     }
+    private _id: string;
+    private _name: string;
 
-    static async getQuestionByCollectionID(nId : string) : Promise<Question>
+    private _answers: Answer[] = [];
+
+    static async getQuestionByCollectionID(nId: string): Promise<Question>
     {
         const api = Api.getApi();
         let returnQuestion;
@@ -60,22 +60,7 @@ export class Question {
         return returnQuestion;
     }
 
-    async getAllAnswers()
-    {
-        const api = Api.getApi();
-        await api.get('/answer/getByQuestion/' + this._id).then(response => {
-            // de vragen.
-            if(response.data.result) // checken voor data
-            {
-                response.data.result.forEach(element => {
-                    // elk antwoord.
-                    this._answers.push(new Answer(element.id, element.name));
-                });
-            }
-        });
-    }
-
-    static async getQuestionByByAnswerID(nId : string) : Promise<Question>
+    static async getQuestionByByAnswerID(nId: string): Promise<Question>
     {
         const api = Api.getApi();
         let returnQuestion;
@@ -85,5 +70,19 @@ export class Question {
             returnQuestion = new Question(response.data.result.id, response.data.result.name);
         });
         return returnQuestion;
+    }
+
+    async getAllAnswers(): Promise<void> {
+        const api = Api.getApi();
+        await api.get('/answer/getByQuestion/' + this._id).then(response => {
+            // de vragen.
+            if (response.data.result) // checken voor data
+            {
+                response.data.result.forEach(element => {
+                    // elk antwoord.
+                    this._answers.push(new Answer(element.id, element.name));
+                });
+            }
+        });
     }
 }
