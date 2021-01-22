@@ -92,7 +92,7 @@ export class CollectionDetailsComponent implements OnInit {
           }
         }).then(async (result2) => {
           if (result2.isConfirmed && result2.value) {
-            await this.Toast.fire({
+            this.Toast.fire({
               icon: 'success',
               title: 'Antwoord aangemaakt'
             });
