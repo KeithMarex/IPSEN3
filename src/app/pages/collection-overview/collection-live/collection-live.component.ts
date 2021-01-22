@@ -180,9 +180,6 @@ export class CollectionLiveComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.api = Api.getApi();
     await this.initialiseMindMapData().then(() => {
-      // this.mindMap = MindMapMain.show(option, mind);
-      // console.log(this.mindMapData);
-      console.log('mindMapData again: ', this.mindMapData);
       this.mindMap = MindMapMain.show(option, this.mindMapData);
       this.setFirstQuestionMindMap();
       this.addNodesToMindMap();
@@ -242,11 +239,8 @@ export class CollectionLiveComponent implements OnInit {
 
   async addNodesToTree(): Promise<void> {
     await this.getNodesFromApi().then(nodes => {
-      console.log('nodes', nodes);
       for (const node of nodes) {
-        console.log('node', node);
         this.tree.addNode(node);
-        console.log('tree', this.tree);
       }
     });
   }
@@ -254,9 +248,7 @@ export class CollectionLiveComponent implements OnInit {
   addAllChildrenToMindMap(nodeId: string): void {
     const currentNode = this.mindMap.getNode(nodeId);
     const children = this.tree.getChildren(nodeId);
-    console.log('addAllChildren -> children: ', children);
     for (const child of children) {
-      console.log('addAllChildren -> childId: ', child.getId());
       this.mindMap.addNode(currentNode, child.getId(), child.getText());
       this.addAllChildrenToMindMap(child.getId());
     }
@@ -278,23 +270,15 @@ export class CollectionLiveComponent implements OnInit {
 
   async initialiseMindMapData(): Promise<void> {
     await this.initialiseTree().then(async r => {
-      console.log('initialising tree done');
       await this.addNodesToTree().then(() => {
         this.mindMapData = this.tree.toMindMap();
-        console.log('mind', mind);
-        console.log('mindMapData', this.mindMapData);
       });
     });
   }
 
   async getNodesFromApi(): Promise<Array<NodeModel>> {
-    // const question = new Question('1', 'Wat heeft u geboekt', this.collectionId, 'DropDown');
-    // const answer = new Answer('2', 'kippenpoten', '1');
-    // return [question, answer];
-    console.log('hoi');
     const nodes: Array<NodeModel> = [];
     const firstQuestion = await this.getFirstQuestionFromApi();
-    console.log('firstQuestion: ', firstQuestion);
     nodes.push(firstQuestion);
     const nodes2 = await this.getAllNodesFromApi2(firstQuestion);
     for (const node2 of nodes2) {
@@ -306,7 +290,6 @@ export class CollectionLiveComponent implements OnInit {
   }
 
   async getAllNodesFromApi2(parentQuestion: Question): Promise<NodeModel[]> {
-    console.log('in getAllNodesFromApi2');
     const nodes: Array<NodeModel> = [];
     const answers = await this.getAnswersFromApi(parentQuestion.getId());
     for (const answer of answers) {
@@ -328,27 +311,24 @@ export class CollectionLiveComponent implements OnInit {
     const parentId = this.collectionId;
     const questionType = 'DropDown'; // ToDo enumeration maken
     const path = '/question/getByCollection/' + this.collectionId;
-    await Api.getApi().get(path).then((responseData) => {
-      console.log(responseData);
-      questionId = responseData.data.result.id;
-      questionText = responseData.data.result.name;
+    await this.getDataFromApi(path).then((responseData) => {
+      // @ts-ignore
+      questionId = responseData.id;
+      // @ts-ignore
+      questionText = responseData.name;
       firstQuestion = new Question(questionId, questionText, parentId, questionType);
     });
     return firstQuestion;
   }
 
   async getAnswersFromApi(questionId: string): Promise<Answer[]> {
-    console.log('in getAllAnswers From Api');
-    console.log('questionId: ' + questionId);
     const answers = [];
     const path = '/answer/getByQuestion/' + questionId;
-    await this.api.get(path).then((responseData) => {
-      const answersData = responseData.data.result;
-      console.log('answerData', answersData);
+    await this.getDataFromApi(path).then((answersData) => {
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < answersData.length; i++) {
+        // @ts-ignore
         const answer = new Answer(answersData[i].id, answersData[i].name, questionId);
-        console.log('getAnswersFromApi -> answer', answer);
         answers.push(answer);
       }
     });
@@ -359,8 +339,8 @@ export class CollectionLiveComponent implements OnInit {
     const path = '/question/getByAnswer/' + answerId;
     let question;
     const questionType = 'DropDown';
-    await this.api.get(path).then((responseData) => {
-      const questionData = responseData.data.result;
+    await this.getDataFromApi(path).then((questionData) => {
+      // @ts-ignore
       question = new Question(questionData.id, questionData.name, answerId, questionType);
     });
     return question;
