@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Tree} from '../../../shared/nodes/tree.model';
 import {NodeModel} from '../../../shared/nodes/node.model';
 import {Answer} from '../../../shared/nodes/answer.model';
+import {ApiServiceModel} from "../../../shared/api-service/api-service.model";
 
 const HIERARCHY_RULES = {
   ROOT: {
@@ -167,6 +168,7 @@ export class CollectionLiveComponent implements OnInit {
   mindMap;
   mindMapData;
   api;
+  apiService: ApiServiceModel;
   tree: Tree;
   collectionName: string;
   collectionId: string;
@@ -179,6 +181,7 @@ export class CollectionLiveComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.api = Api.getApi();
+    this.apiService = new ApiServiceModel();
     await this.initialiseMindMapData().then(() => {
       this.mindMap = MindMapMain.show(option, this.mindMapData);
       this.setFirstQuestionMindMap();
@@ -223,10 +226,9 @@ export class CollectionLiveComponent implements OnInit {
   }
 
   async setCollectionNameFromApi(): Promise<void> {
-    const path = '/collection/' + this.collectionId;
-    return await this.getDataFromApi(path).then(response => {
+    await this.apiService.getCollectionById(this.collectionId).then((collectionData) => {
       // @ts-ignore
-      this.collectionName = response.name;
+      this.collectionName = collectionData.name;
     });
   }
 
@@ -306,16 +308,13 @@ export class CollectionLiveComponent implements OnInit {
 
   async getFirstQuestionFromApi(): Promise<Question> {
     let firstQuestion;
-    let questionId;
-    let questionText;
     const parentId = this.collectionId;
     const questionType = 'DropDown'; // ToDo enumeration maken
-    const path = '/question/getByCollection/' + this.collectionId;
-    await this.getDataFromApi(path).then((responseData) => {
+    await this.apiService.getFirstQuestionByCollectionId(this.collectionId).then((firstQuestionData) => {
       // @ts-ignore
-      questionId = responseData.id;
+      const questionId = firstQuestionData.id;
       // @ts-ignore
-      questionText = responseData.name;
+      const questionText = firstQuestionData.name;
       firstQuestion = new Question(questionId, questionText, parentId, questionType);
     });
     return firstQuestion;
@@ -323,8 +322,8 @@ export class CollectionLiveComponent implements OnInit {
 
   async getAnswersFromApi(questionId: string): Promise<Answer[]> {
     const answers = [];
-    const path = '/answer/getByQuestion/' + questionId;
-    await this.getDataFromApi(path).then((answersData) => {
+    await this.apiService.getAnswersByQuestionId(questionId).then((answersData) => {
+      // @ts-ignore
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < answersData.length; i++) {
         // @ts-ignore
@@ -339,7 +338,7 @@ export class CollectionLiveComponent implements OnInit {
     const path = '/question/getByAnswer/' + answerId;
     let question;
     const questionType = 'DropDown';
-    await this.getDataFromApi(path).then((questionData) => {
+    await this.apiService.getQuestionByAnswerId(answerId).then((questionData) => {
       // @ts-ignore
       question = new Question(questionData.id, questionData.name, answerId, questionType);
     });
