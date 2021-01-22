@@ -167,7 +167,6 @@ const mind = {
 export class CollectionLiveComponent implements OnInit {
   mindMap;
   mindMapData;
-  api;
   apiService: ApiServiceModel;
   tree: Tree;
   collectionName: string;
@@ -180,7 +179,6 @@ export class CollectionLiveComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.api = Api.getApi();
     this.apiService = new ApiServiceModel();
     await this.initialiseMindMapData().then(() => {
       this.mindMap = MindMapMain.show(option, this.mindMapData);
@@ -213,12 +211,6 @@ export class CollectionLiveComponent implements OnInit {
     const data = this.mindMap.getData().data;
     console.log('data: ', data);
     return data;
-  }
-
-  async getDataFromApi(url: string): Promise<string> {
-    return await this.api.get(url).then(response => {
-      return response.data.result;
-    });
   }
 
   setCollectionIdFromUrl(): void {
