@@ -33,7 +33,7 @@
             <tbody class="content-table__body">
             <tr class="content-table__row" *ngFor="let el of this.answers; let i = index">
               <td class="va">{{el.name}}</td>
-              <td class="va"><span class="content-table__status">Bevat geen notificatie</span></td>
+              <td class="va"><span class="content-table__status" *ngIf="!el.hasNotification">Bevat geen notificatie</span><span class="content-table__status" style="background-color: orange" *ngIf="el.hasNotification">Notificatie</span></td>
               <td class="content-table__actions-cel va">
                 <icon-edit (click)="editAnswer(el, i)"></icon-edit>
                 <icon-remove (click)="removeAnswer(el, i)"></icon-remove>
@@ -47,3 +47,10 @@
     </div>
   </div>
 </div>
+
+<swal #textEditor text="Hoi!" (confirm)="textEditorFunc()">
+  <div *swalPortal>
+    <h1>{{this.currText}}</h1>
+    <app-rich-text-editor (data)="this.currData = $event"></app-rich-text-editor>
+  </div>
+</swal>

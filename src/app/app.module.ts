@@ -27,6 +27,8 @@ import {CollectionDetailsComponent} from './pages/collection-overview/collection
 import {ArrowComponent} from './icons/arrow/arrow.component';
 import {ModalComponent} from './components/modal/modal.component';
 import { CollectionLiveComponent } from './pages/collection-overview/collection-live/collection-live.component';
+import { RichTextEditorComponent } from './rich-text-editor/rich-text-editor.component';
+import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
 
 
 const appRoutes: Routes = [
@@ -35,7 +37,8 @@ const appRoutes: Routes = [
   {path: 'admin/dashboard', component: CollectionOverviewComponent},
   {path: 'admin/collection/:collectionId', component: CollectionDetailsComponent},
   {path: 'admin/dashboard/live/:collectionId', component: CollectionLiveComponent},
-  {path: '', component: HomepageComponent}
+  {path: '', component: HomepageComponent},
+  {path: 'text', component: RichTextEditorComponent}
 ];
 
 @NgModule({
@@ -60,6 +63,7 @@ const appRoutes: Routes = [
     CollectionDetailsComponent,
     ArrowComponent,
     CollectionLiveComponent,
+    RichTextEditorComponent,
   ],
   imports: [
     BrowserModule,
@@ -68,6 +72,7 @@ const appRoutes: Routes = [
     FormsModule,
     HttpClientModule,
     SweetAlert2Module.forRoot(),
+    CKEditorModule,
   ],
   providers: [ConfigurationService],
   bootstrap: [AppComponent]
