@@ -6,6 +6,7 @@ import {Tree} from '../../../shared/nodes/tree.model';
 import {NodeModel} from '../../../shared/nodes/node.model';
 import {Answer} from '../../../shared/nodes/answer.model';
 import {ApiServiceModel} from '../../../shared/api-service/api-service.model';
+import {getUndecoratedClassWithAngularFeaturesDiagnostic} from "@angular/compiler-cli/src/ngtsc/annotations/src/diagnostics";
 
 const HIERARCHY_RULES = {
   ROOT: {
@@ -130,10 +131,28 @@ export class CollectionLiveComponent implements OnInit {
     for (const child of children) {
       console.log('Current node', currentNode);
       console.log('Adding child: ', child);
-      this.addNodeToMindMap(currentNode, child);
-      // this.mindMap.addNode(currentNode, child.getId(), child.getText());
-      this.addAllChildrenToMindMap(child.getId());
+      if (this.nodeIdExists(child)) {
+        console.log('id exists: ', child);
+      } else {
+        this.addNodeToMindMap(currentNode, child);
+        // this.mindMap.addNode(currentNode, child.getId(), child.getText());
+        this.addAllChildrenToMindMap(child.getId());
+      }
     }
+  }
+
+  nodeIdExists(nodeModel: NodeModel): boolean {
+    const nodeId = nodeModel.getId();
+    const mindMapNode = this.mindMap.getNode(nodeId);
+    console.log('mindMapNode', mindMapNode);
+    if (mindMapNode === null) {
+      return false;
+    }
+    return true;
+  }
+
+  addLinkedNodeToMindMap(nodeModel: NodeModel): void {
+    // ToDo
   }
 
   addNodesToMindMap(): void {
@@ -152,7 +171,15 @@ export class CollectionLiveComponent implements OnInit {
 
   addNodeToMindMap(parentNode: any, node: NodeModel): void {
     this.mindMap.addNode(parentNode, node.getId(), node.getText());
-    this.mindMap.setNodeColor(node.getId(), node.getMindMapBackGroundColor(), node.getMindMapColor());
+    this.setDefaultNodeColor(node);
+  }
+
+  setDefaultNodeColor(node: NodeModel): void {
+    this.setNodeColor(node.getId(), node.getMindMapBackGroundColor(), node.getMindMapColor());
+  }
+
+  setNodeColor(nodeId: string, backGroundColor: string, frontColor): void {
+    this.mindMap.setNodeColor(nodeId, backGroundColor, frontColor);
   }
 
   async initialiseMindMapData(): Promise<void> {
