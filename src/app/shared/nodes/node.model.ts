@@ -60,17 +60,4 @@ export class NodeModel {
   private getMindMapType(): string {
     return this.mindMapType;
   }
-
-  public toMindMap(childrenData: Array<object>): object {
-    const data = {
-      id: this.id,
-      color: this.getMindMapColor(),
-      topic: this.getText(),
-      direction: 'right',
-      selectedType: 'this.getType',
-      backgroundColor: '#616161',
-      children: [childrenData]
-    };
-    return data;
-  }
 }
