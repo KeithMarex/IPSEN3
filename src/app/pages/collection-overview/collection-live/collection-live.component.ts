@@ -20,7 +20,8 @@ const HIERARCHY_RULES = {
     color: '#fff',
     backgroundColor: '#f4d03f',
     getChildren: () => [
-      HIERARCHY_RULES.ANSWERS
+      HIERARCHY_RULES.ANSWERS,
+      HIERARCHY_RULES.DOUBLE_NODE
     ]
   },
   ANSWERS: {
@@ -29,7 +30,8 @@ const HIERARCHY_RULES = {
     backgroundColor: '#f9e79f',
     getChildren: () => [
       HIERARCHY_RULES.QUESTION,
-      HIERARCHY_RULES.NOTIFICATION
+      HIERARCHY_RULES.NOTIFICATION,
+      HIERARCHY_RULES.DOUBLE_NODE
     ]
   },
   NOTIFICATION: {
@@ -37,7 +39,9 @@ const HIERARCHY_RULES = {
     color: '#fff',
     backgroundColor: '#f5b7b1',
     getChildren: () => [
-      HIERARCHY_RULES.END_NOTIFICATION
+      HIERARCHY_RULES.QUESTION,
+      HIERARCHY_RULES.END_NOTIFICATION,
+      HIERARCHY_RULES.DOUBLE_NODE
     ]
   },
   END_NOTIFICATION: {
@@ -47,89 +51,11 @@ const HIERARCHY_RULES = {
     getChildren: () => [
     ]
   },
-  QUESTION1: {
-    name: 'Question',
-    color: '#fff',
-    backgroundColor: '#f4d03f',
+  DOUBLE_NODE: {
+    name: 'doubleNode',
+    color: '#f00',
+    backgroundColor: '#0ff',
     getChildren: () => [
-      HIERARCHY_RULES.ANSWERS1
-    ]
-  },
-  ANSWERS1: {
-    name: 'Answer',
-    color: '#fff',
-    backgroundColor: '#f9e79f',
-    getChildren: () => [
-      HIERARCHY_RULES.NOTIFICATION,
-      HIERARCHY_RULES.QUESTION
-    ]
-  },
-  QUESTION2: {
-    name: 'Question',
-    color: '#fff',
-    backgroundColor: '#f4d03f',
-    getChildren: () => [
-      HIERARCHY_RULES.ANSWERS
-    ]
-  },
-  ANSWERS3: {
-    name: 'Answer',
-    color: '#fff',
-    backgroundColor: '#f9e79f',
-    getChildren: () => [
-      HIERARCHY_RULES.NOTIFICATION,
-      HIERARCHY_RULES.QUESTION
-    ]
-  },
-  QUESTION3: {
-    name: 'Question',
-    color: '#fff',
-    backgroundColor: '#f4d03f',
-    getChildren: () => [
-      HIERARCHY_RULES.ANSWERS
-    ]
-  },
-  ANSWERS4: {
-    name: 'Answer',
-    color: '#fff',
-    backgroundColor: '#f9e79f',
-    getChildren: () => [
-      HIERARCHY_RULES.NOTIFICATION,
-      HIERARCHY_RULES.QUESTION
-    ]
-  },
-  QUESTION4: {
-    name: 'Question',
-    color: '#fff',
-    backgroundColor: '#f4d03f',
-    getChildren: () => [
-      HIERARCHY_RULES.ANSWERS
-    ]
-  },
-  ANSWERS5: {
-    name: 'Answer',
-    color: '#fff',
-    backgroundColor: '#f9e79f',
-    getChildren: () => [
-      HIERARCHY_RULES.NOTIFICATION,
-      HIERARCHY_RULES.QUESTION
-    ]
-  },
-  QUESTION5: {
-    name: 'Question',
-    color: '#fff',
-    backgroundColor: '#f4d03f',
-    getChildren: () => [
-      HIERARCHY_RULES.ANSWERS
-    ]
-  },
-  ANSWERS6: {
-    name: 'Answer',
-    color: '#fff',
-    backgroundColor: '#f9e79f',
-    getChildren: () => [
-      HIERARCHY_RULES.NOTIFICATION,
-      HIERARCHY_RULES.QUESTION
     ]
   }
 };
