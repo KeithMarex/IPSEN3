@@ -56,14 +56,11 @@ export class Tree{
   }
 
   private getNode(id: string): NodeModel {
-    console.log('id of searched string', id);
     for (const node of this.nodes) {
-      console.log('ids found: ', node.getId());
       if (node.getId() === id) {
         return node;
       }
     }
-    console.log('could not get node', id);
     return null;
   }
 
@@ -78,7 +75,6 @@ export class Tree{
   public getChildren(parentId: string): NodeModel[] {
     const children: NodeModel[] = [];
     for (const node of this.nodes) {
-      console.log('potential children: ', node.getText() + ' ' + node.getId());
       if (node.getParentId() === parentId) {
         children.push(node);
       }
@@ -87,20 +83,15 @@ export class Tree{
   }
 
   private childrenDataToMindMap(parentId: string): object {
-    console.log('intoChildrenDataToMindMap');
     const children = this.getChildren(parentId);
-    console.log('children: ', children);
     const childrenData: Array<object> = [];
     if (children.length === 0 && (this.nodeExists(parentId))) {
-      console.log('childrenLength is 0');
       return this.getNode(parentId).toMindMap([]);
     }
     for (const child of children) {
       childrenData.push(this.childrenDataToMindMap(child.getId()));
     }
     if (this.nodeExists(parentId)) {
-      console.log('hoi');
-      console.log('childrenData', this.getNode(parentId).toMindMap(childrenData));
       return this.getNode(parentId).toMindMap(childrenData);
     }
     return [];
