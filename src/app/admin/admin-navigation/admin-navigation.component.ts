@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import Swal from 'sweetalert2';
 import {HttpClient} from '@angular/common/http';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
@@ -12,6 +12,9 @@ import {Api} from '../../api/api';
   styleUrls: ['./admin-navigation.component.scss']
 })
 export class AdminNavigationComponent implements OnInit {
+  @Output() createCategor = new EventEmitter();
+  @Output() changeCategor = new EventEmitter();
+  @Output() deleteCategor = new EventEmitter();
 
   constructor(private http: HttpClient, private route: Router) {
   }
@@ -136,5 +139,17 @@ export class AdminNavigationComponent implements OnInit {
     }).then(() => {
       this.route.navigate(['/']);
     });
+  }
+
+  createCategory() {
+    this.createCategor.emit();
+  }
+
+  changeCategory() {
+    this.changeCategor.emit();
+  }
+
+  deleteCategory() {
+    this.deleteCategor.emit();
   }
 }

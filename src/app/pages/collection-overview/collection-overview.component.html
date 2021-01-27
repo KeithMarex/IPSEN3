@@ -1,4 +1,4 @@
-<app-admin-navigation></app-admin-navigation>
+<app-admin-navigation (createCategor)="createCategory()" (changeCategor)="changeCategory()" (deleteCategor)="deleteCategory()"></app-admin-navigation>
 <app-admin-breadcrumb></app-admin-breadcrumb>
 <div class="container-fluid">
     <div class="row">
@@ -10,14 +10,9 @@
                     </div>
                 </div>
               <div class="row">
-                <div class=" sidebar__col col-sm-12">
-                  <button type="button" class="sidebar__btn btn" (click)="newCategory()" style="margin: 0 20px 0 20px">
-                    Categorie
-                  </button>
-                  <button type="button" class="sidebar__btn btn" (click)="newCollection()" style="float: right; margin: 0 20px 0 20px">
-                    Nieuwe collectie
-                  </button>
-                </div>
+                <button type="button" class="sidebar__btn btn" (click)="newCollection()" style="float: right; margin: 0 20px 0 20px">
+                  Nieuwe collectie
+                </button>
               </div>
             </div>
             <div class="sidebar-content container-fluid">
