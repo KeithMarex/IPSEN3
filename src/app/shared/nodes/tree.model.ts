@@ -55,7 +55,7 @@ export class Tree{
     return false;
   }
 
-  private getNode(id: string): NodeModel {
+  public getNode(id: string): NodeModel {
     for (const node of this.nodes) {
       if (node.getId() === id) {
         return node;

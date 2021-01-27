@@ -6,6 +6,7 @@ export class Answer extends NodeModel{
     super(id, text, parentId);
     super.setMindMapColor('#f9e79f');
     super.setMindMapBackGroundColor('#f9e79f');
+    super.setLinkedColor('#e3bb1e');
     super.setMindMapType('Answer');
   }
 }
