@@ -52,17 +52,21 @@
     width: 100%;
 
     &__item {
-        margin-bottom: 10px;
-        border-radius: 5px 0 0 5px;
+      margin-bottom: 10px;
+      border-radius: 5px 0 0 5px;
 
-        a {
-            width: 100%;
-            color: $textColor;
-            text-decoration: none;
-            display: block;
-            padding: 15px 0px 15px 30px;
-            border-radius: 5px;
-        }
+      ul {
+        padding: 0;
+      }
+
+      a {
+        width: 100%;
+        color: $textColor;
+        text-decoration: none;
+        display: block;
+        padding: 15px 0;
+        border-radius: 5px;
+      }
 
         &.active {
             background-color: #fff;
