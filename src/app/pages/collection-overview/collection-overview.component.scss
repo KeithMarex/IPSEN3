@@ -1,3 +1,13 @@
 td {
   vertical-align: middle !important;
 }
+
+.category-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    height: 30px;
+  }
+}
