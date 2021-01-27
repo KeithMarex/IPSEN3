@@ -85,17 +85,19 @@ export class CollectionOverviewComponent implements OnInit {
 
   async chooseCategory(el: CategoryModel, index): Promise<void> {
     if (el !== undefined){
-      this.collectionsFromCategory.splice(0);
-      this.selectedCategory = el;
+      if (this.selectedCategory === undefined || this.selectedCategory.id !== el.id){
+        this.collectionsFromCategory.splice(0);
+        this.selectedCategory = el;
 
-      this.selectedIndex = index;
+        this.selectedIndex = index;
 
-      const response = await Api.getApi().get('/collection/all/' + el.id);
-      const j = response.data.result;
+        const response = await Api.getApi().get('/collection/all/' + el.id);
+        const j = response.data.result;
 
-      for (let i = 0; i < j.length; i++) {
-        const r = response.data.result[i];
-        this.collectionsFromCategory.push(new CollectionModel(r.id, r.name, r.type, r.version));
+        for (let i = 0; i < j.length; i++) {
+          const r = response.data.result[i];
+          this.collectionsFromCategory.push(new CollectionModel(r.id, r.name, r.type, r.version));
+        }
       }
     }
   }
