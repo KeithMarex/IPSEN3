@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { customizeUtil, MindMapMain } from 'mind-map';
 import {Question} from '../../../shared/nodes/question.model';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -6,6 +6,7 @@ import {Tree} from '../../../shared/nodes/tree.model';
 import {NodeModel} from '../../../shared/nodes/node.model';
 import {Answer} from '../../../shared/nodes/answer.model';
 import {ApiServiceModel} from '../../../shared/api-service/api-service.model';
+import {CollectionModel} from "../../../shared/models/collection.model";
 
 const HIERARCHY_RULES = {
   ROOT: {
@@ -73,7 +74,7 @@ const option = {
 const DROP_DOWN_STRING = 'DropDown';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-collection-live',
   templateUrl: './collection-live.component.html',
   styleUrls: ['./collection-live.component.scss']
 })
@@ -88,6 +89,7 @@ export class CollectionLiveComponent implements OnInit {
   result: string;
   firstNodeId: string;
   linkedNodeCount: number;
+  @Input() collection: CollectionModel;
 
   constructor(private route: ActivatedRoute, private router: Router) {
   }
@@ -108,7 +110,7 @@ export class CollectionLiveComponent implements OnInit {
   }
 
   setCollectionIdFromUrl(): void {
-    this.collectionId = this.route.snapshot.paramMap.get('collectionId');
+    this.collectionId = this.collection.id;
   }
 
   async setCollectionNameFromApi(): Promise<void> {

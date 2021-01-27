@@ -69,7 +69,7 @@
                             <icon-edit (click)="changeStatus(collection, i)"></icon-edit>
                             <icon-clone (click)="cloneCollection(collection)"></icon-clone>
                             <icon-remove (click)="deleteCollection(collection, i)"></icon-remove>
-                            <button *ngIf="selectedCollectionIsEmpty" class="sidebar__btn btn" style="margin: auto 0 0 auto; float: right" (click)="this.liveViewClicked(collection)">Live weergeven</button>
+                            <button *ngIf="selectedCollectionIsEmpty" class="sidebar__btn btn" style="margin: auto 0 0 auto; float: right" (click)="LiveViewStart(collection)">Live weergeven</button>
                           </td>
                         </tr>
                         </tbody>
@@ -112,4 +112,20 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal" tabindex="-1" [ngClass]="{ 'modal__active': LiveView }" *ngIf="LiveView">
+  <div class="modal-dialog" style="max-width: 100%; width: 80%">
+    <div class="modal-content" style="padding: 0 20px 0 20px">
+      <div class="modal-header">
+        <h5 class="modal-title">Collectie: {{LiveViewCollection.name}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="LiveView = false">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <app-collection-live [collection]="LiveViewCollection"></app-collection-live>
+      </div>
+    </div>
+  </div>
 </div>
