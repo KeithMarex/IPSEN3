@@ -28,8 +28,8 @@ const HIERARCHY_RULES = {
     color: '#fff',
     backgroundColor: '#f9e79f',
     getChildren: () => [
-      HIERARCHY_RULES.NOTIFICATION,
-      HIERARCHY_RULES.QUESTION
+      HIERARCHY_RULES.QUESTION,
+      HIERARCHY_RULES.NOTIFICATION
     ]
   },
   NOTIFICATION: {
@@ -44,7 +44,93 @@ const HIERARCHY_RULES = {
     name: 'endNotification',
     color: '#fff',
     backgroundColor: '#f8f',
-    getChildren: () => []
+    getChildren: () => [
+    ]
+  },
+  QUESTION1: {
+    name: 'Question',
+    color: '#fff',
+    backgroundColor: '#f4d03f',
+    getChildren: () => [
+      HIERARCHY_RULES.ANSWERS1
+    ]
+  },
+  ANSWERS1: {
+    name: 'Answer',
+    color: '#fff',
+    backgroundColor: '#f9e79f',
+    getChildren: () => [
+      HIERARCHY_RULES.NOTIFICATION,
+      HIERARCHY_RULES.QUESTION
+    ]
+  },
+  QUESTION2: {
+    name: 'Question',
+    color: '#fff',
+    backgroundColor: '#f4d03f',
+    getChildren: () => [
+      HIERARCHY_RULES.ANSWERS
+    ]
+  },
+  ANSWERS3: {
+    name: 'Answer',
+    color: '#fff',
+    backgroundColor: '#f9e79f',
+    getChildren: () => [
+      HIERARCHY_RULES.NOTIFICATION,
+      HIERARCHY_RULES.QUESTION
+    ]
+  },
+  QUESTION3: {
+    name: 'Question',
+    color: '#fff',
+    backgroundColor: '#f4d03f',
+    getChildren: () => [
+      HIERARCHY_RULES.ANSWERS
+    ]
+  },
+  ANSWERS4: {
+    name: 'Answer',
+    color: '#fff',
+    backgroundColor: '#f9e79f',
+    getChildren: () => [
+      HIERARCHY_RULES.NOTIFICATION,
+      HIERARCHY_RULES.QUESTION
+    ]
+  },
+  QUESTION4: {
+    name: 'Question',
+    color: '#fff',
+    backgroundColor: '#f4d03f',
+    getChildren: () => [
+      HIERARCHY_RULES.ANSWERS
+    ]
+  },
+  ANSWERS5: {
+    name: 'Answer',
+    color: '#fff',
+    backgroundColor: '#f9e79f',
+    getChildren: () => [
+      HIERARCHY_RULES.NOTIFICATION,
+      HIERARCHY_RULES.QUESTION
+    ]
+  },
+  QUESTION5: {
+    name: 'Question',
+    color: '#fff',
+    backgroundColor: '#f4d03f',
+    getChildren: () => [
+      HIERARCHY_RULES.ANSWERS
+    ]
+  },
+  ANSWERS6: {
+    name: 'Answer',
+    color: '#fff',
+    backgroundColor: '#f9e79f',
+    getChildren: () => [
+      HIERARCHY_RULES.NOTIFICATION,
+      HIERARCHY_RULES.QUESTION
+    ]
   }
 };
 
@@ -53,7 +139,7 @@ const option = {
   theme: 'normal',
   editable: true,
   selectable: false,
-  depth: 6,
+  depth: 15,
   hierarchyRule: HIERARCHY_RULES,
   enableDraggable: true,
 };
@@ -195,6 +281,11 @@ export class CollectionLiveComponent implements OnInit {
     });
   }
 
+  backClicked(): void {
+    const dashboardUrl = 'admin/dashboard';
+    this.router.navigate([dashboardUrl]);
+  }
+
   removeNode(): void {
     const selectedNode = this.mindMap.getSelectedNode();
     const selectedId = selectedNode && selectedNode.id;
@@ -251,6 +342,7 @@ export class CollectionLiveComponent implements OnInit {
     const currentNode = this.mindMap.getNode(nodeId);
     const children = this.tree.getChildren(nodeId);
     for (const child of children) {
+      console.log('Current node', currentNode);
       console.log('Adding child: ', child);
       this.addNodeToMindMap(currentNode, child);
       // this.mindMap.addNode(currentNode, child.getId(), child.getText());
@@ -282,9 +374,6 @@ export class CollectionLiveComponent implements OnInit {
       await this.addNodesToTreeFromApi().then(() => {
         this.mindMapData = this.tree.toMindMap();
       });
-      // await this.addNodesToTreeOld().then(() => {
-      //   this.mindMapData = this.tree.toMindMap();
-      // });
     });
   }
 

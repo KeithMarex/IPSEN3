@@ -254,8 +254,8 @@ export class CollectionOverviewComponent implements OnInit {
     const type: string = f['type']; // Word dit niet gebruikt?
 
     const questionData = {
-        name: question,
-        collection_id: this.newCollectionId
+      name: question,
+      collection_id: this.newCollectionId
     };
 
     const api = Api.getApi();
