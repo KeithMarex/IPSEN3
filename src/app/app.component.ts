@@ -1,12 +1,4 @@
-import { Component, HostBinding } from '@angular/core';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition,
-  // ...
-} from '@angular/animations';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -17,5 +9,5 @@ import {
   ]
 })
 export class AppComponent {
-  title = 'IPSEN3';
+  title = 'ARAG Vragenboom';
 }
