@@ -185,7 +185,6 @@ export class CollectionLiveComponent implements OnInit {
     this.mindMap.addNode(parentNode, node.getId(), node.getText());
     this.mindMap.getNode(node.getId()).selectedType = node.getMindMapType();
     this.setDefaultColor(node);
-    console.log('type', this.mindMap.getNode(node.getId()).selectedType);
   }
 
   setDefaultColor(node: NodeModel): void {
@@ -211,7 +210,6 @@ export class CollectionLiveComponent implements OnInit {
 
   async addNodesToTreeFromApi(): Promise<void> {
     await this.apiService.getAllDataFromACollection(this.collectionId).then((allCollectionData) => {
-      console.log('all Collection Data', allCollectionData);
       this.extractFirstQuestion(allCollectionData);
     });
   }
@@ -269,7 +267,6 @@ export class CollectionLiveComponent implements OnInit {
     const notificationData = notificationsData[0];
     // @ts-ignore
     const notification = new Notification(notificationData.id, notificationData.text, data.id);
-    console.log('found notification', notification);
     this.tree.addNode(notification);
     this.extractQuestions(notificationData);
   }
