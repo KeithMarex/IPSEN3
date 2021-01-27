@@ -151,7 +151,6 @@ export class CollectionLiveComponent implements OnInit {
   }
 
   isDifferentParent(parentNode: Node, node: NodeModel): boolean {
-    // ToDo check if this works.
     // @ts-ignore
     return !(this.tree.getNode(node.getId()).getParentId() === parentNode.id);
   }
