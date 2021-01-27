@@ -6,6 +6,7 @@ export class NodeModel {
   private mindMapBackGroundColor = '#ccc';
   private linkedColor = '#888';
   private mindMapType = 'node';
+  private linkedMindMapType = 'duplicateNode';
 
   constructor(private id: string, private text: string, private parentId: string) {}
 
@@ -53,24 +54,15 @@ export class NodeModel {
     return this.linkedColor;
   }
 
+  public getLinkedMindMapType(): string {
+    return this.linkedMindMapType;
+  }
+
   protected setMindMapType(mindMapType: string): void {
     this.mindMapType = mindMapType;
   }
 
-  private getMindMapType(): string {
+  public getMindMapType(): string {
     return this.mindMapType;
-  }
-
-  public toMindMap(childrenData: Array<object>): object {
-    const data = {
-      id: this.id,
-      color: this.getMindMapColor(),
-      topic: this.getText(),
-      direction: 'right',
-      selectedType: 'this.getType',
-      backgroundColor: '#616161',
-      children: [childrenData]
-    };
-    return data;
   }
 }

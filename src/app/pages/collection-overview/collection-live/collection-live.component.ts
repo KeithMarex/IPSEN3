@@ -6,17 +6,18 @@ import {Tree} from '../../../shared/nodes/tree.model';
 import {NodeModel} from '../../../shared/nodes/node.model';
 import {Answer} from '../../../shared/nodes/answer.model';
 import {ApiServiceModel} from '../../../shared/api-service/api-service.model';
-import {CollectionModel} from "../../../shared/models/collection.model";
+import {DuplicateColors} from '../../../shared/nodes/duplicate-colors.model';
+import {CollectionModel} from '../../../shared/models/collection.model';
 
 const HIERARCHY_RULES = {
   ROOT: {
     name: 'Collection',
     backgroundColor: '#7EC6E1',
     getChildren: () => [
-      HIERARCHY_RULES.QUESTION
+      HIERARCHY_RULES.QUESTIONS
     ]
   },
-  QUESTION: {
+  QUESTIONS: {
     name: 'Question',
     color: '#fff',
     backgroundColor: '#f4d03f',
@@ -30,7 +31,7 @@ const HIERARCHY_RULES = {
     color: '#fff',
     backgroundColor: '#f9e79f',
     getChildren: () => [
-      HIERARCHY_RULES.QUESTION,
+      HIERARCHY_RULES.QUESTIONS,
       HIERARCHY_RULES.NOTIFICATION,
       HIERARCHY_RULES.DOUBLE_NODE
     ]
@@ -40,7 +41,7 @@ const HIERARCHY_RULES = {
     color: '#fff',
     backgroundColor: '#f5b7b1',
     getChildren: () => [
-      HIERARCHY_RULES.QUESTION,
+      HIERARCHY_RULES.QUESTIONS,
       HIERARCHY_RULES.END_NOTIFICATION,
       HIERARCHY_RULES.DOUBLE_NODE
     ]
@@ -53,7 +54,7 @@ const HIERARCHY_RULES = {
     ]
   },
   DOUBLE_NODE: {
-    name: 'doubleNode',
+    name: 'duplicateNode',
     color: '#f00',
     backgroundColor: '#0ff',
     getChildren: () => [
@@ -96,7 +97,6 @@ export class CollectionLiveComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.apiService = new ApiServiceModel();
-    // await this.setCollectionNameFromApi();
     await this.initialiseMindMapData().then(() => {
       this.mindMap = MindMapMain.show(option, this.mindMapData);
       this.setFirstQuestionMindMap();
@@ -137,7 +137,6 @@ export class CollectionLiveComponent implements OnInit {
         }
       } else {
         this.addNodeToMindMap(currentNode, child);
-        this.setDefaultNodeColor(child);
         this.addAllChildrenToMindMap(child.getId());
       }
     }
@@ -161,8 +160,9 @@ export class CollectionLiveComponent implements OnInit {
     const nodeId = this.linkedNodeCount.toString();
     const nodeText = '(dubbel) ' + node.getText();
     this.mindMap.addNode(parentNode, nodeId, nodeText);
-    this.setNodeColor(nodeId, node.getLinkedColor(), node.getMindMapColor());
-    this.setNodeColor(node.getId(), node.getLinkedColor(), node.getMindMapColor());
+    this.mindMap.getNode(nodeId).selectedType = node.getLinkedMindMapType();
+    this.setNodeColor(nodeId, DuplicateColors.getDuplicateColor(this.linkedNodeCount), node.getMindMapColor());
+    this.setNodeColor(node.getId(), DuplicateColors.getDuplicateColor(this.linkedNodeCount), node.getMindMapColor());
     this.linkedNodeCount++;
   }
 
@@ -182,10 +182,7 @@ export class CollectionLiveComponent implements OnInit {
 
   addNodeToMindMap(parentNode: any, node: NodeModel): void {
     this.mindMap.addNode(parentNode, node.getId(), node.getText());
-  }
-
-  setDefaultNodeColor(node: NodeModel): void {
-    this.setNodeColor(node.getId(), node.getMindMapBackGroundColor(), node.getMindMapColor());
+    this.mindMap.getNode(node.getId()).selectedType = node.getMindMapType();
   }
 
   setNodeColor(nodeId: any, backGroundColor: string, frontColor): void {

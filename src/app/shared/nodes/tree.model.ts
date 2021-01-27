@@ -82,42 +82,12 @@ export class Tree{
     return children;
   }
 
-  private childrenDataToMindMap(parentId: string): object {
-    const children = this.getChildren(parentId);
-    const childrenData: Array<object> = [];
-    if (children.length === 0 && (this.nodeExists(parentId))) {
-      return this.getNode(parentId).toMindMap([]);
-    }
-    for (const child of children) {
-      childrenData.push(this.childrenDataToMindMap(child.getId()));
-    }
-    if (this.nodeExists(parentId)) {
-      return this.getNode(parentId).toMindMap(childrenData);
-    }
-    return [];
-  }
-
-  private collectionChildToMindMap(): object {
-    const root = this.getRoot();
-    const childrenData = [];
-    childrenData.push(this.childrenDataToMindMap(root.getId()));
-    return root.toMindMap(childrenData);
-  }
-
   private collectionDataToMindMap(): object {
-    let childrenData;
-    if (this.nodes.length === 0) {
-      childrenData = [];
-    } else {
-      // childrenData = this.collectionChildToMindMap();
-      // childrenData = [];
-    }
     const collectionMindMap = {
       id: this.collectionId,
       topic: this.collectionName,
       selectedType: false,
       backgroundColor: '#7EC6E1',
-      // children: childrenData};
       children: []};
     return collectionMindMap;
   }
