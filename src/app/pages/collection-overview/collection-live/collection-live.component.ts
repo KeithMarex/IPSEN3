@@ -144,112 +144,6 @@ const option = {
   enableDraggable: true,
 };
 
-const mind2 = {
-  format: 'nodeTree',
-  data: {
-    id: 1,
-    topic: 'Reisvoucher 2021',
-    selectedType: false,
-    backgroundColor: '#7EC6E1',
-    children: []
-  }
-};
-
-const mind = {
-  format: 'nodeTree',
-  data: {
-    id: '5MDed2Wplvc',
-    topic: 'Reisvoucher 2021',
-    selectedType: false,
-    backgroundColor: '#7EC6E1',
-    children: [
-      {
-        id: 80,
-        color: '#fff',
-        topic: 'show room',
-        direction: 'right',
-        selectedType: 'Question',
-        backgroundColor: '#616161',
-        children: []
-      },
-      {
-        id: 44,
-        color: '#fff',
-        topic: 'Iets',
-        direction: 'right',
-        selectedType: 'Question',
-        backgroundColor: '#616161',
-        children: [
-          {
-            id: 46,
-            color: '#fff',
-            topic: 'Iets anders',
-            direction: 'right',
-            selectedType: 'Answer',
-            backgroundColor: '#989898',
-            children: [
-              {
-                id: 49,
-                color: '#fff',
-                topic: 'Nog iets',
-                direction: 'right',
-                selectedType: 'Question',
-                backgroundColor: '#C6C6C6',
-                children: []
-              },
-              {
-                id: 51,
-                color: '#fff',
-                topic: 'Weer iets',
-                direction: 'right',
-                selectedType: 'Question',
-                backgroundColor: '#C6C6C6',
-                children: []
-              },
-              {
-                id: 47,
-                color: '#fff',
-                topic: 'Een topic',
-                direction: 'right',
-                selectedType: 'Question',
-                backgroundColor: '#C6C6C6',
-                children: []
-              },
-              {
-                id: 48,
-                color: '#fff',
-                topic: 'Nog een topic',
-                direction: 'right',
-                selectedType: 'Question',
-                backgroundColor: '#C6C6C6',
-                children: []
-              },
-              {
-                id: 50,
-                color: '#fff',
-                topic: 'Oeh!',
-                direction: 'right',
-                selectedType: 'Question',
-                backgroundColor: '#C6C6C6',
-                children: []
-              }
-            ]
-          }
-        ]
-      },
-      {
-        id: 45,
-        color: '#fff',
-        topic: 'Hey, jij hier?',
-        direction: 'right',
-        selectedType: 'Question',
-        backgroundColor: '#616161',
-        children: []
-      }
-    ]
-  }
-};
-
 const DROP_DOWN_STRING = 'DropDown';
 
 @Component({
@@ -286,32 +180,6 @@ export class CollectionLiveComponent implements OnInit {
     this.router.navigate([dashboardUrl]);
   }
 
-  removeNode(): void {
-    const selectedNode = this.mindMap.getSelectedNode();
-    const selectedId = selectedNode && selectedNode.id;
-
-    if (!selectedId) {
-      return;
-    }
-    this.mindMap.removeNode(selectedId);
-  }
-
-  addNode(): void {
-    const selectedNode = this.mindMap.getSelectedNode();
-    if (!selectedNode) {
-      return;
-    }
-
-    const nodeId = customizeUtil.uuid.newid();
-    this.mindMap.addNode(selectedNode, nodeId);
-  }
-
-  getMindMapData(): string {
-    const data = this.mindMap.getData().data;
-    console.log('data: ', data);
-    return data;
-  }
-
   setCollectionIdFromUrl(): void {
     this.collectionId = this.route.snapshot.paramMap.get('collectionId');
   }
@@ -327,14 +195,6 @@ export class CollectionLiveComponent implements OnInit {
     this.setCollectionIdFromUrl();
     await this.setCollectionNameFromApi().then(() => {
       this.tree = new Tree(this.collectionName, this.collectionId);
-    });
-  }
-
-  async addNodesToTreeOld(): Promise<void> {
-    await this.getNodesFromApiOld().then(nodes => {
-      for (const node of nodes) {
-        this.tree.addNode(node);
-      }
     });
   }
 
@@ -375,74 +235,6 @@ export class CollectionLiveComponent implements OnInit {
         this.mindMapData = this.tree.toMindMap();
       });
     });
-  }
-
-  async getNodesFromApiOld(): Promise<Array<NodeModel>> {
-    const nodes: Array<NodeModel> = [];
-    const firstQuestion = await this.getFirstQuestionFromApi();
-    nodes.push(firstQuestion);
-    const nodes2 = await this.getAllNodesFromApiOld2(firstQuestion);
-    for (const node2 of nodes2) {
-      if (node2.getId() !== undefined) {
-        nodes.push(node2);
-      }
-    }
-    return nodes;
-  }
-
-  async getAllNodesFromApiOld2(parentQuestion: Question): Promise<NodeModel[]> {
-    const nodes: Array<NodeModel> = [];
-    const answers = await this.getAnswersFromApi(parentQuestion.getId());
-    for (const answer of answers) {
-      nodes.push(answer);
-      const question = await this.getQuestionFromApi(answer.getId());
-      nodes.push(question);
-      const children = await this.getAllNodesFromApiOld2(question);
-      for (const child of children) {
-        nodes.push(child);
-      }
-    }
-    return nodes;
-  }
-
-  async getFirstQuestionFromApi(): Promise<Question> {
-    let firstQuestion;
-    const parentId = this.collectionId;
-    // const questionType = Question.getDropDownTypeString();
-    const questionType = DROP_DOWN_STRING;
-    await this.apiService.getFirstQuestionByCollectionId(this.collectionId).then((firstQuestionData) => {
-      // @ts-ignore
-      const questionId = firstQuestionData.id;
-      // @ts-ignore
-      const questionText = firstQuestionData.name;
-      firstQuestion = new Question(questionId, questionText, parentId, questionType);
-    });
-    return firstQuestion;
-  }
-
-  async getAnswersFromApi(questionId: string): Promise<Answer[]> {
-    const answers = [];
-    await this.apiService.getAnswersByQuestionId(questionId).then((answersData) => {
-      // @ts-ignore
-      // tslint:disable-next-line:prefer-for-of
-      for (let i = 0; i < answersData.length; i++) {
-        // @ts-ignore
-        const answer = new Answer(answersData[i].id, answersData[i].name, questionId);
-        answers.push(answer);
-      }
-    });
-    return answers;
-  }
-
-  async getQuestionFromApi(answerId: string): Promise<Question> {
-    let question;
-    // const questionType = Question.getDropDownTypeString();
-    const questionType = DROP_DOWN_STRING;
-    await this.apiService.getQuestionByAnswerId(answerId).then((questionData) => {
-      // @ts-ignore
-      question = new Question(questionData.id, questionData.name, answerId, questionType);
-    });
-    return question;
   }
 
   async addNodesToTreeFromApi(): Promise<void> {
