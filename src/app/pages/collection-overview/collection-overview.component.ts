@@ -41,6 +41,8 @@ export class CollectionOverviewComponent implements OnInit {
     timerProgressBar: true,
   });
   private selectedCategory: CategoryModel;
+  public LiveView = false;
+  public LiveViewCollection: CollectionModel;
 
   constructor(private router: Router) {
   }
@@ -396,5 +398,10 @@ export class CollectionOverviewComponent implements OnInit {
         });
       }
     });
+  }
+
+  LiveViewStart(collection: CollectionModel): void {
+    this.LiveView = true;
+    this.LiveViewCollection = collection;
   }
 }
