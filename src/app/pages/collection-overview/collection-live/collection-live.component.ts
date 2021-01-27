@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import { customizeUtil, MindMapMain } from 'mind-map';
+import {MindMapMain} from 'mind-map';
 import {Question} from '../../../shared/nodes/question.model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Tree} from '../../../shared/nodes/tree.model';
@@ -105,6 +105,7 @@ export class CollectionLiveComponent implements OnInit {
     });
   }
 
+  // @ts-ignore
   backClicked(): void {
     const dashboardUrl = 'admin/dashboard';
     this.router.navigate([dashboardUrl]);
@@ -146,10 +147,7 @@ export class CollectionLiveComponent implements OnInit {
   nodeIdExists(nodeModel: NodeModel): boolean {
     const nodeId = nodeModel.getId();
     const mindMapNode = this.mindMap.getNode(nodeId);
-    if (mindMapNode === null) {
-      return false;
-    }
-    return true;
+    return mindMapNode !== null;
   }
 
   isDifferentParent(parentNode: Node, node: NodeModel): boolean {
@@ -197,7 +195,7 @@ export class CollectionLiveComponent implements OnInit {
 
   async initialiseMindMapData(): Promise<void> {
     this.initialiseLinkedNodeCount();
-    await this.initialiseTree().then(async r => {
+    await this.initialiseTree().then(async () => {
       await this.addNodesToTreeFromApi().then(() => {
         this.mindMapData = this.tree.toMindMap();
       });
