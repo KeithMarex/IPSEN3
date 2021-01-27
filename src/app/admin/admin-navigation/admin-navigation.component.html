@@ -13,9 +13,6 @@
                 <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Collections</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="#">Notifications</a>
             </li>
             <li class="nav-item">
@@ -28,9 +25,9 @@
               Categorie
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" style="cursor: pointer">Maak categorie</a>
-              <a class="dropdown-item" style="cursor: pointer">Verander categorie</a>
-              <a class="dropdown-item" style="cursor: pointer">Verwijder categorie</a>
+              <a class="dropdown-item" style="cursor: pointer" (click)="createCategory()">Maak categorie</a>
+              <a class="dropdown-item" style="cursor: pointer" (click)="changeCategory()">Verander categorie</a>
+              <a class="dropdown-item" style="cursor: pointer" (click)="deleteCategory()">Verwijder categorie</a>
             </div>
           </li>
             <li class="nav-item dropdown">

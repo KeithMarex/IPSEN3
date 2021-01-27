@@ -41,6 +41,8 @@ export class CollectionOverviewComponent implements OnInit {
     timerProgressBar: true,
   });
   private selectedCategory: CategoryModel;
+  public LiveView = false;
+  public LiveViewCollection: CollectionModel;
 
   constructor(private router: Router) {
   }
@@ -85,17 +87,19 @@ export class CollectionOverviewComponent implements OnInit {
 
   async chooseCategory(el: CategoryModel, index): Promise<void> {
     if (el !== undefined){
-      this.collectionsFromCategory.splice(0);
-      this.selectedCategory = el;
+      if (this.selectedCategory === undefined || this.selectedCategory.id !== el.id){
+        this.collectionsFromCategory.splice(0);
+        this.selectedCategory = el;
 
-      this.selectedIndex = index;
+        this.selectedIndex = index;
 
-      const response = await Api.getApi().get('/collection/all/' + el.id);
-      const j = response.data.result;
+        const response = await Api.getApi().get('/collection/all/' + el.id);
+        const j = response.data.result;
 
-      for (let i = 0; i < j.length; i++) {
-        const r = response.data.result[i];
-        this.collectionsFromCategory.push(new CollectionModel(r.id, r.name, r.type, r.version));
+        for (let i = 0; i < j.length; i++) {
+          const r = response.data.result[i];
+          this.collectionsFromCategory.push(new CollectionModel(r.id, r.name, r.type, r.version));
+        }
       }
     }
   }
@@ -289,126 +293,115 @@ export class CollectionOverviewComponent implements OnInit {
     this.router.navigate([this.router.url + '/live/' + collection.id]);
   }
 
-  newCategory(): void {
+  createCategory(): void {
     Swal.fire({
-      title: 'Wat wil je doen?',
-      showDenyButton: true,
-      confirmButtonText: `Maak een nieuwe categorie`,
-      denyButtonText: `Wijzig een categorie`,
-      showCloseButton: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: 'Een nieuwe categorie',
-          html: '<label for="swal-input1">Naam</label>' +
-            '<input id="swal-input1" class="swal2-input">' +
-            '<label for="swal-input2" type="text">Icoon URL</label>' +
-            '<input id="swal-input2" class="swal2-input">',
-          confirmButtonText: 'Maak',
-          preConfirm: () => {
-            return [
-              (document.getElementById('swal-input1') as HTMLInputElement).value,
-              (document.getElementById('swal-input2') as HTMLInputElement).value,
-            ];
-          }
-        }).then((result2) => {
-          if (result2.isConfirmed){
-            Api.getApi().post('/category/create', {name: result2.value[0], icon: result2.value[1]}).then((response) => {
-              if (response.data.result) {
-                this.Toast.fire({
-                  icon: 'success',
-                  title: 'Nieuwe categorie succesvol aangemaakt'
-                });
-                this.getOnInitData();
-              }
+      title: 'Een nieuwe categorie',
+      html: '<label for="swal-input1">Naam</label>' +
+        '<input id="swal-input1" class="swal2-input">' +
+        '<label for="swal-input2" type="text">Icoon URL</label>' +
+        '<input id="swal-input2" class="swal2-input">',
+      confirmButtonText: 'Maak',
+      preConfirm: () => {
+        return [
+          (document.getElementById('swal-input1') as HTMLInputElement).value,
+          (document.getElementById('swal-input2') as HTMLInputElement).value,
+        ];
+      }
+    }).then((result2) => {
+      if (result2.isConfirmed){
+        Api.getApi().post('/category/create', {name: result2.value[0], icon: result2.value[1]}).then((response) => {
+          if (response.data.result) {
+            this.Toast.fire({
+              icon: 'success',
+              title: 'Nieuwe categorie succesvol aangemaakt'
             });
-          }
-        });
-      } else if (result.isDenied) {
-        Swal.fire({
-          title: 'Wat wil je met een categorie doen?',
-          showDenyButton: true,
-          confirmButtonText: `Verander een categorie`,
-          denyButtonText: `Verwijder een categorie`,
-          showCloseButton: true,
-        }).then(async e => {
-          if (e.isConfirmed){
-            const json = {};
-            const categorie = await Api.getApi().get('/category/all');
-            categorie.data.result.forEach(f => {
-              json[f.id] = f.name;
-            });
-
-            Swal.fire({
-              title: 'Kies een categorie',
-              input: 'select',
-              inputOptions: json,
-              showDenyButton: true,
-              confirmButtonText: `Kies`,
-              showCloseButton: true,
-            }).then(g => {
-              if (g.isConfirmed){
-                Swal.fire({
-                  title: 'Vul een nieuwe naam in voor de collectie',
-                  input: 'text',
-                  inputLabel: 'Nieuwe naam',
-                  showCancelButton: true,
-                  inputValidator: (value) => {
-                    if (!value) {
-                      return 'You need to write something!';
-                    }
-                  }
-                }).then(async h => {
-                  if (h.isConfirmed){
-                    const resp = await Api.getApi().post('/category/update', {id: g.value, name: h.value});
-                    if (resp.data.result){
-                      this.Toast.fire({
-                        icon: 'success',
-                        title: 'Succesvol aangepast!'
-                      });
-                      this.getOnInitData();
-                    } else {
-                      this.Toast.fire({
-                        icon: 'error',
-                        title: 'Er is iets fout gegaan.'
-                      });
-                    }
-                  }
-                });
-              }
-            });
-          } else if (e.isDenied) {
-            const json = {};
-            const categorie = await Api.getApi().get('/category/all');
-            categorie.data.result.forEach(f => {
-              json[f.id] = f.name;
-            });
-            Swal.fire({
-              title: 'Kies een categorie',
-              input: 'select',
-              inputOptions: json,
-              showCancelButton: true,
-              cancelButtonText: 'Annuleren',
-              confirmButtonText: `Verwijder`,
-              showCloseButton: true,
-            }).then(async j => {
-              const resp = await Api.getApi().post('/category/delete', {id: j.value});
-              if (resp.data.result){
-                this.Toast.fire({
-                  icon: 'success',
-                  title: 'Succesvol aangepast!'
-                });
-                this.getOnInitData();
-              } else {
-                this.Toast.fire({
-                  icon: 'error',
-                  title: 'Er is iets fout gegaan.'
-                });
-              }
-            });
+            this.getOnInitData();
           }
         });
       }
     });
+  }
+
+  async changeCategory(): Promise<void> {
+    const json = {};
+    const categorie = await Api.getApi().get('/category/all');
+    categorie.data.result.forEach(f => {
+      json[f.id] = f.name;
+    });
+
+    Swal.fire({
+      title: 'Kies een categorie',
+      input: 'select',
+      inputOptions: json,
+      showDenyButton: true,
+      confirmButtonText: `Kies`,
+      showCloseButton: true,
+    }).then(g => {
+      if (g.isConfirmed) {
+        Swal.fire({
+          title: 'Vul een nieuwe naam in voor de collectie',
+          input: 'text',
+          inputLabel: 'Nieuwe naam',
+          showCancelButton: true,
+          inputValidator: (value) => {
+            if (!value) {
+              return 'You need to write something!';
+            }
+          }
+        }).then(async h => {
+          if (h.isConfirmed) {
+            const resp = await Api.getApi().post('/category/update', {id: g.value, name: h.value});
+            if (resp.data.result) {
+              this.Toast.fire({
+                icon: 'success',
+                title: 'Succesvol aangepast!'
+              });
+              this.getOnInitData();
+            } else {
+              this.Toast.fire({
+                icon: 'error',
+                title: 'Er is iets fout gegaan.'
+              });
+            }
+          }
+        });
+      }
+    });
+  }
+
+  async deleteCategory(): Promise<void> {
+    const json = {};
+    const categorie = await Api.getApi().get('/category/all');
+    categorie.data.result.forEach(f => {
+      json[f.id] = f.name;
+    });
+    Swal.fire({
+      title: 'Kies een categorie',
+      input: 'select',
+      inputOptions: json,
+      showCancelButton: true,
+      cancelButtonText: 'Annuleren',
+      confirmButtonText: `Verwijder`,
+      showCloseButton: true,
+    }).then(async j => {
+      const resp = await Api.getApi().post('/category/delete', {id: j.value});
+      if (resp.data.result) {
+        this.Toast.fire({
+          icon: 'success',
+          title: 'Succesvol aangepast!'
+        });
+        this.getOnInitData();
+      } else {
+        this.Toast.fire({
+          icon: 'error',
+          title: 'Er is iets fout gegaan.'
+        });
+      }
+    });
+  }
+
+  LiveViewStart(collection: CollectionModel): void {
+    this.LiveView = true;
+    this.LiveViewCollection = collection;
   }
 }
