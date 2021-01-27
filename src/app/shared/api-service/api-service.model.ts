@@ -7,6 +7,7 @@ export class ApiServiceModel {
   // collection routes
   private GET_ALL_COLLECTIONS_PATH = 'collection/all';
   private GET_COLLECTION_BY_ID = 'collection/';
+  private GET_ALL_DATA_BY_COLLECTION_ID = '/collection/getAllData/';
 
   // question routes
   private GET_FIRST_QUESTION_BY_COLLECTION_ID = '/question/getByCollection/';
@@ -32,6 +33,11 @@ export class ApiServiceModel {
 
   public async getCollectionById(collectionId: string): Promise<object> {
     const path = this.GET_COLLECTION_BY_ID + collectionId;
+    return await this.getDataFromApi(path);
+  }
+
+  public async getAllDataFromACollection(collectionId: string): Promise<object> {
+    const path = this.GET_ALL_DATA_BY_COLLECTION_ID + collectionId;
     return await this.getDataFromApi(path);
   }
 

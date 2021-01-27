@@ -3,6 +3,7 @@ export class NodeModel {
 
   private previousNode: NodeModel;
   private mindMapColor = '#fff';
+  private mindMapBackGroundColor = '#CCC';
   private mindMapType = 'node';
 
   constructor(private id: string, private text: string, private parentId: string) {}
@@ -31,8 +32,16 @@ export class NodeModel {
     this.mindMapColor = mindMapColor;
   }
 
-  private getMindMapColor(): string {
+  public getMindMapColor(): string {
     return this.mindMapColor;
+  }
+
+  protected setMindMapBackGroundColor(mindMapBackGroundColor: string): void {
+    this.mindMapBackGroundColor = mindMapBackGroundColor;
+  }
+
+  public getMindMapBackGroundColor(): string {
+    return this.mindMapBackGroundColor;
   }
 
   protected setMindMapType(mindMapType: string): void {
