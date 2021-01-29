@@ -123,21 +123,37 @@ export class CollectionDetailsComponent implements OnInit {
   }
 
   async removeAnswer(el: AnswerModel, i: number): Promise<void> {
-    const response = await Api.getApi().post('/answer/delete', {id: el.id});
-    const r = response.data;
-    if (r.result){
-      this.answers.splice(i, 1);
-      await this.Toast.fire({
-        icon: 'success',
-        title: 'Antwoord verwijderd'
-      });
-    } else {
-      await this.Toast.fire({
-        icon: 'error',
-        title: 'Er heeft zich een fout vergedaan',
-        text: r
-      });
-    }
+
+    Swal.fire({
+      title: 'Weet je het zeker dat je dit wilt verwijderen?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Bevestigen',
+      cancelButtonText: "Annuleren"
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const response = await Api.getApi().post('/answer/delete', {id: el.id});
+        const r = response.data;
+        if (r.result){
+          this.answers.splice(i, 1);
+          await this.Toast.fire({
+            icon: 'success',
+            title: 'Antwoord verwijderd'
+          });
+        } else {
+          await this.Toast.fire({
+            icon: 'error',
+            title: 'Er heeft zich een fout vergedaan',
+            text: r
+          });
+        }
+        
+      }
+    })
+
+    
   }
 
   async editAnswer(el: AnswerModel, i): Promise<void> {

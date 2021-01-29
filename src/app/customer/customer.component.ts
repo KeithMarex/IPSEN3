@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Api } from '../api/api';
 import { Answer } from '../shared/models/answer';
+import { Notification } from '../shared/models/notification';
 import { Question } from '../shared/models/question';
 
 @Component({
@@ -16,6 +17,7 @@ export class CustomerComponent implements OnInit {
   lastAnswer : Answer;
   questionStack : Question[] = [];
   answerStack : Answer[] = [];
+  showNotification : Notification;
 
   constructor(private route: ActivatedRoute, private router : Router) {}
 
@@ -44,9 +46,23 @@ export class CustomerComponent implements OnInit {
   async onAnswered(answer : Answer)
   {
     console.log(answer);
-    await Question.getQuestionByByAnswerID(answer.id).then(question => {
+    await Question.getQuestionByByAnswerID(answer.id).then(async question => {
+      console.log("question:"); 
+      console.log(question);
+
       this.questionStack.push(this.currentQuestion); // we pushen de huidige vraag op de stack, zodat het mogelijk is om terug te gaan.
       this.answerStack.push(answer);// ook pushen we het antwoord op de stack voor preselection in het geval van terugkeren
+
+      if(question.id == undefined) // Geen vervolg vraag, controleren notificatie
+      {
+        await Notification.getNotificationByAnswerID(answer.id).then(notification => {
+          console.log(notification);
+          this.showNotification = notification;
+          this.currentQuestion.name = "";
+        });
+        return;
+      }
+      
       this.currentQuestion = question;
     });
   }
@@ -56,6 +72,7 @@ export class CustomerComponent implements OnInit {
     if (this.questionStack.length > 0)
     {
       // er bestaat een vorige vraag.
+      this.showNotification = null;
       this.currentQuestion = this.questionStack[this.questionStack.length -1];
       this.lastAnswer = this.answerStack[this.answerStack.length - 1];
       this.questionStack.pop();
