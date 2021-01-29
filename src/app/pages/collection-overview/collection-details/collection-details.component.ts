@@ -4,6 +4,7 @@ import {CollectionModel} from '../../../shared/models/collection.model';
 import {Api} from '../../../api/api';
 import {AnswerModel} from '../../../shared/models/answer.model';
 import Swal, {SweetAlertResult} from 'sweetalert2';
+import fire = module
 
 @Component({
   selector: 'app-collection-details',
@@ -54,9 +55,20 @@ export class CollectionDetailsComponent implements OnInit {
     });
   }
 
-  async createAnswer(): Promise<void> {
-    await Swal.fire({
-      html: `<h1><b>Nieuw antwoord</b></h1>
+  createAnswer(): void {
+    Swal.fire({
+      title: 'Wat wil je doen?',
+      text: 'Ik wil een nieuw antwoord maken met...',
+      icon: 'question',
+      showDenyButton: true,
+      showConfirmButton: true,
+      showCancelButton: false,
+      confirmButtonText: 'Een nieuw vervolg',
+      denyButtonText: 'Een bestaand vervolg (Koppelen)'
+    }).then(async res => {
+      if (res.isConfirmed){
+        Swal.fire({
+          html: `<h1><b>Nieuw antwoord</b></h1>
              <hr>
              <input id="swal-input2" class="swal2-input" placeholder="Vul hier een nieuw antwoord in...">
              <hr>
@@ -69,60 +81,116 @@ export class CollectionDetailsComponent implements OnInit {
               </select>
               <br>
         `,
-      focusConfirm: false,
-      confirmButtonText: 'Oke',
-      preConfirm: () => {
-        // tslint:disable-next-line:max-line-length
-        if ((document.getElementById('swal-input2') as HTMLInputElement).value && (document.getElementById('sel1') as HTMLInputElement).value) {
-          return [
-            (document.getElementById('swal-input2') as HTMLInputElement).value,
-            (document.getElementById('sel1') as HTMLInputElement).value
-          ];
-        } else {
-          Swal.showValidationMessage('Je moet waardes opgeven');
-        }
-      },
-    }).then(async (result) => {
-      if (result.isConfirmed && result.value[1] === 'Notificatie') {
-        this.res = result;
-        this.currText = 'Nieuwe ' + result.value[1].toLowerCase() + ' voor ' + result.value[0];
-        this.te.fire();
-      } else if (result.value[1] === 'Vooraf'){
-        // Todo Keuze menu uit notificaties voor collectie
-      } else {
-        await Swal.fire({
-            inputLabel: 'Nieuwe ' + result.value[1].toLowerCase() + ' voor ' + result.value[0],
-            input: 'text',
-            inputPlaceholder: 'Vul een nieuwe vraag in',
-            showCancelButton: true,
-            confirmButtonText: 'Oke',
-            cancelButtonText: 'Annuleren',
-            inputValidator: (value) => {
-              if (!value) {
-                return 'Je moet iets opgeven!';
-              }
+          focusConfirm: false,
+          confirmButtonText: 'Oke',
+          preConfirm: () => {
+            // tslint:disable-next-line:max-line-length
+            if ((document.getElementById('swal-input2') as HTMLInputElement).value && (document.getElementById('sel1') as HTMLInputElement).value) {
+              return [
+                (document.getElementById('swal-input2') as HTMLInputElement).value,
+                (document.getElementById('sel1') as HTMLInputElement).value
+              ];
+            } else {
+              Swal.showValidationMessage('Je moet waardes opgeven');
             }
-          }).then(async (result2) => {
-            if (result2.isConfirmed && result2.value) {
+          },
+        }).then(async (result) => {
+          if (result.isConfirmed && result.value[1] === 'Notificatie') {
+            this.res = result;
+            this.currText = 'Nieuwe ' + result.value[1].toLowerCase() + ' voor ' + result.value[0];
+            this.te.fire();
+          } else if (result.value[1] === 'Vooraf'){
+            // Todo Keuze menu uit notificaties voor collectie
+          } else {
+            await Swal.fire({
+              inputLabel: 'Nieuwe ' + result.value[1].toLowerCase() + ' voor ' + result.value[0],
+              input: 'text',
+              inputPlaceholder: 'Vul een nieuwe vraag in',
+              showCancelButton: true,
+              confirmButtonText: 'Oke',
+              cancelButtonText: 'Annuleren',
+              inputValidator: (value) => {
+                if (!value) {
+                  return 'Je moet iets opgeven!';
+                }
+              }
+            }).then(async (result2) => {
+              if (result2.isConfirmed && result2.value) {
+                this.Toast.fire({
+                  icon: 'success',
+                  title: 'Antwoord aangemaakt'
+                });
+
+                const response = await Api.getApi().post('/answer/create', {
+                  name: result.value[0],
+                  question_id: this.firstQuestion['id']
+                });
+                const r = response.data;
+
+                const response2 = await Api.getApi().post('/question/create', {
+                  name: result2.value,
+                  answer_id: r.id
+                });
+
+                this.answers.push(new AnswerModel(r.id, result.value[0]));
+              }
+            });
+          }
+        });
+      } else if (res.isDenied){
+        const json = {};
+        const idLijst = [];
+        for (const i of this.answers){
+          if (!i.hasNotification){
+            await Api.getApi().get('/question/getByAnswer/' + i.id).then(res => {
+              if (!idLijst.includes(res.data.result.id)){
+                json[res.data.result.id] = res.data.result.name;
+                idLijst.push(res.data.result.id);
+              }
+            });
+          }
+        }
+
+        Swal.fire({
+          title: 'Kies een vervolg vraag',
+          input: 'select',
+          inputOptions: json,
+          showDenyButton: false,
+          confirmButtonText: `Kies`,
+          showCloseButton: true,
+          inputValidator: (value) => {
+            if (!value) {
+              return 'Je moet een categorie selecteren!';
+            }
+          }
+        }).then(rest => {
+          Swal.fire({
+            title: 'Vul een nieuwe antwoord in',
+            input: 'text',
+          }).then(async result => {
+            if (result.isConfirmed){
               this.Toast.fire({
                 icon: 'success',
                 title: 'Antwoord aangemaakt'
               });
 
               const response = await Api.getApi().post('/answer/create', {
-                name: result.value[0],
+                name: result.value,
                 question_id: this.firstQuestion['id']
               });
               const r = response.data;
 
-              const response2 = await Api.getApi().post('/question/create', {
-                name: result2.value,
-                answer_id: r.id
-              });
+              // ToDo link
 
-              this.answers.push(new AnswerModel(r.id, result.value[0]));
-            }
+              // const response2 = await Api.getApi().post('/question/create', {
+              //   name: result2.value,
+              //   answer_id: r.id
+              // });
+              //
+              // this.answers.push(new AnswerModel(r.id, result.value[0]));
+            };
           });
+        });
       }
     });
   }
@@ -154,11 +222,11 @@ export class CollectionDetailsComponent implements OnInit {
             text: r
           });
         }
-        
+
       }
     })
 
-    
+
   }
 
   async editAnswer(el: AnswerModel, i): Promise<void> {
