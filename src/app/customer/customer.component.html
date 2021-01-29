@@ -26,6 +26,35 @@
           <p class="mb-0" [innerHTML]="showNotification.text"></p>
         </div>
 
+        <div *ngIf="showEndInfo">
+          <hr>
+          <p><b>Beantwoord dit uw vraag?</b></p>
+          <p>
+            <a class="btn btn-primary" data-toggle="collapse" href="#extraInfoJa" role="button" aria-expanded="false" aria-controls="extraInfoJa">
+              Ja
+            </a>
+          </p>
+          <div class="collapse" id="extraInfoJa">
+            <div class="card card-body">
+              We zijn blij te horen u van dienst te zijn geweest!
+            </div>
+          </div>
+          <br>
+          <p>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#extraInfoNee" aria-expanded="false" aria-controls="extraInfoNee">
+              Nee
+            </button>
+          </p>
+          <div class="collapse" id="extraInfoNee">
+            <div class="card card-body">
+              Wat jammer om te horen. We zouden u telefonisch te woord te kunnen staan om u verder te helpen.<br>
+              Telefoon: 033 43 42 342<br>
+              Bereikbaar ma/vr 8.30 - 17.30 (Lokaal tarief)
+            </div>
+          </div>
+
+        </div>
+
         <br><br>
 <!--        <div *ngIf="!isFirstQuestion">-->
           <div class="btn" type="button" id="previousQuestionButton" (click)="onGoBack()">

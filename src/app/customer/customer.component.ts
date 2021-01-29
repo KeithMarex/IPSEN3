@@ -18,6 +18,7 @@ export class CustomerComponent implements OnInit {
   questionStack : Question[] = [];
   answerStack : Answer[] = [];
   showNotification : Notification;
+  showEndInfo : boolean = false;
 
   constructor(private route: ActivatedRoute, private router : Router) {}
 
@@ -59,6 +60,8 @@ export class CustomerComponent implements OnInit {
           console.log(notification);
           this.showNotification = notification;
           this.currentQuestion.name = "";
+          //Check maken of het eindnotificatie is
+          this.showEndInfo = true;
         });
         return;
       }
@@ -69,6 +72,7 @@ export class CustomerComponent implements OnInit {
 
   onGoBack()
   {
+    this.showEndInfo = false;
     if (this.questionStack.length > 0)
     {
       // er bestaat een vorige vraag.
