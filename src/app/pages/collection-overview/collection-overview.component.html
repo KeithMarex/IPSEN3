@@ -21,7 +21,7 @@
                         <li *ngFor="let el of this.categorien; let i = index"
                             [ngClass]="{'active': el.id === selectedCollection.id }" class="content-list__item"
                             style="cursor: pointer">
-                          <div class="row" (click)="chooseCategory(el, i)">
+                          <div class="row category" (click)="chooseCategory(el, i)">
                             <div class="col-md-2 category-image">
                               <img src="{{el.icon_url}}" alt="">
                             </div>
@@ -31,7 +31,7 @@
                           </div>
                           <div class="col-md-9 offset-2">
                             <ul *ngIf="this.selectedIndex === i" style="list-style-type: none">
-                              <li *ngFor="let col of this.collectionsFromCategory"
+                              <li class="pl-2" *ngFor="let col of this.collectionsFromCategory"
                                   (click)="changeSelectedCollection(col)">
                                 <a>{{ col.name }}</a>
                               </li>
