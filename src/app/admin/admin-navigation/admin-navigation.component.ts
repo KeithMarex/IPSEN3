@@ -1,10 +1,11 @@
-import {Component, OnInit, Output, EventEmitter, ViewChild} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, ViewChild, Input} from '@angular/core';
 import Swal from 'sweetalert2';
 import {HttpClient} from '@angular/common/http';
-import {Cookie} from 'ng2-cookies/ng2-cookies';
 import {Router} from '@angular/router';
 import {UserModel} from '../../shared/models/user.model';
 import {Api} from '../../api/api';
+import {NotificationModel} from "../../shared/models/notification.model";
+import {Cookie} from 'ng2-cookies/ng2-cookies';
 
 @Component({
   selector: 'app-admin-navigation',
@@ -15,7 +16,10 @@ export class AdminNavigationComponent implements OnInit {
   @Output() createCategor = new EventEmitter();
   @Output() changeCategor = new EventEmitter();
   @Output() deleteCategor = new EventEmitter();
+  public notifications: NotificationModel[] = [];
   @ViewChild('notificationTab') nt;
+  @Input() selectedCollectionId: number;
+  currData: string;
 
   constructor(private http: HttpClient, private route: Router) {
   }
@@ -156,5 +160,11 @@ export class AdminNavigationComponent implements OnInit {
 
   openNotification(): void {
     this.nt.fire();
+  }
+
+  makeNotification() {
+    Api.getApi().post('/notification/create', {}).then(result => {
+
+    });
   }
 }

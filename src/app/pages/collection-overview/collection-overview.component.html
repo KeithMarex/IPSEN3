@@ -1,4 +1,4 @@
-<app-admin-navigation (createCategor)="createCategory()" (changeCategor)="changeCategory()" (deleteCategor)="deleteCategory()"></app-admin-navigation>
+<app-admin-navigation [selectedCollectionId]="this.selectedCollection.id" (createCategor)="createCategory()" (changeCategor)="changeCategory()" (deleteCategor)="deleteCategory()"></app-admin-navigation>
 <app-admin-breadcrumb></app-admin-breadcrumb>
 <div class="container-fluid">
     <div class="row">
