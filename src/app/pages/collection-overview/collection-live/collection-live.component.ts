@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import { customizeUtil, MindMapMain } from 'mind-map';
+import {MindMapMain} from 'mind-map';
 import {Question} from '../../../shared/nodes/question.model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Tree} from '../../../shared/nodes/tree.model';
@@ -8,6 +8,7 @@ import {Answer} from '../../../shared/nodes/answer.model';
 import {ApiServiceModel} from '../../../shared/api-service/api-service.model';
 import {DuplicateColors} from '../../../shared/nodes/duplicate-colors.model';
 import {CollectionModel} from '../../../shared/models/collection.model';
+import {Notification} from '../../../shared/nodes/notification.model';
 
 const HIERARCHY_RULES = {
   ROOT: {
@@ -104,6 +105,7 @@ export class CollectionLiveComponent implements OnInit {
     });
   }
 
+  // @ts-ignore
   backClicked(): void {
     const dashboardUrl = 'admin/dashboard';
     this.router.navigate([dashboardUrl]);
@@ -145,10 +147,7 @@ export class CollectionLiveComponent implements OnInit {
   nodeIdExists(nodeModel: NodeModel): boolean {
     const nodeId = nodeModel.getId();
     const mindMapNode = this.mindMap.getNode(nodeId);
-    if (mindMapNode === null) {
-      return false;
-    }
-    return true;
+    return mindMapNode !== null;
   }
 
   isDifferentParent(parentNode: Node, node: NodeModel): boolean {
@@ -183,6 +182,11 @@ export class CollectionLiveComponent implements OnInit {
   addNodeToMindMap(parentNode: any, node: NodeModel): void {
     this.mindMap.addNode(parentNode, node.getId(), node.getText());
     this.mindMap.getNode(node.getId()).selectedType = node.getMindMapType();
+    this.setDefaultColor(node);
+  }
+
+  setDefaultColor(node: NodeModel): void {
+    this.setNodeColor(node.getId(), node.getMindMapColor(), node.getMindMapBackGroundColor());
   }
 
   setNodeColor(nodeId: any, backGroundColor: string, frontColor): void {
@@ -191,7 +195,7 @@ export class CollectionLiveComponent implements OnInit {
 
   async initialiseMindMapData(): Promise<void> {
     this.initialiseLinkedNodeCount();
-    await this.initialiseTree().then(async r => {
+    await this.initialiseTree().then(async () => {
       await this.addNodesToTreeFromApi().then(() => {
         this.mindMapData = this.tree.toMindMap();
       });
@@ -234,6 +238,7 @@ export class CollectionLiveComponent implements OnInit {
     for (let i = 0; i < answersData.length; i++) {
       const answer = new Answer(answersData[i].id, answersData[i].name, parentId);
       this.tree.addNode(answer);
+      this.extractNotifications(answersData[i]);
       this.extractQuestions(answersData[i]);
     }
   }
@@ -249,5 +254,18 @@ export class CollectionLiveComponent implements OnInit {
     const question = new Question(questionData.id, questionData.name, data.id, questionType);
     this.tree.addNode(question);
     this.extractAnswers(questionData);
+  }
+
+  extractNotifications(data: object): void {
+    // @ts-ignore
+    const notificationsData = data.notifications;
+    if (notificationsData === undefined) {
+      return;
+    }
+    const notificationData = notificationsData[0];
+    // @ts-ignore
+    const notification = new Notification(notificationData.id, notificationData.text, data.id);
+    this.tree.addNode(notification);
+    this.extractQuestions(notificationData);
   }
 }
