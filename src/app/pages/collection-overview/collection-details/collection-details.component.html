@@ -48,7 +48,7 @@
   </div>
 </div>
 
-<swal #textEditor text="Hoi!" (confirm)="textEditorFunc()">
+<swal #textEditor (confirm)="textEditorFunc()">
   <div *swalPortal>
     <h1>{{this.currText}}</h1>
     <app-rich-text-editor (data)="this.currData = $event"></app-rich-text-editor>

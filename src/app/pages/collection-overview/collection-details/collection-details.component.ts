@@ -3,8 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {CollectionModel} from '../../../shared/models/collection.model';
 import {Api} from '../../../api/api';
 import {AnswerModel} from '../../../shared/models/answer.model';
-import Swal, {SweetAlertResult} from 'sweetalert2';
-import fire = module
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-collection-details',
