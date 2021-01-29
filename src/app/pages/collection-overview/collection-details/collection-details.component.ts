@@ -14,10 +14,11 @@ export class CollectionDetailsComponent implements OnInit {
 
   selectedCollection: CollectionModel = null;
   answers: AnswerModel[] = [];
-  firstQuestion: string;
+  firstQuestion: CollectionModel;
   isDataAvailable = false;
 
-  routes = ['Collections'];
+  routesNormal = ['Collections'];
+  routes = [];
 
   Toast = Swal.mixin({
     toast: true,
@@ -32,6 +33,7 @@ export class CollectionDetailsComponent implements OnInit {
   currText: any;
   currData: any;
   private res;
+  public previousQuestion: string;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -43,7 +45,7 @@ export class CollectionDetailsComponent implements OnInit {
       this.firstQuestion = firstQuestion.data.result;
       const r = response.data.result;
       this.selectedCollection = new CollectionModel(r.id, r.name, r.type, r.version);
-      this.routes.push(this.selectedCollection.name);
+      this.routesNormal.push(this.selectedCollection.name);
       // tslint:disable-next-line:prefer-for-of
       for (let i = 0; i < answers.data.result.length; i++){
         this.answers.push(new AnswerModel(answers.data.result[i].id, answers.data.result[i].name));
@@ -62,6 +64,7 @@ export class CollectionDetailsComponent implements OnInit {
              <select class="form-control" id="sel1">
                 <option value="Vraag">Vraag</option>
                 <option value="Notificatie">Notificatie</option>
+                <option value="Vooraf">Vooraf aangemaakte notificatie</option>
 <!--                <option value="Email">Email</option>-->
               </select>
               <br>
@@ -84,6 +87,8 @@ export class CollectionDetailsComponent implements OnInit {
         this.res = result;
         this.currText = 'Nieuwe ' + result.value[1].toLowerCase() + ' voor ' + result.value[0];
         this.te.fire();
+      } else if (result.value[1] === 'Vooraf'){
+        // Todo Keuze menu uit notificaties voor collectie
       } else {
         await Swal.fire({
             inputLabel: 'Nieuwe ' + result.value[1].toLowerCase() + ' voor ' + result.value[0],
@@ -190,6 +195,8 @@ export class CollectionDetailsComponent implements OnInit {
   }
 
   async nextQuestion(el: AnswerModel): Promise<void> {
+    this.routes.push(this.firstQuestion);
+
     this.answers.splice(0);
     const firstQuestion = await Api.getApi().get('/question/getByAnswer/' + el.id);
     this.firstQuestion = firstQuestion.data.result;
@@ -220,5 +227,16 @@ export class CollectionDetailsComponent implements OnInit {
 
     console.log(this.currData);
     this.answers.push(new AnswerModel(r.id, this.res.value[0]));
+  }
+
+  async goTo($event: CollectionModel): Promise<void> {
+    this.answers.splice(0);
+    this.firstQuestion = $event;
+
+    const answers = await Api.getApi().get('/answer/getByQuestion/' + $event.id);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < answers.data.result.length; i++) {
+      this.answers.push(new AnswerModel(answers.data.result[i].id, answers.data.result[i].name));
+    }
   }
 }

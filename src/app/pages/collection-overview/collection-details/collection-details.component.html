@@ -1,5 +1,5 @@
 <app-admin-navigation></app-admin-navigation>
-<app-admin-breadcrumb [active]="routes"></app-admin-breadcrumb>
+<app-admin-breadcrumb [active]="routes" [activeNormal]="routesNormal" (goToQ)="goTo($event)"></app-admin-breadcrumb>
 <div class="container-fluid" *ngIf="isDataAvailable">
   <div class="row">
     <div class="sidebar__wrapper col-sm-3 ">
