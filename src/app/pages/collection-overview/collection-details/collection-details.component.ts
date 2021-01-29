@@ -182,13 +182,13 @@ export class CollectionDetailsComponent implements OnInit {
 
               // ToDo link
 
-              // const response2 = await Api.getApi().post('/question/create', {
-              //   name: result2.value,
-              //   answer_id: r.id
-              // });
-              //
-              // this.answers.push(new AnswerModel(r.id, result.value[0]));
-            };
+              Api.getApi().post('/question/link', {
+                question_id: rest.value,
+                answer_id: r.id
+              }).then( () => {
+                this.answers.push(new AnswerModel(r.id, result.value));
+              });
+            }
           });
         });
       }
@@ -196,7 +196,6 @@ export class CollectionDetailsComponent implements OnInit {
   }
 
   async removeAnswer(el: AnswerModel, i: number): Promise<void> {
-
     Swal.fire({
       title: 'Weet je het zeker dat je dit wilt verwijderen?',
       icon: 'warning',
@@ -204,7 +203,7 @@ export class CollectionDetailsComponent implements OnInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Bevestigen',
-      cancelButtonText: "Annuleren"
+      cancelButtonText: 'Annuleren'
     }).then(async (result) => {
       if (result.isConfirmed) {
         const response = await Api.getApi().post('/answer/delete', {id: el.id});
@@ -218,15 +217,13 @@ export class CollectionDetailsComponent implements OnInit {
         } else {
           await this.Toast.fire({
             icon: 'error',
-            title: 'Er heeft zich een fout vergedaan',
+            title: 'Er heeft zich een fout voorgedaan',
             text: r
           });
         }
 
       }
-    })
-
-
+    });
   }
 
   async editAnswer(el: AnswerModel, i): Promise<void> {
