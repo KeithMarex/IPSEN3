@@ -1,5 +1,6 @@
-import {Component, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {Router} from "@angular/router";
+import {CollectionModel} from "../../shared/models/collection.model";
 
 @Component({
   selector: 'app-admin-breadcrumb',
@@ -9,7 +10,9 @@ import {Router} from "@angular/router";
 export class AdminBreadcrumbComponent implements OnInit {
 
   @Input() home = 'Dashboard';
+  @Input() activeNormal = [];
   @Input() active = [];
+  @Output() goToQ = new EventEmitter<CollectionModel>();
 
 
   constructor(private route: Router) { }
@@ -19,5 +22,10 @@ export class AdminBreadcrumbComponent implements OnInit {
 
   goToDashboard(): void {
     this.route.navigate(['admin/dashboard']);
+  }
+
+  goTo(i: CollectionModel, index: number): void {
+    this.goToQ.emit(i);
+    this.active.splice(index + 1);
   }
 }
