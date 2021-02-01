@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
-import {Router} from "@angular/router";
-import {CollectionModel} from "../../shared/models/collection.model";
+import {Router} from '@angular/router';
+import {CollectionModel} from '../../shared/models/collection.model';
 
 @Component({
   selector: 'app-admin-breadcrumb',
