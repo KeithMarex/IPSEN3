@@ -1,3 +1,4 @@
+import {DuplicateColors} from './duplicate-colors.model';
 
 export class NodeModel {
 
@@ -7,6 +8,7 @@ export class NodeModel {
   private linkedColor = '#888';
   private mindMapType = 'node';
   private linkedMindMapType = 'duplicateNode';
+  private linkedNumber;
 
   constructor(private id: string, private text: string, private parentId: string) {}
 
@@ -46,13 +48,13 @@ export class NodeModel {
     return this.mindMapBackGroundColor;
   }
 
-  protected setLinkedColor(linkedColor: string): void {
-    this.linkedColor = linkedColor;
-  }
-
-  public getLinkedColor(): string {
-    return this.linkedColor;
-  }
+  // protected setLinkedColor(linkedColor: string): void {
+  //   this.linkedColor = linkedColor;
+  // }
+  //
+  // public getLinkedColor(): string {
+  //   return this.linkedColor;
+  // }
 
   public getLinkedMindMapType(): string {
     return this.linkedMindMapType;
@@ -64,5 +66,17 @@ export class NodeModel {
 
   public getMindMapType(): string {
     return this.mindMapType;
+  }
+
+  public setLinkedNumber(linkedNumber: number): void {
+    this.linkedNumber = linkedNumber;
+  }
+
+  public getLinkedNumber(): number {
+    return this.linkedNumber;
+  }
+
+  public getLinkedColor(): string {
+    return DuplicateColors.getDuplicateColor(this.linkedNumber);
   }
 }

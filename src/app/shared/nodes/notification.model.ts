@@ -6,7 +6,6 @@ export class Notification extends NodeModel{
     super(id, text, parentId);
     super.setMindMapColor('#f5b7b1');
     super.setMindMapBackGroundColor('#f192b2');
-    super.setLinkedColor('#c93c6b');
     super.setMindMapType('Notification');
   }
 }

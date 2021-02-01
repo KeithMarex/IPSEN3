@@ -90,7 +90,9 @@ export class CollectionLiveComponent implements OnInit {
   expected: string;
   result: string;
   firstNodeId: string;
-  linkedNodeCount: number;
+  linkedNodeStartId: number;
+  linkedNodeColorNumber: number;
+  linkedNodes: NodeModel[];
   @Input() collection: CollectionModel;
 
   constructor(private route: ActivatedRoute, private router: Router) {
@@ -156,13 +158,39 @@ export class CollectionLiveComponent implements OnInit {
   }
 
   addLinkedNodeToMindMap(parentNode: NodeModel, node: NodeModel): void {
-    const nodeId = this.linkedNodeCount.toString();
-    const nodeText = '(dubbel) ' + node.getText();
-    this.mindMap.addNode(parentNode, nodeId, nodeText);
-    this.mindMap.getNode(nodeId).selectedType = node.getLinkedMindMapType();
-    this.setNodeColor(nodeId, DuplicateColors.getDuplicateColor(this.linkedNodeCount), node.getMindMapColor());
-    this.setNodeColor(node.getId(), DuplicateColors.getDuplicateColor(this.linkedNodeCount), node.getMindMapColor());
-    this.linkedNodeCount++;
+    const linkedNodeId = this.generateLinkedNodeId();
+    const nodeText = '*' + node.getText(); // ToDo - better styling
+    this.mindMap.addNode(parentNode, linkedNodeId, nodeText);
+    this.mindMap.getNode(linkedNodeId).selectedType = node.getLinkedMindMapType();
+    if (this.isAlreadyLinkedNode(node.getId())) {
+      this.setSameColorMindMap(node.getId(), linkedNodeId);
+      return;
+    }
+    this.linkedNodes.push(node);
+    this.setNodeColor(linkedNodeId, DuplicateColors.getDuplicateColor(this.linkedNodeColorNumber), node.getMindMapColor());
+    this.setNodeColor(node.getId(), DuplicateColors.getDuplicateColor(this.linkedNodeColorNumber), node.getMindMapColor());
+    this.linkedNodeColorNumber++;
+  }
+
+  generateLinkedNodeId(): string {
+    const linkedNodeId = this.linkedNodeStartId.toString();
+    this.linkedNodeStartId++;
+    return linkedNodeId;
+  }
+
+  isAlreadyLinkedNode(nodeId: string): boolean {
+    for (const node of this.linkedNodes) {
+      if (node.getId() === nodeId) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  setSameColorMindMap(exampleNodeId: string, toChangeNodeId: string): void {
+    const backGroundColor = this.mindMap.getNode(exampleNodeId).data['background-color'];
+    const foreGroundColor = this.mindMap.getNode(exampleNodeId).data['foreground-color'];
+    this.setNodeColor(toChangeNodeId, backGroundColor, foreGroundColor);
   }
 
   addNodesToMindMap(): void {
@@ -194,7 +222,7 @@ export class CollectionLiveComponent implements OnInit {
   }
 
   async initialiseMindMapData(): Promise<void> {
-    this.initialiseLinkedNodeCount();
+    this.initialiseLinkedNodeNumbers();
     await this.initialiseTree().then(async () => {
       await this.addNodesToTreeFromApi().then(() => {
         this.mindMapData = this.tree.toMindMap();
@@ -202,8 +230,10 @@ export class CollectionLiveComponent implements OnInit {
     });
   }
 
-  initialiseLinkedNodeCount(): void {
-    this.linkedNodeCount = 0;
+  initialiseLinkedNodeNumbers(): void {
+    this.linkedNodeStartId = 0;
+    this.linkedNodeColorNumber = 0;
+    this.linkedNodes = [];
   }
 
   async addNodesToTreeFromApi(): Promise<void> {
