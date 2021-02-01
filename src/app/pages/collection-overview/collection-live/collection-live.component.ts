@@ -68,7 +68,6 @@ const option = {
   theme: 'normal',
   editable: true,
   selectable: false,
-  depth: 15,
   hierarchyRule: HIERARCHY_RULES,
   enableDraggable: true,
 };
