@@ -10,8 +10,6 @@ export class Question {
 
         // fetch alle vragen voor deze vraag.
         this.getAllAnswers();
-        console.log('Antwoorden:');
-        console.log(this._answers);
     }
 
     get id(): string

@@ -28,9 +28,9 @@ export class HomepageComponent implements OnInit {
     });
   }
 
-  private loadCollectionsByCat(catId : number) {
+  private loadCollectionsByCat(catId: number): void {
     const api = Api.getApi();
-    api.get('/collection/all/' + catId).then((response) => {
+    api.post('/collection/all', { categoryId: catId, type: 'published'}).then((response) => {
       this.collections = response.data.result;
       console.log(response.data);
     });

@@ -66,7 +66,7 @@ export class CollectionOverviewComponent implements OnInit {
       this.categorien.push(new CategoryModel(e.id, e.name, e.icon));
     });
 
-    const response = await Api.getApi().get('/collection/all');
+    const response = await Api.getApi().post('/collection/all');
     this.convertDataToObject(response.data.result);
   }
 
@@ -93,7 +93,8 @@ export class CollectionOverviewComponent implements OnInit {
 
         this.selectedIndex = index;
 
-        const response = await Api.getApi().get('/collection/all/' + el.id);
+
+        const response = await Api.getApi().post('/collection/all', { categoryId: el.id, type: 'published'});
         const j = response.data.result;
 
         for (let i = 0; i < j.length; i++) {
