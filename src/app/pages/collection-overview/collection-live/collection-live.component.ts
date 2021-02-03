@@ -102,6 +102,7 @@ export class CollectionLiveComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    this.initialisingColors();
     this.apiService = new ApiServiceModel();
     await this.initialiseMindMapData().then(() => {
       this.mindMap = MindMapMain.show(option, this.mindMapData);
@@ -173,7 +174,7 @@ export class CollectionLiveComponent implements OnInit {
 
   addLinkedNodeToMindMap(parentNode: NodeModel, node: NodeModel): void {
     const linkedNodeId = this.generateLinkedNodeId();
-    const nodeText = '*' + node.getText(); // ToDo - better styling
+    const nodeText = '*' + node.getText();
     this.mindMap.addNode(parentNode, linkedNodeId, nodeText);
     this.mindMap.getNode(linkedNodeId).selectedType = node.getLinkedMindMapType();
     if (this.isAlreadyLinkedNode(node.getId())) {
