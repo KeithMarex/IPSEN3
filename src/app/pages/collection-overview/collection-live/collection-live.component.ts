@@ -117,7 +117,6 @@ export class CollectionLiveComponent implements OnInit {
     const tempParentId = '0';
     const tempType = 'DropDown';
     this.colorCollectionName = HIERARCHY_RULES.ROOT.backgroundColor;
-    console.log(this.colorCollectionName);
     this.colorQuestion = new Question(tempId, tempText, tempParentId, tempType).getMindMapBackGroundColor();
     this.colorAnswer = new Answer(tempId, tempParentId, tempText).getMindMapBackGroundColor();
     this.colorNotification = new Notification(tempId, tempParentId, tempText).getMindMapBackGroundColor();
@@ -175,7 +174,7 @@ export class CollectionLiveComponent implements OnInit {
 
   addLinkedNodeToMindMap(parentNode: NodeModel, node: NodeModel): void {
     const linkedNodeId = this.generateLinkedNodeId();
-    const nodeText = '*' + node.getText(); // ToDo - better styling
+    const nodeText = '*' + node.getText();
     this.mindMap.addNode(parentNode, linkedNodeId, nodeText);
     this.mindMap.getNode(linkedNodeId).selectedType = node.getLinkedMindMapType();
     if (this.isAlreadyLinkedNode(node.getId())) {
