@@ -102,6 +102,7 @@ export class CollectionLiveComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    this.initialisingColors();
     this.apiService = new ApiServiceModel();
     await this.initialiseMindMapData().then(() => {
       this.mindMap = MindMapMain.show(option, this.mindMapData);
@@ -116,6 +117,7 @@ export class CollectionLiveComponent implements OnInit {
     const tempParentId = '0';
     const tempType = 'DropDown';
     this.colorCollectionName = HIERARCHY_RULES.ROOT.backgroundColor;
+    console.log(this.colorCollectionName);
     this.colorQuestion = new Question(tempId, tempText, tempParentId, tempType).getMindMapBackGroundColor();
     this.colorAnswer = new Answer(tempId, tempParentId, tempText).getMindMapBackGroundColor();
     this.colorNotification = new Notification(tempId, tempParentId, tempText).getMindMapBackGroundColor();
