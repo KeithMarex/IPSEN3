@@ -162,8 +162,8 @@ export class AdminNavigationComponent implements OnInit {
     this.nt.fire();
   }
 
-  makeNotification() {
-    Api.getApi().post('/notification/create', {}).then(result => {
+  makeNotification(html: string): void {
+    Api.getApi().post('/notification/create', {text: html}).then(result => {
 
     });
   }
