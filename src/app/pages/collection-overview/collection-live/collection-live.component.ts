@@ -92,6 +92,10 @@ export class CollectionLiveComponent implements OnInit {
   linkedNodeStartId: number;
   linkedNodeColorNumber: number;
   linkedNodes: NodeModel[];
+  colorCollectionName: string;
+  colorQuestion: string;
+  colorAnswer: string;
+  colorNotification: string;
   @Input() collection: CollectionModel;
 
   constructor(private route: ActivatedRoute, private router: Router) {
@@ -104,6 +108,17 @@ export class CollectionLiveComponent implements OnInit {
       this.setFirstQuestionMindMap();
       this.addNodesToMindMap();
     });
+  }
+
+  initialisingColors(): void {
+    const tempId = '1';
+    const tempText = 'temp';
+    const tempParentId = '0';
+    const tempType = 'DropDown';
+    this.colorCollectionName = HIERARCHY_RULES.ROOT.backgroundColor;
+    this.colorQuestion = new Question(tempId, tempText, tempParentId, tempType).getMindMapBackGroundColor();
+    this.colorAnswer = new Answer(tempId, tempParentId, tempText).getMindMapBackGroundColor();
+    this.colorNotification = new Notification(tempId, tempParentId, tempText).getMindMapBackGroundColor();
   }
 
   // @ts-ignore
