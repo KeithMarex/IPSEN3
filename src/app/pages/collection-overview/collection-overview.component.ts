@@ -94,7 +94,7 @@ export class CollectionOverviewComponent implements OnInit {
         this.selectedIndex = index;
 
 
-        const response = await Api.getApi().post('/collection/all', { categoryId: el.id, type: 'published'});
+        const response = await Api.getApi().post('/collection/all', { categoryId: el.id });
         const j = response.data.result;
 
         for (let i = 0; i < j.length; i++) {
