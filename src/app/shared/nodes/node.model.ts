@@ -48,14 +48,6 @@ export class NodeModel {
     return this.mindMapBackGroundColor;
   }
 
-  // protected setLinkedColor(linkedColor: string): void {
-  //   this.linkedColor = linkedColor;
-  // }
-  //
-  // public getLinkedColor(): string {
-  //   return this.linkedColor;
-  // }
-
   public getLinkedMindMapType(): string {
     return this.linkedMindMapType;
   }

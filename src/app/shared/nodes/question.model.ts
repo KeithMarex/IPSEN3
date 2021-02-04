@@ -5,9 +5,8 @@ export class Question extends NodeModel{
 
   constructor(id: string, text: string, parentId: string, questionType: string) {
     super(id, text, parentId);
-    super.setMindMapColor('#f4d03f');
+    super.setMindMapColor('#FDD302');
     super.setMindMapBackGroundColor('#f4d03f');
-    // super.setLinkedColor('#c77f14');
     super.setMindMapType('Question');
     this.questionType = questionType;
   }

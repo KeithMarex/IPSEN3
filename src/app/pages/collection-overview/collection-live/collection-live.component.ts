@@ -21,7 +21,7 @@ const HIERARCHY_RULES = {
   QUESTIONS: {
     name: 'Question',
     color: '#fff',
-    backgroundColor: '#f4d03f',
+    backgroundColor: '#FDD302',
     getChildren: () => [
       HIERARCHY_RULES.ANSWERS,
       HIERARCHY_RULES.DOUBLE_NODE
@@ -30,7 +30,7 @@ const HIERARCHY_RULES = {
   ANSWERS: {
     name: 'Answer',
     color: '#fff',
-    backgroundColor: '#f9e79f',
+    backgroundColor: '#E1A40D',
     getChildren: () => [
       HIERARCHY_RULES.QUESTIONS,
       HIERARCHY_RULES.NOTIFICATION,
@@ -117,9 +117,9 @@ export class CollectionLiveComponent implements OnInit {
     const tempParentId = '0';
     const tempType = 'DropDown';
     this.colorCollectionName = HIERARCHY_RULES.ROOT.backgroundColor;
-    this.colorQuestion = new Question(tempId, tempText, tempParentId, tempType).getMindMapBackGroundColor();
-    this.colorAnswer = new Answer(tempId, tempParentId, tempText).getMindMapBackGroundColor();
-    this.colorNotification = new Notification(tempId, tempParentId, tempText).getMindMapBackGroundColor();
+    this.colorQuestion = new Question(tempId, tempText, tempParentId, tempType).getMindMapColor();
+    this.colorAnswer = new Answer(tempId, tempParentId, tempText).getMindMapColor();
+    this.colorNotification = new Notification(tempId, tempParentId, tempText).getMindMapColor();
   }
 
   // @ts-ignore
