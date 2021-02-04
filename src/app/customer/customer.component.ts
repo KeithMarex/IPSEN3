@@ -34,7 +34,6 @@ export class CustomerComponent implements OnInit {
   setCollectionName()
   {
     this.collectionId = this.route.snapshot.paramMap.get('collectionId');
-    console.log(this.collectionId);
     const api = Api.getApi();
     api.get('/collection/' + this.collectionId).then(response => {
       if(response.data.result)
@@ -46,10 +45,7 @@ export class CustomerComponent implements OnInit {
 
   async onAnswered(answer : Answer)
   {
-    console.log(answer);
     await Question.getQuestionByByAnswerID(answer.id).then(async question => {
-      console.log('question:');
-      console.log(question);
 
       this.questionStack.push(this.currentQuestion); // we pushen de huidige vraag op de stack, zodat het mogelijk is om terug te gaan.
       this.answerStack.push(answer); // ook pushen we het antwoord op de stack voor preselection in het geval van terugkeren
@@ -57,7 +53,6 @@ export class CustomerComponent implements OnInit {
       if (question.id === undefined) // Geen vervolg vraag, controleren notificatie
       {
         await NotificationModel.getNotificationByAnswerID(answer.id).then(notification => {
-          console.log(notification);
           this.showNotification = notification;
           this.currentQuestion.name = '';
           // Check maken of het eindnotificatie is
