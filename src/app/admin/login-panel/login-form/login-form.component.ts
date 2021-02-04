@@ -4,11 +4,12 @@ import {Router} from '@angular/router';
 import {UserModel} from '../../../shared/models/user.model';
 import {Cookie} from 'ng2-cookies/ng2-cookies';
 import {Api} from '../../../api/api';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.scss']
+  styleUrls: ['./login-form.component.scss'],
 })
 export class LoginFormComponent implements OnInit {
   success = true;
@@ -39,5 +40,19 @@ export class LoginFormComponent implements OnInit {
         this.router.navigate([this.router.url + '/dashboard']);
       }
     });
+  }
+
+  checkLogin(emaild, passwordd): boolean {
+    let val = true;
+    const postData = {email: emaild, password: passwordd};
+    console.log(postData);
+    Api.getApi().post('/user/checkUserCredentials', postData).then((response) => {
+      if (response.data.login !== 'success') {
+        val = false;
+      } else {
+        val = true;
+      }
+    });
+    return val;
   }
 }
