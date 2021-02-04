@@ -49,8 +49,10 @@
       <tr>
         <th>Notificaties voor deze collectie</th>
       </tr>
-      <tr *ngFor="let i of this.notifications">
-        <td [innerHTML]="i.text" style="border: 1px solid black"></td>
+      <tr>
+        <select class="form-control" id="sel1" >
+          <option value="{{i.id}}" *ngFor="let i of this.notifications" [innerHTML]="i.text"></option>
+        </select>
       </tr>
     </table>
   </div>

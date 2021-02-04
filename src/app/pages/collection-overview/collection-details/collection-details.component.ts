@@ -4,6 +4,7 @@ import {CollectionModel} from '../../../shared/models/collection.model';
 import {Api} from '../../../api/api';
 import {AnswerModel} from '../../../shared/models/answer.model';
 import Swal from 'sweetalert2';
+import {NotificationModel} from '../../../shared/models/notification.model';
 
 @Component({
   selector: 'app-collection-details',
@@ -20,6 +21,9 @@ export class CollectionDetailsComponent implements OnInit {
   routesNormal = ['Collections'];
   routes = [];
 
+  @ViewChild('notificationTab') nt;
+  public notifications: NotificationModel[] = [];
+
   Toast = Swal.mixin({
     toast: true,
     position: 'bottom-end',
@@ -34,6 +38,7 @@ export class CollectionDetailsComponent implements OnInit {
   currData: any;
   private res;
   public previousQuestion: string;
+  currSelected: any;
 
   constructor(private route: ActivatedRoute) { }
 
@@ -100,6 +105,15 @@ export class CollectionDetailsComponent implements OnInit {
             this.te.fire();
           } else if (result.value[1] === 'Vooraf'){
             // Todo Keuze menu uit notificaties voor collectie
+            this.notifications = [];
+            Api.getApi().get('/notification/get/all').then(res => {
+              const data = res['data']['result'];
+              data.forEach(val => {
+                this.notifications.push(new NotificationModel(val.id, val.text));
+              });
+            });
+            this.res = result;
+            this.nt.fire();
           } else {
             await Swal.fire({
               inputLabel: 'Nieuwe ' + result.value[1].toLowerCase() + ' voor ' + result.value[0],
@@ -302,5 +316,30 @@ export class CollectionDetailsComponent implements OnInit {
     for (let i = 0; i < answers.data.result.length; i++) {
       this.answers.push(new AnswerModel(answers.data.result[i].id, answers.data.result[i].name));
     }
+  }
+
+  onChange(deviceValue): void {
+    console.log(deviceValue);
+    this.nt.delete();
+  }
+
+  async newNotification(): Promise<void> {
+    this.Toast.fire({
+      icon: 'success',
+      title: 'Antwoord aangemaakt'
+    });
+
+    const response = await Api.getApi().post('/answer/create', {
+      name: this.res.value[0],
+      question_id: this.firstQuestion['id']
+    });
+    const r = response.data;
+
+    const response2 = await Api.getApi().post('/notification/link', {
+      notificationId: this.currSelected,
+      answerId: r.id
+    });
+
+    this.answers.push(new AnswerModel(r.id, this.res.value[0]));
   }
 }
