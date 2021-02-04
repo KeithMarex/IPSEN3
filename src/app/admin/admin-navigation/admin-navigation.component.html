@@ -50,7 +50,7 @@
         <th>Notificaties voor deze collectie</th>
       </tr>
       <tr *ngFor="let i of this.notifications">
-        <td>{{i.text}}</td>
+        <td [innerHTML]="i.text" style="border: 1px solid black"></td>
       </tr>
     </table>
   </div>

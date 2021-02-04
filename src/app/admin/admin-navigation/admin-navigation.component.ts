@@ -21,6 +21,14 @@ export class AdminNavigationComponent implements OnInit {
   @Input() selectedCollectionId: number;
   currData: string;
 
+  Toast = Swal.mixin({
+    toast: true,
+    position: 'bottom-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
+
   constructor(private http: HttpClient, private route: Router) {
   }
 
@@ -159,12 +167,22 @@ export class AdminNavigationComponent implements OnInit {
   }
 
   openNotification(): void {
+    this.notifications = [];
+    Api.getApi().get('/notification/get/all').then(res => {
+      const data = res['data']['result'];
+      data.forEach(val => {
+        this.notifications.push(new NotificationModel(val.id, val.text));
+      });
+    });
     this.nt.fire();
   }
 
   makeNotification(html: string): void {
     Api.getApi().post('/notification/create', {text: html}).then(result => {
-
+      this.Toast.fire({
+        icon: 'success',
+        title: 'Notificatie is aangemaakt!'
+      });
     });
   }
 }
