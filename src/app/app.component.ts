@@ -3,11 +3,8 @@ import {Component} from '@angular/core';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  animations: [
-    // animation triggers go here
-  ]
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'ARAG Vragenboom';
+  title = 'IPSEN3';
 }
