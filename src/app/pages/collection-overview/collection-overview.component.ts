@@ -266,8 +266,6 @@ export class CollectionOverviewComponent implements OnInit {
     const api = Api.getApi();
     const post = await api.post('/question/create', questionData);
 
-    console.log(post);
-
     this.closeFirstQuestionModal();
 
     if (post.data.result){

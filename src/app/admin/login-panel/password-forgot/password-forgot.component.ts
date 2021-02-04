@@ -25,7 +25,6 @@ export class PasswordForgotComponent implements OnInit {
     console.log(postData);
     const api = Api.getApi();
     api.post('/user/resetPassword', postData).then((responseData) => {
-      console.log(responseData);
       if (responseData.data.result === true) {
         Swal.fire({
           icon: 'success',

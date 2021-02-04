@@ -17,7 +17,6 @@ export class HomepageComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCategories();
-    //this.loadCollections();
   }
 
   private loadCategories()
@@ -32,14 +31,12 @@ export class HomepageComponent implements OnInit {
     const api = Api.getApi();
     api.post('/collection/all', { categoryId: catId, type: 'published'}).then((response) => {
       this.collections = response.data.result;
-      console.log(response.data);
     });
   }
 
   onSelectCategory(catId : number)
   {
     this.loadCollectionsByCat(catId);
-    console.log(catId);
     this.selectedCategoryId = catId;
 
   }

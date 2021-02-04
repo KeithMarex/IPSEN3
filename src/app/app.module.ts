@@ -22,10 +22,8 @@ import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {ConfigurationService} from './shared/configuration.service';
 import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
-import {CollectionVersionsComponent} from './components/collections/collection-versions/collection-versions.component';
 import {CollectionDetailsComponent} from './pages/collection-overview/collection-details/collection-details.component';
 import {ArrowComponent} from './icons/arrow/arrow.component';
-import {ModalComponent} from './components/modal/modal.component';
 import { CollectionLiveComponent } from './pages/collection-overview/collection-live/collection-live.component';
 import { RichTextEditorComponent } from './rich-text-editor/rich-text-editor.component';
 import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
@@ -58,8 +56,6 @@ const appRoutes: Routes = [
     RemoveComponent,
     CloneComponent,
     EditComponent,
-    CollectionVersionsComponent,
-    ModalComponent,
     CollectionDetailsComponent,
     ArrowComponent,
     CollectionLiveComponent,

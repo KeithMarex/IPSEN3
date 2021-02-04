@@ -303,7 +303,6 @@ export class CollectionDetailsComponent implements OnInit {
       answer_id: r.id
     });
 
-    console.log(this.currData);
     this.answers.push(new AnswerModel(r.id, this.res.value[0]));
   }
 
@@ -316,11 +315,6 @@ export class CollectionDetailsComponent implements OnInit {
     for (let i = 0; i < answers.data.result.length; i++) {
       this.answers.push(new AnswerModel(answers.data.result[i].id, answers.data.result[i].name));
     }
-  }
-
-  onChange(deviceValue): void {
-    console.log(deviceValue);
-    this.nt.delete();
   }
 
   async newNotification(): Promise<void> {
