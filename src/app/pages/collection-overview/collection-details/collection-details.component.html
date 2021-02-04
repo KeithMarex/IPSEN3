@@ -54,3 +54,18 @@
     <app-rich-text-editor (data)="this.currData = $event"></app-rich-text-editor>
   </div>
 </swal>
+
+<swal #notificationTab showConfirmButton="false" (confirm)="newNotification()" >
+  <div *swalPortal>
+    <table style="width: 100%">
+      <tr>
+        <th>Notificaties voor deze collectie</th>
+      </tr>
+      <tr>
+        <select class="form-control" id="sel1" (change)="currSelected = $event.target.value">
+          <option value="{{i.id}}" *ngFor="let i of this.notifications" [innerHTML]="i.text"></option>
+        </select>
+      </tr>
+    </table>
+  </div>
+</swal>
