@@ -1,18 +1,20 @@
 .icon {
-    color: $iconDefaultColor;
-    opacity: 60%;
-    height: 20px;
-    width: auto;
-    transition: all .2 ease-in;
-    margin-right: 20px;
+  color: $iconDefaultColor;
+  opacity: 0.6;
+  height: 20px;
+  width: auto;
+  transition: all .2 ease-in;
+  margin-right: 20px;
 
-    &__clone {}
-    &__remove {
-        color: $iconRemoveColor;
-    }
-    
+  &__clone {
+  }
+
+  &__remove {
+    color: $iconRemoveColor;
+  }
+
     &:hover {
-        opacity: 100%;
-        cursor: pointer;
+      opacity: 1;
+      cursor: pointer;
     }
 }
